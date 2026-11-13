@@ -1,0 +1,90 @@
+.lanyardContainer {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.lanyardStage {
+  position: relative;
+  width: 100%;
+  max-width: 540px;
+  height: 640px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  /* Open stage: subtle background glow without generic purple spheres */
+  background: radial-gradient(circle at 50% 40%, rgba(37, 99, 235, 0.08) 0%, rgba(4, 6, 13, 0) 65%);
+}
+
+.lanyardCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.lanyardCanvas:active {
+  cursor: grabbing;
+}
+
+.lanyardControlsBar {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 0.5rem 0.85rem;
+  background: rgba(7, 11, 22, 0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+  z-index: 10;
+  pointer-events: auto;
+}
+
+.lanyardTelemetry {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--fg-400);
+}
+
+.lanyardActionButtons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.lanyardButton {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  padding: 0.3rem 0.65rem;
+  background: rgba(59, 130, 246, 0.12);
+  color: var(--accent-sky);
+  border: 1px solid rgba(96, 165, 250, 0.3);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.lanyardButton:hover {
+  background: rgba(59, 130, 246, 0.25);
+  color: var(--fg-50);
+  border-color: var(--accent-sky);
+}
+
+@media (max-width: 768px) {
+  .lanyardStage {
+    height: 520px;
+  }
+}

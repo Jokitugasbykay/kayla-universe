@@ -1,0 +1,76 @@
+@import './styles/tokens.css';
+@import './styles/typography.css';
+@import './styles/layout.css';
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  background-color: var(--bg-950);
+  color: var(--fg-50);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background-color: var(--bg-950);
+  color: var(--fg-50);
+  line-height: 1.6;
+  min-height: 100vh;
+  position: relative;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+input, textarea, select {
+  font-family: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-sky);
+  outline-offset: 3px;
+}
+
+/* Subtle ambient backdrop wash (never generic purple spheres) */
+.ambient-lighting {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(70% 60% at 75% 15%, rgba(37, 99, 235, 0.08) 0%, rgba(139, 92, 246, 0.03) 45%, rgba(4, 6, 13, 0) 75%),
+    radial-gradient(60% 50% at 20% 85%, rgba(56, 189, 248, 0.05) 0%, rgba(4, 6, 13, 0) 70%);
+}
+
+/* App container */
+.app-wrapper {
+  position: relative;
+  z-index: 1;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
