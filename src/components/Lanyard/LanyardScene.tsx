@@ -46,9 +46,12 @@ export const LanyardScene: React.FC<LanyardSceneProps> = ({ portraitImg }) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    // Check WebGL availability
+    // Check WebGL availability safely using an offscreen canvas
+    const testCanvas = document.createElement('canvas');
     const testGl =
-      canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      testCanvas.getContext('webgl2') ||
+      testCanvas.getContext('webgl') ||
+      testCanvas.getContext('experimental-webgl');
     if (!testGl) {
       setWebglSupported(false);
       return;
