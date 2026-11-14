@@ -1,4 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
+import fs from 'node:fs';
+
+const defaultWindowsChrome = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
+const localChromeExists = process.platform === 'win32' && fs.existsSync(defaultWindowsChrome);
 
 export default defineConfig({
   testDir: './tests/e2e',
@@ -14,7 +18,9 @@ export default defineConfig({
     trace: 'on-first-retry',
     screenshot: 'on',
     launchOptions: {
-      executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+      ...(localChromeExists && !process.env.CI
+        ? { executablePath: defaultWindowsChrome }
+        : {}),
       headless: true
     }
   },
