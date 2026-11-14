@@ -3,6 +3,12 @@ import { PROJECTS_DATA } from '../../data/portfolio';
 import { QuantumSimulator } from './QuantumSimulator';
 import styles from './Projects.module.css';
 
+const resolveAsset = (path?: string) => {
+  if (!path) return '';
+  if (path.startsWith('/')) return `.${path}`;
+  return path;
+};
+
 export const Projects: React.FC = () => {
   return (
     <section id="projects" className={styles.projectsSection}>
@@ -39,7 +45,7 @@ export const Projects: React.FC = () => {
                 <div className={styles.previewContainer}>
                   {project.previewImage && (
                     <img
-                      src={project.previewImage}
+                      src={resolveAsset(project.previewImage)}
                       alt={`${project.title} interface preview`}
                       className={styles.previewImg}
                     />

@@ -14,7 +14,7 @@ import { Footer } from './components/Footer/Footer';
 gsap.registerPlugin(ScrollTrigger);
 
 export const App: React.FC = () => {
-  const [portraitSrc, setPortraitSrc] = useState<string>('/assets/foto1.jpg');
+  const [portraitSrc, setPortraitSrc] = useState<string>('./assets/foto1.jpg');
   const [portraitImg, setPortraitImg] = useState<HTMLImageElement | null>(null);
   const [hasCustomFoto1, setHasCustomFoto1] = useState<boolean>(false);
   const mainRef = useRef<HTMLDivElement>(null);
