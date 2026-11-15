@@ -17,20 +17,20 @@ export const Footer: React.FC = () => {
               <span className={styles.brandName}>KAYLA UNIVERSE</span>
             </div>
             <p className={styles.brandTagline}>
-              Science, engineering, and creative technology crafted with mathematical discipline.
+              Science, computational modeling, and creative technology crafted with mathematical discipline.
             </p>
           </div>
 
           <div className={styles.navCol}>
-            <span className={styles.navHeader}>CHAPTERS</span>
+            <span className={styles.navHeader}>SECTIONS</span>
             <div className={styles.linkList}>
-              <a href="#home" className={styles.footerLink}>01 / Identity</a>
-              <a href="#about" className={styles.footerLink}>02 / About</a>
-              <a href="#education" className={styles.footerLink}>03 / Education</a>
-              <a href="#projects" className={styles.footerLink}>04 / Projects</a>
-              <a href="#research" className={styles.footerLink}>05 / Research</a>
-              <a href="#skills" className={styles.footerLink}>06 / Skills</a>
-              <a href="#contact" className={styles.footerLink}>07 / Contact</a>
+              <a href="#home" className={styles.footerLink}>Identity</a>
+              <a href="#about" className={styles.footerLink}>Biography</a>
+              <a href="#education" className={styles.footerLink}>Curriculum</a>
+              <a href="#projects" className={styles.footerLink}>Selected Work</a>
+              <a href="#research" className={styles.footerLink}>Research</a>
+              <a href="#skills" className={styles.footerLink}>Capabilities</a>
+              <a href="#contact" className={styles.footerLink}>Correspondence</a>
             </div>
           </div>
 
@@ -41,15 +41,14 @@ export const Footer: React.FC = () => {
               className={styles.backToTopBtn}
               aria-label="Scroll back to top"
             >
-              <span>Back to Top &uarr;</span>
+              <span>Back to Top ↑</span>
             </button>
           </div>
         </div>
 
         <div className={styles.footerBottomRow}>
           <div className={styles.copyrightText}>
-            &copy; {new Date().getFullYear()} {PROFILE_DATA.name}. Physics Undergraduate, Universitas
-            Airlangga.
+            &copy; {new Date().getFullYear()} {PROFILE_DATA.name}. Physics Undergraduate, Universitas Airlangga.
           </div>
           <div className={styles.techStackNote}>
             Engineered with TypeScript, React 19, Three.js &amp; GSAP.

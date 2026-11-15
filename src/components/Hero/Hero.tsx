@@ -45,12 +45,11 @@ export const Hero: React.FC<HeroProps> = ({ portraitImg, portraitSrc }) => {
   return (
     <section id="home" className={styles.heroSection}>
       <div className={styles.heroContainer}>
-        {/* Left Column: Editorial Identity & Intro */}
+        {/* Left Column: Editorial Identity & Typography */}
         <div className={styles.heroContent}>
-          <div className={styles.eyebrow}>
-            <span>CHAPTER 01 / IDENTITY &amp; ROOTS</span>
-            <span className={styles.dotSeparator}>/</span>
-            <span className={styles.tagLocation}>SURABAYA, ID</span>
+          <div className={styles.statusBadge}>
+            <span className={styles.statusPulse}></span>
+            <span className={styles.statusText}>Physics Undergraduate / Surabaya, Indonesia</span>
           </div>
 
           <h1 className={styles.heroTitle}>
@@ -58,55 +57,56 @@ export const Hero: React.FC<HeroProps> = ({ portraitImg, portraitSrc }) => {
           </h1>
 
           <div className={styles.typewriterRow}>
-            <span className={styles.typewriterPrefix}>Focus:</span>
+            <span className={styles.typewriterPrefix}>Inquiry:</span>
             <span className={styles.typewriterText}>{text}</span>
             <span className={styles.cursor}></span>
           </div>
 
           <p className={styles.heroBio}>
-            I study physics at <strong className={styles.highlight}>Universitas Airlangga</strong> in
-            Surabaya. My work connects continuous physical principles, mathematical modeling, and
-            artificial intelligence with practical software engineering.
+            Undergraduate in Physics at <strong className={styles.highlight}>Universitas Airlangga</strong>.
+            I explore continuous physical laws, mathematical modeling, and artificial intelligence,
+            translating foundational physics into high-performance software.
           </p>
 
-          {/* Integrated Foto 1 Identity Plate */}
+          {/* Authentic Portrait Plate (Foto 1) */}
           <div className={styles.identityPlate}>
             <div className={styles.portraitThumbWrap}>
               <img
                 src={portraitSrc}
-                alt="Portrait of Kayla Gabrielle"
+                alt="Official Portrait of Kayla Gabrielle"
                 className={styles.portraitThumb}
               />
             </div>
             <div className={styles.identityMeta}>
               <div className={styles.identityName}>{PROFILE_DATA.name}</div>
               <div className={styles.identitySub}>
-                Physics Undergrad &middot; Universitas Airlangga
+                Semester 5 Physics &middot; Universitas Airlangga
               </div>
               <div className={styles.identityNote}>
-                Authentic portrait integrated with 3D hanging lanyard
+                Founder of JOKI.IN &middot; Computational Physics Researcher
               </div>
             </div>
           </div>
 
-          {/* Call to Actions */}
+          {/* Button-in-Button Nested CTAs */}
           <div className={styles.ctaRow}>
             <a href="#about" className={styles.primaryCta}>
-              <span>Read Biography</span>
+              <span>Explore Biography</span>
+              <span className={styles.ctaIconCircle}>↓</span>
             </a>
             <a href="#projects" className={styles.secondaryCta}>
-              <span>Explore Selected Work</span>
+              <span>Selected Work</span>
+              <span className={styles.ctaIconCircle}>→</span>
             </a>
           </div>
 
-          {/* Scroll invitation */}
           <div className={styles.scrollInvitation}>
             <span className={styles.scrollLine}></span>
             <span className={styles.scrollText}>Scroll to discover academic inquiry &amp; projects</span>
           </div>
         </div>
 
-        {/* Right Column: Open-Stage 3D Lanyard Centerpiece */}
+        {/* Right Column: Free-Floating Organic 3D Lanyard */}
         <div className={styles.heroVisual}>
           <LanyardScene portraitImg={portraitImg} />
         </div>

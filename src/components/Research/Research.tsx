@@ -8,28 +8,27 @@ export const Research: React.FC = () => {
       <div className={styles.researchContainer}>
         {/* Section Header */}
         <div className={styles.sectionHeaderRow}>
-          <div className={styles.eyebrow}>05 / RESEARCH &amp; EXPLORATION</div>
+          <div className={styles.eyebrow}>05 / RESEARCH &amp; SCIENTIFIC INQUIRY</div>
           <div className={styles.eyebrowRight}>
-            THEORETICAL PHYSICS &middot; AI INTEGRATION &middot; COMPUTATIONAL RIGOR
+            THEORETICAL PHYSICS &middot; MACHINE LEARNING &middot; COMPUTATIONAL RIGOR
           </div>
         </div>
 
         <div className={styles.headerBlock}>
           <h2 className={styles.sectionTitle}>
-            Where physical theory meets artificial intelligence.
+            Where continuous physical laws inform modern artificial intelligence.
           </h2>
           <p className={styles.sectionSubtitle}>
-            My independent and academic investigations concentrate on bridging continuous
-            differential systems with discrete computational learning: grounding neural
-            architectures in physical conservation laws and understanding spatial confinement in
-            nanocrystals.
+            My investigations focus on bridging continuous differential systems with discrete
+            computational architectures: embedding physical conservation laws into neural networks and
+            modeling zero-dimensional quantum dot confinement.
           </p>
         </div>
 
-        {/* Research Topics Grid */}
+        {/* Research Bento Grid */}
         <div className={styles.researchGrid}>
-          {RESEARCH_DATA.map((item) => (
-            <div key={item.code} className={styles.researchCard}>
+          {RESEARCH_DATA.map((item, idx) => (
+            <div key={item.code} className={`${styles.researchCard} ${idx === 0 ? styles.featuredCard : ''}`}>
               <div className={styles.cardHeader}>
                 <span className={styles.topicCode}>{item.code}</span>
                 <span className={styles.topicStatus}>{item.status}</span>

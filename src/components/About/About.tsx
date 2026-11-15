@@ -19,150 +19,165 @@ export const About: React.FC<AboutProps> = ({ portraitSrc, onFoto1Upload }) => {
       <div className={styles.aboutContainer}>
         {/* Section Header */}
         <div className={styles.sectionHeaderRow}>
-          <div className={styles.eyebrow}>02 / ABOUT KAYLA GABRIELLE</div>
+          <div className={styles.eyebrow}>02 / BIOGRAPHY &amp; SCIENTIFIC INQUIRY</div>
           <div className={styles.eyebrowRight}>
-            SCIENTIFIC REASONING &middot; ENGINEERING DISCIPLINE &middot; ORIGINAL RESEARCH
+            FOUNDATIONAL PHYSICS &middot; COMPUTATIONAL REASONING &middot; SOFTWARE CRAFT
           </div>
         </div>
 
         <div className={styles.mainGrid}>
-          {/* Left Column: Authentic Photography Plate (Foto 1) & Profile Table */}
+          {/* Left Column: Asymmetrical Double-Bezel Dual Photo Spread */}
           <div className={styles.leftColumn}>
-            <figure className={styles.foto1Plate}>
-              <div className={styles.plateHeader}>
-                <span className={styles.plateTitle}>FOTO 1 &middot; KAYLA GABRIELLE</span>
-                <span className={styles.plateRatio}>PORTRAIT PLATE 4:5</span>
-              </div>
-
-              <div className={styles.imageFrame}>
-                <img
-                  src={portraitSrc}
-                  alt="Official Portrait of Kayla Gabrielle (Foto 1)"
-                  className={styles.portraitImage}
-                />
-                <div className={styles.imageCaptionBar}>
-                  <div>
-                    <div className={styles.captionName}>{PROFILE_DATA.name}</div>
-                    <div className={styles.captionRole}>
-                      Physics Undergraduate, Universitas Airlangga
-                    </div>
+            <div className={styles.photoComposition}>
+              {/* Primary Plate: Foto 1 Official Academic Portrait */}
+              <div className={styles.primaryPhotoFrame}>
+                <div className={styles.innerCore}>
+                  <img
+                    src={portraitSrc}
+                    alt="Official Academic Portrait of Kayla Gabrielle (Foto 1)"
+                    className={styles.primaryPhoto}
+                  />
+                  <div className={styles.photoTagOverlay}>
+                    <span className={styles.photoTagTitle}>FOTO 1 // OFFICIAL PORTRAIT</span>
+                    <span className={styles.photoTagSub}>UNAIR Red Alma Mater Blazer</span>
                   </div>
-                  <label htmlFor="foto1-upload-about" className={styles.changeFotoBtn}>
-                    <span>Change Foto 1</span>
-                    <input
-                      id="foto1-upload-about"
-                      type="file"
-                      accept="image/*"
-                      className={styles.hiddenInput}
-                      onChange={handleFileChange}
-                    />
-                  </label>
                 </div>
               </div>
-            </figure>
 
-            {/* Verified Quick Profile Table */}
-            <div className={styles.profileTable}>
-              <div className={styles.profileRow}>
-                <span className={styles.profileKey}>FULL NAME</span>
-                <span className={styles.profileVal}>{PROFILE_DATA.name}</span>
+              {/* Secondary Overlapping Plate: Authentic Candid / Academic Snapshot */}
+              <div className={styles.secondaryPhotoFrame}>
+                <div className={styles.innerCoreSmall}>
+                  <img
+                    src="./assets/kayla-about.jpg"
+                    alt="Authentic Casual Snapshot of Kayla Gabrielle"
+                    className={styles.secondaryPhoto}
+                  />
+                </div>
               </div>
-              <div className={styles.profileRow}>
-                <span className={styles.profileKey}>STATUS</span>
-                <span className={styles.profileVal}>
-                  Physics Undergrad (Semester 5)
-                </span>
+
+              {/* Upload control */}
+              <div className={styles.uploadRow}>
+                <label htmlFor="foto1-upload-about" className={styles.uploadBtn}>
+                  <span>Change Custom Foto 1</span>
+                  <input
+                    id="foto1-upload-about"
+                    type="file"
+                    accept="image/*"
+                    className={styles.hiddenInput}
+                    onChange={handleFileChange}
+                  />
+                </label>
               </div>
-              <div className={styles.profileRow}>
-                <span className={styles.profileKey}>UNIVERSITY</span>
-                <span className={styles.profileVal}>{PROFILE_DATA.university}</span>
+            </div>
+
+            {/* Academic Dossier Ledger */}
+            <div className={styles.dossierLedger}>
+              <div className={styles.ledgerRow}>
+                <span className={styles.ledgerKey}>FULL NAME</span>
+                <span className={styles.ledgerVal}>{PROFILE_DATA.name}</span>
               </div>
-              <div className={styles.profileRow}>
-                <span className={styles.profileKey}>BACKGROUND</span>
-                <span className={styles.profileVal}>
-                  Malaysia &middot; Jakarta &middot; Surabaya
-                </span>
+              <div className={styles.ledgerRow}>
+                <span className={styles.ledgerKey}>ACADEMIC STATUS</span>
+                <span className={styles.ledgerVal}>Semester 5 Physics Undergraduate</span>
               </div>
-              <div className={styles.profileRow}>
-                <span className={styles.profileKey}>CITIZENSHIP</span>
-                <span className={styles.profileVal}>Malaysian Citizen</span>
+              <div className={styles.ledgerRow}>
+                <span className={styles.ledgerKey}>INSTITUTION</span>
+                <span className={styles.ledgerVal}>{PROFILE_DATA.university}</span>
               </div>
-              <div className={styles.profileRow}>
-                <span className={styles.profileKey}>PROJECTS</span>
-                <span className={styles.profileVal}>JOKI.IN &amp; Kayla Finance</span>
+              <div className={styles.ledgerRow}>
+                <span className={styles.ledgerKey}>CROSS-BORDER PATH</span>
+                <span className={styles.ledgerVal}>Malaysia &middot; Jakarta &middot; Surabaya</span>
+              </div>
+              <div className={styles.ledgerRow}>
+                <span className={styles.ledgerKey}>CITIZENSHIP</span>
+                <span className={styles.ledgerVal}>Malaysian Citizen</span>
+              </div>
+              <div className={styles.ledgerRow}>
+                <span className={styles.ledgerKey}>CORE VENTURES</span>
+                <span className={styles.ledgerVal}>JOKI.IN &middot; Kayla Finance</span>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Editorial Narrative & Inquiry Pillars */}
+          {/* Right Column: Editorial Narrative Prose & Inquiry Dimensions */}
           <div className={styles.rightColumn}>
-            <h2 className={styles.narrativeTitle}>
-              Bridging continuous physical phenomena, mathematical rigor, and modern software craft.
-            </h2>
+            <div className={styles.quoteBlock}>
+              <h2 className={styles.narrativeTitle}>
+                Grounded in the deterministic beauty of physics, driven by the limitless scale of software.
+              </h2>
+            </div>
 
             <div className={styles.storyProse}>
               <p>
-                My educational journey began across borders. As a{' '}
-                <strong className={styles.boldWhite}>Malaysian citizen</strong>, I spent my early
-                school years in Malaysia before relocating to{' '}
-                <strong className={styles.boldWhite}>Jakarta for high school</strong>. Later, I
-                moved to Surabaya to pursue a degree in{' '}
+                My path across Southeast Asia shaped how I observe complex systems. As a{' '}
+                <strong className={styles.boldWhite}>Malaysian citizen</strong>, I spent my
+                formative school years in Malaysia before relocating to{' '}
+                <strong className={styles.boldWhite}>Jakarta for high school</strong>. Today, I am
+                based in Surabaya, pursuing a Bachelor of Science in{' '}
                 <strong className={styles.boldWhite}>Physics at Universitas Airlangga</strong>,
-                where I am currently completing{' '}
-                <strong className={styles.boldSky}>semester 5</strong>. Experiencing different
-                educational systems taught me to observe how complex structures function and how to
-                tackle unfamiliar challenges with curiosity.
+                currently immersed in <strong className={styles.boldSky}>semester 5</strong>.
               </p>
 
               <p>
-                Studying physics instilled in me a deep respect for mathematical modeling and the
-                behavior of physical systems under natural constraints. Over time, that academic
-                foundation naturally led me toward{' '}
+                Physics teaches that beneath the apparent chaos of natural phenomena lie elegant
+                conservation laws, differential equations, and boundary conditions. From analytical
+                mechanics to the discrete energy states of nanoscale{' '}
+                <strong className={styles.boldViolet}>quantum dots</strong>, I find immense
+                clarity in formal mathematical rigor.
+              </p>
+
+              <p>
+                That mathematical foundation drives my work in{' '}
                 <strong className={styles.boldWhite}>
-                  scientific computing, physical simulation, and artificial intelligence
+                  artificial intelligence and scientific simulation
                 </strong>
-                . I am fascinated by how machine learning architectures can be grounded in physical
-                conservation laws, as well as the fascinating quantum mechanics governing nanoscale
-                structures like <strong className={styles.boldViolet}>quantum dots</strong>.
+                . Rather than treating neural networks as black boxes, I am fascinated by
+                physics-informed architectures where conservation of momentum and energy are built
+                directly into optimization losses.
               </p>
 
               <p>
-                Alongside academic study, I love the craft of software engineering. Building{' '}
-                <strong className={styles.boldWhite}>JOKI.IN</strong> and{' '}
-                <strong className={styles.boldWhite}>Kayla Finance</strong> taught me to turn
-                structured conceptual models into real, production-ready web platforms that users
-                rely upon. My long-term goal is to contribute to deep technology and build software
-                that connects scientific insight with human utility.
+                Concurrently, I am an active product builder. Founding{' '}
+                <strong className={styles.boldWhite}>JOKI.IN</strong> and architecting{' '}
+                <strong className={styles.boldWhite}>Kayla Finance</strong> taught me how to
+                structure end-to-end full-stack platforms, manage real client workloads, and deploy
+                robust cloud services that people trust every day.
               </p>
             </div>
 
-            {/* Three Pillars of Inquiry */}
-            <div className={styles.pillarsGrid}>
-              <div className={styles.pillarCard}>
-                <div className={styles.pillarNumber}>01 / SCIENTIFIC CORE</div>
-                <h3 className={styles.pillarTitle}>Physics &amp; Mathematics</h3>
-                <p className={styles.pillarDesc}>
-                  Analytical mechanics, differential equations, numerical methods, and theoretical
-                  exploration of zero-dimensional quantum dots.
-                </p>
+            {/* Three Architectural Inquiries */}
+            <div className={styles.inquiriesList}>
+              <div className={styles.inquiryItem}>
+                <div className={styles.inquiryIndex}>01</div>
+                <div className={styles.inquiryBody}>
+                  <h3 className={styles.inquiryHeading}>Theoretical Physics &amp; Mathematics</h3>
+                  <p className={styles.inquiryText}>
+                    Analytical mechanics, differential equations, computational electrodynamics, and
+                    quantum dot spatial confinement models.
+                  </p>
+                </div>
               </div>
 
-              <div className={styles.pillarCard}>
-                <div className={styles.pillarNumber}>02 / DEEP TECH &amp; AI</div>
-                <h3 className={styles.pillarTitle}>AI &amp; Scientific Computing</h3>
-                <p className={styles.pillarDesc}>
-                  Physics-informed neural networks, computational modeling, and accelerating
-                  numerical simulation through machine learning.
-                </p>
+              <div className={styles.inquiryItem}>
+                <div className={styles.inquiryIndex}>02</div>
+                <div className={styles.inquiryBody}>
+                  <h3 className={styles.inquiryHeading}>Scientific Computing &amp; Machine Learning</h3>
+                  <p className={styles.inquiryText}>
+                    Physics-informed neural networks, numerical wave packet solvers, and continuous
+                    dynamical simulation with Python and Three.js.
+                  </p>
+                </div>
               </div>
 
-              <div className={styles.pillarCard}>
-                <div className={styles.pillarNumber}>03 / APPLIED CRAFT</div>
-                <h3 className={styles.pillarTitle}>Software Engineering</h3>
-                <p className={styles.pillarDesc}>
-                  Production TypeScript, full-stack systems, interactive 3D WebGL interfaces, and
-                  operational product engineering.
-                </p>
+              <div className={styles.inquiryItem}>
+                <div className={styles.inquiryIndex}>03</div>
+                <div className={styles.inquiryBody}>
+                  <h3 className={styles.inquiryHeading}>Production Software Systems</h3>
+                  <p className={styles.inquiryText}>
+                    Modern TypeScript, React 19, scalable cloud infrastructure, and operational
+                    product craftsmanship behind JOKI.IN.
+                  </p>
+                </div>
               </div>
             </div>
           </div>

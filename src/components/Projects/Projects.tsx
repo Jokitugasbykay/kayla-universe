@@ -15,9 +15,9 @@ export const Projects: React.FC = () => {
       <div className={styles.projectsContainer}>
         {/* Section Header */}
         <div className={styles.sectionHeaderRow}>
-          <div className={styles.eyebrow}>04 / SELECTED WORK</div>
+          <div className={styles.eyebrow}>04 / SELECTED WORK &amp; CASE STUDIES</div>
           <div className={styles.eyebrowRight}>
-            OPERATIONAL PRODUCTS &middot; QUANTITATIVE MODELS &middot; SIMULATION
+            PRODUCTION PLATFORMS &middot; QUANTITATIVE LOGIC &middot; APPLIED PHYSICS
           </div>
         </div>
 
@@ -27,7 +27,7 @@ export const Projects: React.FC = () => {
           </h2>
           <p className={styles.sectionSubtitle}>
             Instead of generic templates, each project solves a distinct technical or operational
-            challenge: from academic queue workflows to quantitative compounding logic and physical
+            challenge: from academic queue management to quantitative financial models and physical
             wave packet simulation.
           </p>
         </div>
@@ -41,15 +41,32 @@ export const Projects: React.FC = () => {
                 key={project.id}
                 className={`${styles.projectCard} ${isReversed ? styles.cardReversed : ''}`}
               >
-                {/* Visual / Preview Container */}
+                {/* Visual / Preview Container with Double-Bezel */}
                 <div className={styles.previewContainer}>
-                  {project.previewImage && (
-                    <img
-                      src={resolveAsset(project.previewImage)}
-                      alt={`${project.title} interface preview`}
-                      className={styles.previewImg}
-                    />
-                  )}
+                  <div className={styles.previewCore}>
+                    {project.previewImage && (
+                      <img
+                        src={resolveAsset(project.previewImage)}
+                        alt={`${project.title} interface preview`}
+                        className={styles.previewImg}
+                      />
+                    )}
+
+                    {project.id === 'joki-in' && (
+                      <div className={styles.floatingBadge}>
+                        <img
+                          src="./assets/jokiin-logo.png"
+                          alt="JOKI.IN Logo"
+                          className={styles.floatingLogo}
+                        />
+                        <div className={styles.badgeText}>
+                          <span className={styles.badgeStatus}>LIVE DEPLOYMENT</span>
+                          <span className={styles.badgeUrl}>jokiin.my.id</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
                   <div className={styles.previewOverlay}>
                     <span className={styles.previewCategory}>{project.category}</span>
                     <span className={styles.previewYear}>{project.year}</span>
@@ -59,7 +76,7 @@ export const Projects: React.FC = () => {
                 {/* Narrative & Details */}
                 <div className={styles.projectDetails}>
                   <div className={styles.projectCategoryLabel}>
-                    CASE STUDY 0{index + 1} / {project.category}
+                    CASE STUDY 0{index + 1} / {project.category.toUpperCase()}
                   </div>
 
                   <h3 className={styles.projectTitle}>{project.title}</h3>
@@ -91,9 +108,10 @@ export const Projects: React.FC = () => {
                         href={project.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={styles.liveLink}
+                        className={styles.primaryLink}
                       >
                         <span>{project.linkLabel || 'Launch Platform'}</span>
+                        <span className={styles.linkCircle}>→</span>
                       </a>
                     )}
                     {project.github && (
@@ -101,9 +119,10 @@ export const Projects: React.FC = () => {
                         href={project.github}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={styles.codeLink}
+                        className={styles.secondaryLink}
                       >
-                        <span>GitHub Repository</span>
+                        <span>Source Code</span>
+                        <span className={styles.linkCircle}>↗</span>
                       </a>
                     )}
                   </div>

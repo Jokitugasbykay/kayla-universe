@@ -27,20 +27,20 @@ export class LanyardVerletSystem {
   card: CardState;
   anchorY: number;
 
-  constructor(segmentCount = 9, segmentLength = 0.28, anchorY = 2.85) {
+  constructor(segmentCount = 16, segmentLength = 0.165, anchorY = 3.1) {
     this.segmentCount = segmentCount;
     this.segmentLength = segmentLength;
     this.anchorY = anchorY;
 
     this.nodes = [];
     for (let i = 0; i <= segmentCount; i++) {
-      const initX = (i / segmentCount) * 0.10;
+      const initX = (i / segmentCount) * 0.08;
       const initY = anchorY - i * segmentLength;
       this.nodes.push({
         x: initX,
         y: initY,
         z: 0,
-        oldX: initX - (i === segmentCount ? 0.008 : 0),
+        oldX: initX - (i === segmentCount ? 0.005 : 0),
         oldY: initY,
         oldZ: 0,
         pinned: i === 0
@@ -52,7 +52,7 @@ export class LanyardVerletSystem {
       dragTargetX: 0,
       dragTargetY: -0.1,
       rotY: -0.15,
-      rotYVel: 0.015,
+      rotYVel: 0.012,
       targetFlipY: 0,
       isFlipped: false,
       tiltX: 0,
@@ -74,17 +74,17 @@ export class LanyardVerletSystem {
       tip.oldX -= fx;
       tip.oldY -= fy;
       tip.oldZ -= fz;
-      this.card.rotYVel += fx * 0.15;
+      this.card.rotYVel += fx * 0.12;
     }
   }
 
   toggleFlip() {
     this.card.isFlipped = !this.card.isFlipped;
     this.card.targetFlipY = this.card.isFlipped ? Math.PI : 0;
-    this.card.rotYVel += 0.22;
+    this.card.rotYVel += 0.24;
   }
 
-  step(gravity = -0.0042, damping = 0.982, iterations = 12) {
+  step(gravity = -0.0035, damping = 0.985, iterations = 16) {
     const n = this.nodes;
     const count = this.segmentCount;
 
@@ -95,8 +95,8 @@ export class LanyardVerletSystem {
       if (this.card.isDragging && i === count) {
         node.oldX = node.x;
         node.oldY = node.y;
-        node.x += (this.card.dragTargetX - node.x) * 0.38;
-        node.y += (this.card.dragTargetY - node.y) * 0.38;
+        node.x += (this.card.dragTargetX - node.x) * 0.35;
+        node.y += (this.card.dragTargetY - node.y) * 0.35;
         continue;
       }
 
@@ -155,12 +155,12 @@ export class LanyardVerletSystem {
     const tipVx = tip.x - tip.oldX;
     const ropeAngleZ = Math.atan2(tip.x - prev.x, prev.y - tip.y);
 
-    this.card.tiltZ += (-ropeAngleZ * 0.70 - this.card.tiltZ) * 0.16;
-    this.card.tiltX += (Math.sin(performance.now() * 0.0016) * 0.035 - this.card.tiltX) * 0.08;
+    this.card.tiltZ += (-ropeAngleZ * 0.75 - this.card.tiltZ) * 0.15;
+    this.card.tiltX += (Math.sin(performance.now() * 0.0015) * 0.03 - this.card.tiltX) * 0.08;
 
-    this.card.rotYVel += tipVx * 0.075;
-    const springToFlip = (this.card.targetFlipY - this.card.rotY) * 0.07;
-    this.card.rotYVel = (this.card.rotYVel + springToFlip) * 0.91;
+    this.card.rotYVel += tipVx * 0.065;
+    const springToFlip = (this.card.targetFlipY - this.card.rotY) * 0.075;
+    this.card.rotYVel = (this.card.rotYVel + springToFlip) * 0.92;
     this.card.rotY += this.card.rotYVel;
   }
 }

@@ -12,20 +12,14 @@ export const QuantumSimulator: React.FC = () => {
     gamma: 0.08,
     kappa: 1.35
   });
-  const [readout, setReadout] = useState<string>(
-    'omega = 2.4 rad/s / gamma = 0.08 / kappa = 1.35'
-  );
   const rafRef = useRef<number>(0);
   const timeRef = useRef<number>(0);
 
+  const phaseVelocity = (params.omega / Math.max(0.01, params.kappa)).toFixed(2);
+  const groupVelocity = (0.5 * (params.omega / Math.max(0.01, params.kappa))).toFixed(2);
+
   const handleSliderChange = (key: keyof QuantumSimParameters, value: number) => {
-    setParams((prev) => {
-      const next = { ...prev, [key]: value };
-      setReadout(
-        `omega = ${next.omega.toFixed(1)} rad/s / gamma = ${next.gamma.toFixed(2)} / kappa = ${next.kappa.toFixed(2)}`
-      );
-      return next;
-    });
+    setParams((prev) => ({ ...prev, [key]: value }));
   };
 
   useEffect(() => {
@@ -46,11 +40,11 @@ export const QuantumSimulator: React.FC = () => {
       const h = canvas.height;
       ctx.clearRect(0, 0, w, h);
 
-      // Background grid
-      ctx.strokeStyle = 'rgba(226, 232, 240, 0.06)';
+      // Deep oscilloscopic grid
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.06)';
       ctx.lineWidth = 1;
-      const gridCols = 8;
-      const gridRows = 4;
+      const gridCols = 10;
+      const gridRows = 6;
       for (let i = 1; i < gridCols; i++) {
         const gx = (w / gridCols) * i;
         ctx.beginPath();
@@ -67,27 +61,27 @@ export const QuantumSimulator: React.FC = () => {
       }
 
       // Compute wave packet data
-      const points = computeWavePacket(params, timeRef.current, 140);
-      const centerY = h * 0.58;
+      const points = computeWavePacket(params, timeRef.current, 160);
+      const centerY = h * 0.56;
 
       // Draw Potential Well V(x)
-      ctx.strokeStyle = 'rgba(148, 163, 184, 0.25)';
+      ctx.strokeStyle = 'rgba(148, 163, 184, 0.3)';
       ctx.lineWidth = 1.5;
       ctx.beginPath();
       points.forEach((pt, idx) => {
         const px = (idx / (points.length - 1)) * w;
-        const py = h - pt.potential * 38 - 14;
+        const py = h - pt.potential * 42 - 16;
         if (idx === 0) ctx.moveTo(px, py);
         else ctx.lineTo(px, py);
       });
       ctx.stroke();
 
       // Draw Probability Density Envelope |psi|^2
-      ctx.fillStyle = 'rgba(59, 130, 246, 0.14)';
+      ctx.fillStyle = 'rgba(56, 189, 248, 0.12)';
       ctx.beginPath();
       points.forEach((pt, idx) => {
         const px = (idx / (points.length - 1)) * w;
-        const py = centerY - pt.probabilityDensity * 90;
+        const py = centerY - pt.probabilityDensity * 95;
         if (idx === 0) ctx.moveTo(px, py);
         else ctx.lineTo(px, py);
       });
@@ -99,31 +93,31 @@ export const QuantumSimulator: React.FC = () => {
       ctx.fill();
 
       // Draw Real Part Re(psi) Waveform
-      ctx.strokeStyle = '#60a5fa';
-      ctx.lineWidth = 2.2;
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 2.4;
       ctx.beginPath();
       points.forEach((pt, idx) => {
         const px = (idx / (points.length - 1)) * w;
-        const py = centerY - pt.psiReal * 80;
+        const py = centerY - pt.psiReal * 85;
         if (idx === 0) ctx.moveTo(px, py);
         else ctx.lineTo(px, py);
       });
       ctx.stroke();
 
-      // Draw Imaginary Part Im(psi) subtle waveform
-      ctx.strokeStyle = 'rgba(167, 139, 250, 0.5)';
-      ctx.lineWidth = 1.4;
+      // Draw Imaginary Part Im(psi) waveform
+      ctx.strokeStyle = 'rgba(192, 132, 252, 0.55)';
+      ctx.lineWidth = 1.6;
       ctx.beginPath();
       points.forEach((pt, idx) => {
         const px = (idx / (points.length - 1)) * w;
-        const py = centerY - pt.psiImag * 80;
+        const py = centerY - pt.psiImag * 85;
         if (idx === 0) ctx.moveTo(px, py);
         else ctx.lineTo(px, py);
       });
       ctx.stroke();
 
-      // Baseline reference
-      ctx.strokeStyle = 'rgba(226, 232, 240, 0.16)';
+      // Zero baseline reference
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.moveTo(0, centerY);
@@ -143,17 +137,28 @@ export const QuantumSimulator: React.FC = () => {
       <div className={styles.simGrid}>
         {/* Controls Column */}
         <div className={styles.simControlsCol}>
-          <div className={styles.simEyebrow}>INTERACTIVE EXPERIMENT</div>
-          <h3 className={styles.simTitle}>Quantum Confinement Simulator</h3>
+          <div className={styles.simEyebrow}>LABORATORY SIMULATION</div>
+          <h3 className={styles.simTitle}>Quantum Wave Packet &amp; Confinement</h3>
           <p className={styles.simDescription}>
-            Visualizing spatial confinement in semiconductor quantum dots and harmonic well
-            superposition. Adjust the mathematical parameters to observe wave packet dispersion.
+            Visualizing time-dependent Schrodinger wave packet evolution in a harmonic potential well.
+            Adjust parameters to observe dispersion, probability density envelope, and phase velocity.
           </p>
+
+          <div className={styles.simTelemetryGrid}>
+            <div className={styles.simTelemetryCard}>
+              <span className={styles.telemetryKey}>PHASE VELOCITY (vp)</span>
+              <span className={styles.telemetryVal}>{phaseVelocity} c</span>
+            </div>
+            <div className={styles.simTelemetryCard}>
+              <span className={styles.telemetryKey}>GROUP VELOCITY (vg)</span>
+              <span className={styles.telemetryVal}>{groupVelocity} c</span>
+            </div>
+          </div>
 
           <div className={styles.controlGroup}>
             <div className={styles.sliderLabelRow}>
               <label htmlFor="sim-omega" className={styles.sliderLabel}>
-                Confinement Frequency (omega)
+                Angular Frequency (omega)
               </label>
               <span className={styles.sliderValue}>{params.omega.toFixed(1)} rad/s</span>
             </div>
@@ -191,7 +196,7 @@ export const QuantumSimulator: React.FC = () => {
           <div className={styles.controlGroup}>
             <div className={styles.sliderLabelRow}>
               <label htmlFor="sim-kappa" className={styles.sliderLabel}>
-                Modulation Coupling (kappa)
+                Spatial Wavenumber (kappa)
               </label>
               <span className={styles.sliderValue}>{params.kappa.toFixed(2)}</span>
             </div>
@@ -212,15 +217,17 @@ export const QuantumSimulator: React.FC = () => {
         <div className={styles.simCanvasCol}>
           <div className={styles.simHeaderBar}>
             <span className={styles.simLegend}>
-              SUPERPOSITION &amp; CONFINEMENT ENVELOPE psi(x,t)
+              SUPERPOSITION &amp; CONFINEMENT ENVELOPE: psi(x,t)
             </span>
-            <span className={styles.simReadoutText}>{readout}</span>
+            <span className={styles.simReadoutText}>
+              omega={params.omega.toFixed(1)} / gamma={params.gamma.toFixed(2)} / kappa={params.kappa.toFixed(2)}
+            </span>
           </div>
 
           <canvas
             ref={canvasRef}
             width={720}
-            height={280}
+            height={300}
             className={styles.simCanvas}
             aria-label="Quantum wave packet simulation plot"
           />
@@ -240,7 +247,7 @@ export const QuantumSimulator: React.FC = () => {
             </div>
             <div className={styles.legendItem}>
               <span className={`${styles.legendDot} ${styles.slate}`}></span>
-              <span>Potential Well V(x)</span>
+              <span>Potential V(x)</span>
             </div>
           </div>
         </div>

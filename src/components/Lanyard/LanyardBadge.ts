@@ -57,51 +57,57 @@ export function drawFrontBadgeCanvas(
   const h = canvas.height;
   ctx.clearRect(0, 0, w, h);
 
-  // Deep anodized obsidian background gradient
+  // Deep obsidian and slate gradient
   const bgGrad = ctx.createLinearGradient(0, 0, w, h);
-  bgGrad.addColorStop(0, '#0d1528');
-  bgGrad.addColorStop(0.55, '#070b16');
-  bgGrad.addColorStop(1, '#0b1326');
+  bgGrad.addColorStop(0, '#0c1424');
+  bgGrad.addColorStop(0.5, '#050812');
+  bgGrad.addColorStop(1, '#091020');
   ctx.fillStyle = bgGrad;
   ctx.fillRect(0, 0, w, h);
 
   // Subtle coordinate grid hairlines
-  ctx.strokeStyle = 'rgba(148, 163, 184, 0.12)';
+  ctx.strokeStyle = 'rgba(148, 163, 184, 0.08)';
   ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.moveTo(36, 108);
-  ctx.lineTo(w - 36, 108);
-  ctx.moveTo(36, 565);
-  ctx.lineTo(w - 36, 565);
+  ctx.moveTo(32, 102);
+  ctx.lineTo(w - 32, 102);
+  ctx.moveTo(32, 570);
+  ctx.lineTo(w - 32, 570);
   ctx.stroke();
 
-  // Top lanyard clasp cutout
-  ctx.fillStyle = '#03050b';
-  drawRoundedRect(ctx, w / 2 - 50, 22, 100, 18, 9);
+  // Top lanyard clasp slot cutout
+  ctx.fillStyle = '#020409';
+  drawRoundedRect(ctx, w / 2 - 45, 20, 90, 16, 8);
   ctx.fill();
-  ctx.strokeStyle = 'rgba(226, 232, 240, 0.3)';
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
   ctx.lineWidth = 1.5;
   ctx.stroke();
 
-  // Top header metadata
-  ctx.fillStyle = '#93c5fd';
-  ctx.font = '600 13px "JetBrains Mono", monospace';
-  ctx.fillText('UNIVERSITAS AIRLANGGA', 36, 82);
+  // Header university metadata
+  ctx.fillStyle = '#38bdf8';
+  ctx.font = '700 13px "JetBrains Mono", monospace';
+  ctx.fillText('UNIVERSITAS AIRLANGGA', 36, 76);
 
   ctx.fillStyle = '#94a3b8';
-  ctx.font = '500 12px "JetBrains Mono", monospace';
+  ctx.font = '500 11px "JetBrains Mono", monospace';
+  ctx.fillText('FAKULTAS SAINS DAN TEKNOLOGI', 36, 94);
+
+  ctx.fillStyle = '#38bdf8';
+  ctx.font = '600 11px "JetBrains Mono", monospace';
   ctx.textAlign = 'right';
-  ctx.fillText('PHYSICS / SEM 05', w - 36, 82);
+  ctx.fillText('NIM 082211333061', w - 36, 76);
+  ctx.fillStyle = '#64748b';
+  ctx.fillText('SEM 05 / 2024-2025', w - 36, 94);
   ctx.textAlign = 'left';
 
   // Prominent Foto 1 portrait window
   const portX = 36;
-  const portY = 126;
+  const portY = 118;
   const portW = w - 72;
-  const portH = 418;
+  const portH = 415;
 
   ctx.save();
-  drawRoundedRect(ctx, portX, portY, portW, portH, 16);
+  drawRoundedRect(ctx, portX, portY, portW, portH, 14);
   ctx.clip();
 
   if (portraitImg && portraitImg.complete && portraitImg.naturalWidth > 0) {
@@ -109,75 +115,86 @@ export function drawFrontBadgeCanvas(
   } else {
     // Elegant fallback plate
     const pGrad = ctx.createLinearGradient(portX, portY, portX + portW, portY + portH);
-    pGrad.addColorStop(0, '#13203d');
-    pGrad.addColorStop(0.6, '#091022');
-    pGrad.addColorStop(1, '#060a14');
+    pGrad.addColorStop(0, '#101a30');
+    pGrad.addColorStop(0.6, '#080e1c');
+    pGrad.addColorStop(1, '#050912');
     ctx.fillStyle = pGrad;
     ctx.fillRect(portX, portY, portW, portH);
 
-    ctx.fillStyle = 'rgba(226, 232, 240, 0.15)';
+    ctx.fillStyle = 'rgba(226, 232, 240, 0.12)';
     ctx.beginPath();
-    ctx.arc(w / 2, 280, 60, 0, Math.PI * 2);
+    ctx.arc(w / 2, 270, 56, 0, Math.PI * 2);
     ctx.fill();
     ctx.beginPath();
-    ctx.arc(w / 2, 470, 120, Math.PI, 0, false);
+    ctx.arc(w / 2, 450, 110, Math.PI, 0, false);
     ctx.fill();
 
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'italic 38px "Instrument Serif", Georgia, serif';
+    ctx.font = 'italic 36px "Instrument Serif", Georgia, serif';
     ctx.textAlign = 'center';
-    ctx.fillText('Kayla Gabrielle', w / 2, 290);
+    ctx.fillText('Kayla Gabrielle', w / 2, 280);
     ctx.textAlign = 'left';
   }
 
   // Bottom gradient vignette inside portrait for contrast
-  const botVignette = ctx.createLinearGradient(0, portY + portH - 95, 0, portY + portH);
-  botVignette.addColorStop(0, 'rgba(7, 11, 22, 0)');
-  botVignette.addColorStop(1, 'rgba(7, 11, 22, 0.85)');
+  const botVignette = ctx.createLinearGradient(0, portY + portH - 100, 0, portY + portH);
+  botVignette.addColorStop(0, 'rgba(5, 8, 18, 0)');
+  botVignette.addColorStop(1, 'rgba(5, 8, 18, 0.92)');
   ctx.fillStyle = botVignette;
-  ctx.fillRect(portX, portY + portH - 95, portW, 95);
+  ctx.fillRect(portX, portY + portH - 100, portW, 100);
+
+  // Holographic security strip on bottom corner of portrait
+  const holoGrad = ctx.createLinearGradient(portX + portW - 140, 0, portX + portW, 0);
+  holoGrad.addColorStop(0, 'rgba(56, 189, 248, 0.25)');
+  holoGrad.addColorStop(0.5, 'rgba(168, 85, 247, 0.35)');
+  holoGrad.addColorStop(1, 'rgba(52, 211, 153, 0.25)');
+  ctx.fillStyle = holoGrad;
+  ctx.fillRect(portX + portW - 140, portY + portH - 32, 126, 20);
+  ctx.fillStyle = '#f8fafc';
+  ctx.font = '700 9px "JetBrains Mono", monospace';
+  ctx.fillText('UNAIR SECURE ID', portX + portW - 132, portY + portH - 18);
 
   ctx.fillStyle = '#e2e8f0';
-  ctx.font = '500 12px "JetBrains Mono", monospace';
-  ctx.fillText('ID // KG-UNAIR-PHY', portX + 18, portY + portH - 18);
+  ctx.font = '600 11px "JetBrains Mono", monospace';
+  ctx.fillText('STUDENT ID: KG-082211333061', portX + 16, portY + portH - 18);
   ctx.restore();
 
   // Crisp border around Foto 1 window
-  ctx.strokeStyle = 'rgba(226, 232, 240, 0.22)';
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.16)';
   ctx.lineWidth = 1.5;
-  drawRoundedRect(ctx, portX, portY, portW, portH, 16);
+  drawRoundedRect(ctx, portX, portY, portW, portH, 14);
   ctx.stroke();
 
-  // Lower editorial name & discipline
+  // Name and academic title
   ctx.fillStyle = '#ffffff';
-  ctx.font = '700 32px "Syne", sans-serif';
-  ctx.fillText('KAYLA GABRIELLE', 36, 614);
+  ctx.font = '700 30px "Syne", sans-serif';
+  ctx.fillText('KAYLA GABRIELLE', 36, 608);
 
-  ctx.fillStyle = '#93c5fd';
-  ctx.font = '500 14px "JetBrains Mono", monospace';
-  ctx.fillText('Physics / AI Research / Software', 36, 646);
+  ctx.fillStyle = '#38bdf8';
+  ctx.font = '500 13px "JetBrains Mono", monospace';
+  ctx.fillText('Physics Undergrad / Scientific Computing', 36, 638);
 
-  // Bottom pill tags
-  const tags = ['JOKI.IN', 'KAYLA FINANCE', 'QUANTUM DOTS'];
+  // Focus Tags Row
+  const tags = ['QUANTUM DOTS', 'JOKI.IN', 'APPLIED AI'];
   let tx = 36;
   tags.forEach((t) => {
-    ctx.font = '500 12px "JetBrains Mono", monospace';
-    const tw = ctx.measureText(t).width + 24;
-    ctx.fillStyle = 'rgba(59, 130, 246, 0.15)';
-    drawRoundedRect(ctx, tx, 676, tw, 32, 16);
+    ctx.font = '500 11px "JetBrains Mono", monospace';
+    const tw = ctx.measureText(t).width + 20;
+    ctx.fillStyle = 'rgba(56, 189, 248, 0.1)';
+    drawRoundedRect(ctx, tx, 664, tw, 28, 14);
     ctx.fill();
-    ctx.strokeStyle = 'rgba(147, 197, 253, 0.35)';
+    ctx.strokeStyle = 'rgba(56, 189, 248, 0.28)';
     ctx.lineWidth = 1;
     ctx.stroke();
-    ctx.fillStyle = '#e2e8f0';
-    ctx.fillText(t, tx + 12, 697);
-    tx += tw + 10;
+    ctx.fillStyle = '#cbd5e1';
+    ctx.fillText(t, tx + 10, 682);
+    tx += tw + 8;
   });
 
-  // Outer card bezel highlight
-  ctx.strokeStyle = 'rgba(226, 232, 240, 0.3)';
-  ctx.lineWidth = 4;
-  drawRoundedRect(ctx, 4, 4, w - 8, h - 8, 26);
+  // Concentric outer bezel highlight
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.18)';
+  ctx.lineWidth = 3;
+  drawRoundedRect(ctx, 4, 4, w - 8, h - 8, 22);
   ctx.stroke();
 }
 
@@ -191,100 +208,105 @@ export function drawBackBadgeCanvas(canvas: HTMLCanvasElement) {
 
   // Background
   const bgGrad = ctx.createLinearGradient(0, 0, w, h);
-  bgGrad.addColorStop(0, '#0d1528');
-  bgGrad.addColorStop(0.55, '#070b16');
-  bgGrad.addColorStop(1, '#0b1326');
+  bgGrad.addColorStop(0, '#0c1424');
+  bgGrad.addColorStop(0.5, '#050812');
+  bgGrad.addColorStop(1, '#091020');
   ctx.fillStyle = bgGrad;
   ctx.fillRect(0, 0, w, h);
 
   // Clasp cutout
-  ctx.fillStyle = '#03050b';
-  drawRoundedRect(ctx, w / 2 - 50, 22, 100, 18, 9);
+  ctx.fillStyle = '#020409';
+  drawRoundedRect(ctx, w / 2 - 45, 20, 90, 16, 8);
   ctx.fill();
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
 
-  ctx.fillStyle = '#93c5fd';
-  ctx.font = '500 13px "JetBrains Mono", monospace';
-  ctx.fillText('PORTFOLIO DOSSIER // BACK', 42, 92);
+  // Header
+  ctx.fillStyle = '#38bdf8';
+  ctx.font = '600 12px "JetBrains Mono", monospace';
+  ctx.fillText('ACADEMIC DOSSIER / RESEARCH PROFILE', 40, 84);
 
   ctx.fillStyle = '#ffffff';
-  ctx.font = 'italic 46px "Instrument Serif", Georgia, serif';
-  ctx.fillText('Kayla Gabrielle', 42, 150);
+  ctx.font = 'italic 42px "Instrument Serif", Georgia, serif';
+  ctx.fillText('Kayla Gabrielle', 40, 138);
 
-  ctx.strokeStyle = 'rgba(226, 232, 240, 0.14)';
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
   ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.moveTo(42, 178);
-  ctx.lineTo(w - 42, 178);
+  ctx.moveTo(40, 164);
+  ctx.lineTo(w - 40, 164);
   ctx.stroke();
 
   const rows = [
-    ['STATUS', 'Physics Undergrad (Sem 5)'],
-    ['UNIVERSITY', 'Universitas Airlangga'],
-    ['BACKGROUND', 'Malaysia, Jakarta, Surabaya'],
-    ['FOCUS', 'AI, Simulation & Quantum Dots'],
-    ['PROJECTS', 'JOKI.IN & Kayla Finance'],
+    ['STATUS', 'Physics Undergrad (Semester 5)'],
+    ['INSTITUTION', 'Universitas Airlangga (UNAIR)'],
+    ['ORIGIN', 'Malaysia, Jakarta, Surabaya'],
+    ['CITIZENSHIP', 'Malaysian Citizen'],
+    ['INQUIRY', 'Quantum Systems, Physics-Informed ML'],
+    ['PRODUCTS', 'JOKI.IN & Kayla Finance'],
     ['GITHUB', 'github.com/Jokitugasbykay']
   ];
 
-  let ry = 224;
+  let ry = 208;
   rows.forEach(([k, v]) => {
     ctx.fillStyle = '#64748b';
-    ctx.font = '500 12px "JetBrains Mono", monospace';
-    ctx.fillText(k, 42, ry);
+    ctx.font = '600 11px "JetBrains Mono", monospace';
+    ctx.fillText(k, 40, ry);
 
     ctx.fillStyle = '#f8fafc';
-    ctx.font = '500 14px "Inter", sans-serif';
-    ctx.fillText(v, 185, ry);
-    ry += 48;
+    ctx.font = '500 13px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText(v, 165, ry);
+    ry += 42;
   });
 
   // Footer separator
-  ctx.strokeStyle = 'rgba(226, 232, 240, 0.14)';
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
   ctx.beginPath();
-  ctx.moveTo(42, 535);
-  ctx.lineTo(w - 42, 535);
+  ctx.moveTo(40, 520);
+  ctx.lineTo(w - 40, 520);
   ctx.stroke();
 
-  // Subtle restrained QR code in bottom corner
-  const qrX = 42;
-  const qrY = 568;
-  const qrSize = 116;
+  // Reduced, refined QR Code (64x64) in bottom right corner
+  const qrSize = 64;
+  const qrX = w - 40 - qrSize;
+  const qrY = 548;
+
   ctx.fillStyle = '#ffffff';
-  drawRoundedRect(ctx, qrX, qrY, qrSize, qrSize, 12);
+  drawRoundedRect(ctx, qrX, qrY, qrSize, qrSize, 8);
   ctx.fill();
 
-  ctx.fillStyle = '#070b16';
-  const cell = 7;
-  for (let r = 0; r < 12; r++) {
-    for (let c = 0; c < 12; c++) {
+  ctx.fillStyle = '#050812';
+  const cell = 4;
+  for (let r = 0; r < 11; r++) {
+    for (let c = 0; c < 11; c++) {
       const isCorner =
         (r < 3 && c < 3) ||
-        (r < 3 && c > 8) ||
-        (r > 8 && c < 3);
-      const bit = ((r * 19 + c * 13 + r * c) % 5) < 2;
+        (r < 3 && c > 7) ||
+        (r > 7 && c < 3);
+      const bit = ((r * 13 + c * 17 + r * c) % 5) < 2;
       if (isCorner || bit) {
-        ctx.fillRect(qrX + 14 + c * cell, qrY + 14 + r * cell, cell - 1.5, cell - 1.5);
+        ctx.fillRect(qrX + 10 + c * cell, qrY + 10 + r * cell, cell - 1, cell - 1);
       }
     }
   }
 
-  // Footer metadata
-  ctx.fillStyle = '#e2e8f0';
-  ctx.font = '600 16px "Syne", sans-serif';
-  ctx.fillText('KAYLA UNIVERSE', 182, 602);
+  // Left text beside QR code
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '700 16px "Syne", sans-serif';
+  ctx.fillText('KAYLA UNIVERSE', 40, 568);
 
   ctx.fillStyle = '#94a3b8';
-  ctx.font = '400 13px "Inter", sans-serif';
-  ctx.fillText('Science, engineering, and', 182, 628);
-  ctx.fillText('creative technology.', 182, 648);
+  ctx.font = '400 12px "Plus Jakarta Sans", sans-serif';
+  ctx.fillText('Physical simulation, AI & engineering.', 40, 592);
 
-  ctx.fillStyle = '#93c5fd';
-  ctx.font = '500 12px "JetBrains Mono", monospace';
-  ctx.fillText('jokiin.my.id', 182, 674);
+  ctx.fillStyle = '#38bdf8';
+  ctx.font = '600 12px "JetBrains Mono", monospace';
+  ctx.fillText('jokiin.my.id', 40, 616);
 
   // Outer bezel highlight
-  ctx.strokeStyle = 'rgba(226, 232, 240, 0.3)';
-  ctx.lineWidth = 4;
-  drawRoundedRect(ctx, 4, 4, w - 8, h - 8, 26);
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.18)';
+  ctx.lineWidth = 3;
+  drawRoundedRect(ctx, 4, 4, w - 8, h - 8, 22);
   ctx.stroke();
 }

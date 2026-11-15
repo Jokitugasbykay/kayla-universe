@@ -3,7 +3,7 @@
   padding-top: var(--section-padding-y);
   padding-bottom: var(--section-padding-y);
   border-top: 1px solid var(--hairline);
-  background: rgba(7, 11, 22, 0.55);
+  background-color: var(--bg-900);
 }
 
 .educationContainer {
@@ -14,6 +14,33 @@
   padding-right: var(--content-padding-x);
 }
 
+.sectionHeaderRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1.5rem;
+  padding-bottom: 1.5rem;
+  margin-bottom: 3.5rem;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent-sky);
+  font-weight: 600;
+}
+
+.eyebrowRight {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  color: var(--fg-400);
+}
+
 .sectionGrid {
   display: grid;
   grid-template-columns: 1fr;
@@ -21,69 +48,116 @@
   align-items: start;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 960px) {
   .sectionGrid {
-    grid-template-columns: 4.5fr 7.5fr;
+    grid-template-columns: 4.8fr 7.2fr;
+    gap: 4.5rem;
   }
 }
 
 .leftCol {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.5rem;
   position: sticky;
   top: 6rem;
 }
 
-.eyebrow {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--accent-sky);
-}
-
 .sectionTitle {
   font-family: var(--font-serif);
-  font-size: clamp(2.2rem, 3.8vw, 3.4rem);
+  font-size: clamp(2.2rem, 4vw, 3.5rem);
   font-weight: 400;
-  line-height: 1.1;
+  line-height: 1.12;
   color: var(--fg-50);
   margin: 0;
-  letter-spacing: -0.015em;
+  font-style: italic;
 }
 
 .sectionDesc {
-  font-size: 0.95rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
   color: var(--fg-400);
-  line-height: 1.7;
+  line-height: 1.75;
   margin: 0;
-  max-width: 42ch;
+  max-width: 44ch;
 }
 
-.curiosityBadge {
-  display: inline-flex;
+/* Double-Bezel Institution Card */
+.institutionCard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  background: var(--bezel-outer-bg);
+  border: var(--bezel-outer-border);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+}
+
+.institutionHeader {
+  display: flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.45rem 0.85rem;
-  background: rgba(59, 130, 246, 0.12);
-  border: 1px solid rgba(96, 165, 250, 0.3);
-  border-radius: var(--radius-pill);
+  gap: 1rem;
+}
+
+.crestCircle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--fg-50);
+}
+
+.instName {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #ffffff;
+}
+
+.instFaculty {
   font-family: var(--font-mono);
   font-size: 0.72rem;
   color: var(--accent-sky);
-  width: fit-content;
-  margin-top: 0.5rem;
+  margin-top: 2px;
 }
 
-.curiosityDot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--accent-sky);
-  box-shadow: 0 0 8px var(--accent-sky);
+.instMetaGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
+.instMetaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.metaLabel {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--fg-500);
+  letter-spacing: 0.05em;
+}
+
+.metaValue {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--fg-200);
+}
+
+/* Right Column: Ledger List */
 .rightCol {
   display: flex;
   flex-direction: column;
@@ -92,91 +166,105 @@
 .ledgerList {
   display: flex;
   flex-direction: column;
+  gap: 1.75rem;
 }
 
-.ledgerItem {
-  padding-bottom: 2.5rem;
-  margin-bottom: 2.5rem;
-  border-bottom: 1px solid var(--hairline);
+.ledgerCard {
+  padding: 1.75rem 2rem;
+  background: var(--bezel-outer-bg);
+  border: var(--bezel-outer-border);
+  border-radius: var(--radius-xl);
+  transition: all var(--transition-smooth);
+}
+
+.ledgerCard:hover {
+  background: rgba(15, 23, 42, 0.65);
+  border-color: rgba(56, 189, 248, 0.3);
+  transform: translateY(-2px);
+}
+
+.cardHeader {
   display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-}
-
-.ledgerItem:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
-  margin-bottom: 0;
-}
-
-.itemMetaRow {
-  display: flex;
-  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.periodBadge {
   font-family: var(--font-mono);
   font-size: 0.72rem;
-}
-
-.itemBadge {
-  color: var(--accent-sky);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.itemPeriod {
-  color: var(--fg-500);
-}
-
-.itemInstitution {
-  font-family: var(--font-serif);
-  font-size: 2rem;
-  font-weight: 400;
-  color: var(--fg-50);
-  margin: 0.2rem 0 0 0;
-}
-
-.itemDegree {
-  font-family: var(--font-display);
-  font-size: 1rem;
   font-weight: 600;
-  color: var(--fg-200);
+  color: var(--accent-sky);
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-pill);
 }
 
-.itemDesc {
-  font-size: 0.95rem;
+.locationTag {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
   color: var(--fg-400);
-  line-height: 1.75;
-  margin: 0.4rem 0 0.8rem 0;
 }
 
-.courseworkWrap {
+.institutionTitle {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 0.35rem 0;
+}
+
+.degreeTitle {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--fg-200);
+  font-weight: 500;
+  margin-bottom: 0.85rem;
+}
+
+.itemDescription {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  color: var(--fg-300);
+  line-height: 1.7;
+  margin: 0 0 1.25rem 0;
+}
+
+.courseworkWrapper {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.courseworkLabel {
+.courseworkHeader {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
-  color: var(--fg-500);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  font-size: 0.7rem;
+  color: var(--fg-400);
+  letter-spacing: 0.04em;
 }
 
-.pillRow {
+.courseworkGrid {
   display: flex;
   flex-wrap: wrap;
   gap: 0.45rem;
 }
 
-.coursePill {
+.courseworkPill {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
-  padding: 0.25rem 0.65rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--hairline-medium);
-  border-radius: var(--radius-pill);
+  font-size: 0.72rem;
   color: var(--fg-200);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-pill);
+  transition: all var(--transition-fast);
+}
+
+.courseworkPill:hover {
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--fg-50);
+  border-color: var(--accent-sky);
 }

@@ -9,7 +9,7 @@ export const Contact: React.FC = () => {
       <div className={styles.contactContainer}>
         {/* Section Header */}
         <div className={styles.sectionHeaderRow}>
-          <div className={styles.eyebrow}>07 / CONTACT &amp; CORRESPONDENCE</div>
+          <div className={styles.eyebrow}>07 / CORRESPONDENCE &amp; DIALOGUE</div>
           <div className={styles.eyebrowRight}>DIRECT CHANNELS &middot; SURABAYA, ID</div>
         </div>
 
@@ -26,7 +26,7 @@ export const Contact: React.FC = () => {
               thoughtful conversations and research opportunities.
             </p>
 
-            {/* Direct Channel Cards */}
+            {/* Direct Channel Cards with Button-in-Button Arrow */}
             <div className={styles.channelList}>
               <a
                 href={`mailto:${PROFILE_DATA.email}`}
@@ -37,7 +37,7 @@ export const Contact: React.FC = () => {
                   <span className={styles.channelLabel}>PRIMARY EMAIL</span>
                   <span className={styles.channelValue}>{PROFILE_DATA.email}</span>
                 </div>
-                <span className={styles.channelArrow}>&rarr;</span>
+                <span className={styles.channelArrowCircle}>→</span>
               </a>
 
               <a
@@ -51,7 +51,7 @@ export const Contact: React.FC = () => {
                   <span className={styles.channelLabel}>GITHUB PROFILE</span>
                   <span className={styles.channelValue}>github.com/{PROFILE_DATA.githubUsername}</span>
                 </div>
-                <span className={styles.channelArrow}>&rarr;</span>
+                <span className={styles.channelArrowCircle}>→</span>
               </a>
 
               <a
@@ -65,7 +65,7 @@ export const Contact: React.FC = () => {
                   <span className={styles.channelLabel}>PRODUCTION SYSTEM</span>
                   <span className={styles.channelValue}>jokiin.my.id</span>
                 </div>
-                <span className={styles.channelArrow}>&rarr;</span>
+                <span className={styles.channelArrowCircle}>→</span>
               </a>
             </div>
 
