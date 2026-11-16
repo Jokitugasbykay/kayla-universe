@@ -15,9 +15,9 @@ test('safe public content, loaded assets and usable interactions', async ({ page
     const canvas = page.locator('canvas[aria-label*="lanyard"]');
     await expect(canvas).toBeVisible();
     expect(await canvas.evaluate((e: HTMLCanvasElement) => !!e.getContext('webgl2'))).toBe(true);
-    await page.getByRole('button', { name: 'Flip lanyard badge' }).click();
-    await expect(page.getByRole('button', { name: 'Flip lanyard badge' })).toHaveText('Show Front');
-    await page.getByRole('button', { name: 'Nudge physical card' }).click();
+    const turnBtn = page.getByRole('button', { name: /Turn lanyard badge|Flip lanyard badge/i });
+    await turnBtn.click();
+    await expect(turnBtn).toHaveText(/Front View|Show Front/i);
     const box = (await canvas.boundingBox())!;
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
     await page.mouse.down();
@@ -68,6 +68,7 @@ test('fallback remains usable and storage failure is truthful', async ({ page })
     await page.goto('/');
     const fallback = page.locator('canvas[aria-label="Interactive physics lanyard for Kayla Gabrielle"]');
     await expect(fallback).toBeVisible();
+    await fallback.scrollIntoViewIfNeeded();
     const box = (await fallback.boundingBox())!;
     await page.mouse.move(box.x + 4, box.y + 4);
     await page.mouse.down();
@@ -77,10 +78,39 @@ test('fallback remains usable and storage failure is truthful', async ({ page })
     await page.mouse.down();
     await expect(page.getByText('Holding card / Release to swing')).toBeVisible();
     await page.mouse.up();
-    await page.getByRole('button', { name: 'Flip lanyard badge' }).click();
-    await expect(page.getByRole('button', { name: 'Flip lanyard badge' })).toHaveText('Show Front');
+    const fallbackTurnBtn = page.getByRole('button', { name: /Turn lanyard badge|Flip lanyard badge/i });
+    await fallbackTurnBtn.click();
+    await expect(fallbackTurnBtn).toHaveText(/Front View|Show Front/i);
     await page.getByLabel('Your Name *').fill('Local visitor');
     await page.getByLabel('Message *').fill('Unsaved note');
     await page.getByRole('button', { name: 'Save locally' }).click();
     await expect(page.getByRole('status')).toContainText('Storage is unavailable');
+});
+
+test('capture dynamic physics interaction states', async ({ page }) => {
+    await page.goto('/');
+    const canvas = page.locator('canvas[aria-label*="lanyard"]');
+    await expect(canvas).toBeVisible();
+    await page.waitForTimeout(600);
+
+    const box = (await canvas.boundingBox())!;
+    const startX = box.x + box.width / 2 + 35;
+    const startY = box.y + box.height * 0.58;
+
+    // 1. Off-center drag producing torque and dynamic tilt
+    await page.mouse.move(startX, startY);
+    await page.mouse.down();
+    await page.mouse.move(startX + 130, startY - 25, { steps: 12 });
+    await page.waitForTimeout(400);
+    await page.screenshot({ path: 'review/lanyard-dragged-torque.png' });
+
+    // Release pointer to allow natural pendulum oscillation
+    await page.mouse.up();
+    await page.waitForTimeout(700);
+
+    // 2. Flip badge to reverse side
+    const turnBtn = page.getByRole('button', { name: /Turn lanyard badge|Flip lanyard badge/i });
+    await turnBtn.click();
+    await page.waitForTimeout(900);
+    await page.screenshot({ path: 'review/lanyard-flipped-back.png' });
 });

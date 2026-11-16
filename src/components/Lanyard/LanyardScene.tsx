@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import * as THREE from 'three';
-import { LanyardVerletSystem } from '../../physics/verletChain';
+import { AdvancedLanyardPhysics } from '../../physics/lanyardPhysics';
 import { drawFrontBadgeCanvas, drawBackBadgeCanvas } from './LanyardBadge';
 import { LanyardFallback } from './LanyardFallback';
 import styles from './Lanyard.module.css';
@@ -14,13 +14,13 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
     const [webglSupported, setWebglSupported] = useState<boolean>(true);
     const [isFlipped, setIsFlipped] = useState<boolean>(false);
     const [telemetry, setTelemetry] = useState<string>('Drag card to swing / Double-click to turn');
-    const simRef = useRef<LanyardVerletSystem>(new LanyardVerletSystem(14, 0.135, 2.35));
+    const simRef = useRef<AdvancedLanyardPhysics>(new AdvancedLanyardPhysics(14, 0.125, new THREE.Vector3(0, 2.35, 0)));
     const rafRef = useRef<number>(0);
 
     const handleFlip = useCallback(() => {
         simRef.current.toggleFlip();
         setIsFlipped((prev) => !prev);
-        setTelemetry(simRef.current.card.isFlipped ? 'Reverse view' : 'Front view');
+        setTelemetry(simRef.current.isFlipped ? 'Reverse view' : 'Front view');
     }, []);
 
     useEffect(() => {
@@ -164,7 +164,8 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
                 frontMat,
                 backMat
             ]);
-            cardMesh.position.y = -cardH / 2 - 0.12;
+            // Centered directly at card group origin (Center of Mass)
+            cardMesh.position.set(0, 0, 0);
             cardGroup.add(cardMesh);
 
             // Polished Hardware Clasp: Warm satin titanium/champagne bracket + swivel ring
@@ -174,17 +175,17 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
                 metalness: 0.85
             });
 
-            // Swivel ring loop
+            // Swivel ring loop positioned at attachment point
             const ringGeo = new THREE.TorusGeometry(0.10, 0.022, 16, 24);
             const ringMesh = new THREE.Mesh(ringGeo, metalMat);
-            ringMesh.position.y = 0.05;
+            ringMesh.position.set(0, cardH * 0.5 + 0.12, 0);
             ringMesh.rotation.x = Math.PI / 2;
             cardGroup.add(ringMesh);
 
             // Clasp bracket body
             const bracketGeo = new THREE.BoxGeometry(0.32, 0.14, 0.07);
             const bracketMesh = new THREE.Mesh(bracketGeo, metalMat);
-            bracketMesh.position.y = -0.04;
+            bracketMesh.position.set(0, cardH * 0.5 + 0.04, 0);
             cardGroup.add(bracketMesh);
 
             scene.add(cardGroup);
@@ -224,7 +225,6 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
         const raycaster = new THREE.Raycaster();
         const dragPlane = new THREE.Plane();
         const dragPoint = new THREE.Vector3();
-        const dragOffset = new THREE.Vector3();
 
         const getNormCoords = (e: MouseEvent) => {
             const rect = canvas.getBoundingClientRect();
@@ -233,62 +233,58 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
             return { nx, ny };
         };
 
-        const hitCard = (e: MouseEvent) => {
-            if (!camera || !cardGroup) return false;
+        const getCardIntersection = (e: MouseEvent): THREE.Intersection | null => {
+            if (!camera || !cardGroup) return null;
             const { nx, ny } = getNormCoords(e);
             raycaster.setFromCamera(new THREE.Vector2(nx, ny), camera);
             cardGroup.updateMatrixWorld(true);
-            return raycaster.intersectObjects(cardGroup.children, true).length > 0;
-        };
-
-        const pointAtPointer = (e: MouseEvent) => {
-            if (!camera) return false;
-            const { nx, ny } = getNormCoords(e);
-            raycaster.setFromCamera(new THREE.Vector2(nx, ny), camera);
-            return raycaster.ray.intersectPlane(dragPlane, dragPoint) !== null;
+            const hits = raycaster.intersectObjects(cardGroup.children, true);
+            return hits.length > 0 ? hits[0] : null;
         };
 
         const handlePointerDown = (e: PointerEvent) => {
             if (e.button !== 0) return;
-            if (!hitCard(e) || !cardGroup || !camera) return;
+            const hit = getCardIntersection(e);
+            if (!hit || !cardGroup || !camera) return;
             try {
                 canvas.setPointerCapture(e.pointerId);
             } catch {
                 // Ignore pointer capture errors in testing/virtual environments
             }
             camera.getWorldDirection(dragPlane.normal);
-            dragPlane.setFromNormalAndCoplanarPoint(dragPlane.normal, cardGroup.position);
-            if (!pointAtPointer(e)) return;
-            dragOffset.copy(cardGroup.position).sub(dragPoint);
-            sim.card.isDragging = true;
-            sim.card.dragTargetX = cardGroup.position.x;
-            sim.card.dragTargetY = cardGroup.position.y;
+            dragPlane.setFromNormalAndCoplanarPoint(dragPlane.normal, hit.point);
+
+            sim.startDragging(hit.point);
             canvas.style.cursor = 'grabbing';
             setTelemetry('Holding card / Release to swing');
         };
 
         const handlePointerMove = (e: PointerEvent) => {
-            if (!sim.card.isDragging) {
-                if (hitCard(e)) {
-                    canvas.style.cursor = 'grab';
-                } else {
-                    canvas.style.cursor = 'default';
-                }
+            if (!sim.isDragging) {
+                canvas.style.cursor = getCardIntersection(e) ? 'grab' : 'default';
                 return;
             }
-            if (!pointAtPointer(e) || !camera) return;
-            // Camera-aware bounds calculation to guarantee card remains inside camera frustum
-            const vHalf = Math.tan((camera.fov * Math.PI) / 360) * camera.position.z;
-            const hHalf = vHalf * camera.aspect;
-            const halfCardW = 0.95;
-            const halfCardH = 1.45;
-            const minDragX = -hHalf + halfCardW + 0.15;
-            const maxDragX = hHalf - halfCardW - 0.15;
-            const maxDragY = sim.anchorY - 0.45;
-            const minDragY = camera.position.y - vHalf + halfCardH + 0.25;
+            if (!camera) return;
+            const { nx, ny } = getNormCoords(e);
+            raycaster.setFromCamera(new THREE.Vector2(nx, ny), camera);
+            if (raycaster.ray.intersectPlane(dragPlane, dragPoint)) {
+                // Camera-aware bounds calculation to guarantee card remains comfortably inside frustum
+                const vHalf = Math.tan((camera.fov * Math.PI) / 360) * camera.position.z;
+                const hHalf = vHalf * camera.aspect;
+                const halfCardW = 0.95;
+                const halfCardH = 1.45;
+                const minDragX = -hHalf + halfCardW + 0.15;
+                const maxDragX = hHalf - halfCardW - 0.15;
+                const maxDragY = sim.anchor.y - 0.25;
+                const minDragY = camera.position.y - vHalf + halfCardH + 0.25;
 
-            sim.card.dragTargetX = Math.max(minDragX, Math.min(maxDragX, dragPoint.x + dragOffset.x));
-            sim.card.dragTargetY = Math.max(minDragY, Math.min(maxDragY, dragPoint.y + dragOffset.y));
+                const clampedTarget = new THREE.Vector3(
+                    Math.max(minDragX, Math.min(maxDragX, dragPoint.x)),
+                    Math.max(minDragY, Math.min(maxDragY, dragPoint.y)),
+                    dragPoint.z
+                );
+                sim.updateDragTarget(clampedTarget);
+            }
         };
 
         const handlePointerUp = (e: PointerEvent) => {
@@ -299,15 +295,15 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
             } catch {
                 // Ignore pointer release errors
             }
-            if (sim.card.isDragging) {
-                sim.card.isDragging = false;
-                canvas.style.cursor = hitCard(e) ? 'grab' : 'default';
-                setTelemetry('Drag card to swing / Double-click to flip');
+            if (sim.isDragging) {
+                sim.stopDragging();
+                canvas.style.cursor = getCardIntersection(e) ? 'grab' : 'default';
+                setTelemetry('Drag card to swing / Double-click to turn');
             }
         };
 
         const handleDblClick = (e: MouseEvent) => {
-            if (hitCard(e)) handleFlip();
+            if (getCardIntersection(e)) handleFlip();
         };
 
         canvas.addEventListener('pointerdown', handlePointerDown);
@@ -316,50 +312,31 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
         window.addEventListener('pointercancel', handlePointerUp);
         canvas.addEventListener('dblclick', handleDblClick);
 
-        // Animation Loop with Segment Normal Ribbon Extrusion
+        // Animation Loop with Segment Normal Ribbon Extrusion & Substep Physics
         const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         let lastTime = 0;
-        let accumulator = 0;
 
         const animate = (now: number) => {
-            accumulator += Math.min((now - (lastTime || now)) / 1000, 0.1);
+            const dt = Math.min((now - (lastTime || now)) / 1000, 0.05);
             lastTime = now;
-            while (accumulator >= 1 / 60) {
-                if (!reduced || sim.card.isDragging || Math.abs(sim.card.targetFlipY - sim.card.rotY) > 0.001) {
-                    sim.step();
-                }
-                accumulator -= 1 / 60;
+
+            if (!reduced || sim.isDragging || sim.card.angularVelocity.lengthSq() > 0.0001 || sim.card.velocity.lengthSq() > 0.0001) {
+                sim.update(dt);
             }
 
-            const tip = sim.nodes[sim.segmentCount];
             if (strapMesh && cardGroup && renderer && scene && camera) {
+                const { left, right } = sim.getRopeRibbonVertices(0.075);
                 const posAttr = strapMesh.geometry.attributes.position as THREE.BufferAttribute;
-                const halfStrapW = 0.075;
 
                 for (let i = 0; i <= sim.segmentCount; i++) {
-                    const n = sim.nodes[i];
-                    let dx = 0;
-                    let dy = -1;
-                    if (i < sim.segmentCount) {
-                        dx = sim.nodes[i + 1].x - n.x;
-                        dy = sim.nodes[i + 1].y - n.y;
-                    } else {
-                        dx = n.x - sim.nodes[i - 1].x;
-                        dy = n.y - sim.nodes[i - 1].y;
-                    }
-                    const len = Math.hypot(dx, dy) || 1;
-                    const perpX = (-dy / len) * halfStrapW;
-                    const perpY = (dx / len) * halfStrapW;
-
-                    posAttr.setXYZ(i * 2, n.x - perpX, n.y - perpY, n.z);
-                    posAttr.setXYZ(i * 2 + 1, n.x + perpX, n.y + perpY, n.z);
+                    posAttr.setXYZ(i * 2, left[i].x, left[i].y, left[i].z);
+                    posAttr.setXYZ(i * 2 + 1, right[i].x, right[i].y, right[i].z);
                 }
-
                 posAttr.needsUpdate = true;
                 strapMesh.geometry.computeVertexNormals();
 
-                cardGroup.position.set(tip.x, tip.y, tip.z);
-                cardGroup.rotation.set(sim.card.tiltX, sim.card.rotY, sim.card.tiltZ);
+                cardGroup.position.copy(sim.card.position);
+                cardGroup.quaternion.copy(sim.card.quaternion);
 
                 renderer.render(scene, camera);
             }

@@ -34,7 +34,7 @@ export const Projects: React.FC = () => {
                                                 src={project.previewImage}
                                                 alt={`${project.title} Preview`}
                                                 className={styles.previewImage}
-                                                loading="lazy"
+                                                loading="eager"
                                             />
                                         )}
 
