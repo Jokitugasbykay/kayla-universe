@@ -1,92 +1,30 @@
 import { describe, it, expect } from 'vitest';
-import {
-  PROFILE_DATA,
-  PROJECTS_DATA,
-  EDUCATION_DATA,
-  RESEARCH_DATA,
-  SKILLS_DATA,
-  INITIAL_GUESTBOOK
-} from '../../src/data/portfolio';
-
-describe('Kayla Universe Portfolio Data Integrity', () => {
-  it('contains authentic profile information for Kayla Gabrielle', () => {
-    expect(PROFILE_DATA.name).toBe('Kayla Gabrielle');
-    expect(PROFILE_DATA.university).toBe('Universitas Airlangga');
-    expect(PROFILE_DATA.semester).toBe('Semester 5');
-    expect(PROFILE_DATA.email).toBe('kaylagabrielle.work@gmail.com');
-    expect(PROFILE_DATA.github).toContain('github.com');
-  });
-
-  it('contains verified project records for JOKI.IN and Kayla Finance', () => {
-    const ids = PROJECTS_DATA.map((p) => p.id);
-    expect(ids).toContain('jokiin');
-    expect(ids).toContain('kayla-finance');
-
-    const jokiin = PROJECTS_DATA.find((p) => p.id === 'jokiin');
-    expect(jokiin?.link).toBe('https://jokiin.my.id');
-    expect(jokiin?.previewImage).toBe('/assets/jokiin-preview.png');
-
-    const finance = PROJECTS_DATA.find((p) => p.id === 'kayla-finance');
-    expect(finance?.previewImage).toBe('/assets/kayla-finance.svg');
-  });
-
-  it('records education at Universitas Airlangga in Semester 5', () => {
-    const unair = EDUCATION_DATA.find((e) => e.institution.includes('Airlangga'));
-    expect(unair).toBeDefined();
-    expect(unair?.qualification).toContain('Physics');
-    expect(unair?.coursework.length).toBeGreaterThan(3);
-  });
-
-  it('contains structured research interests', () => {
-    expect(RESEARCH_DATA.length).toBeGreaterThanOrEqual(3);
-    const codes = RESEARCH_DATA.map((r) => r.code);
-    expect(codes).toContain('RES-01');
-    expect(codes).toContain('RES-02');
-    expect(codes).toContain('RES-03');
-  });
-
-  it('contains curated skill categories without fake percentage scores', () => {
-    expect(SKILLS_DATA.length).toBe(4);
-    SKILLS_DATA.forEach((cat) => {
-      expect(cat.items.length).toBeGreaterThanOrEqual(4);
-      expect(cat.domain).toBeDefined();
+import { readFileSync } from 'node:fs';
+import { PROFILE_DATA, PROJECTS_DATA, EDUCATION_DATA, RESEARCH_DATA, SKILLS_DATA, INITIAL_GUESTBOOK } from '../../src/data/portfolio';
+import { drawFrontBadgeCanvas, drawBackBadgeCanvas } from '../../src/components/Lanyard/LanyardBadge';
+describe('Public content safety', () => {
+    it('keeps approved identity, neutral education and no endorsements', () => {
+        expect(PROFILE_DATA.name).toBe('Kayla Gabrielle');
+        expect(PROFILE_DATA.university).toBe('Universitas Airlangga');
+        expect(INITIAL_GUESTBOOK).toEqual([]);
+        expect(EDUCATION_DATA).toHaveLength(1);
+        expect(EDUCATION_DATA[0].qualification).toContain('student');
+        expect(PROJECTS_DATA.every(p => !p.github || new URL(p.github).pathname.split('/').filter(Boolean).length === 2)).toBe(true);
     });
-  });
-
-  it('STRICT RULE: verifies that NO string contains an em dash or en dash', () => {
-    const hasDash = (str: string) => str.includes('\u2014') || str.includes('\u2013');
-
-    // Profile check
-    Object.values(PROFILE_DATA).forEach((val) => {
-      if (typeof val === 'string') {
-        expect(hasDash(val), `Found em dash or en dash in profile: ${val}`).toBe(false);
-      }
+    it('does not expose identifiers, private biography or unsupported titles', () => {
+        const publicData = JSON.stringify({ PROFILE_DATA, PROJECTS_DATA, EDUCATION_DATA, RESEARCH_DATA, SKILLS_DATA });
+        expect(publicData).not.toMatch(/citizen|researcher|Bachelor of Science|[\u2013\u2014]/i);
+        const labels: string[] = [];
+        const ctx = new Proxy({ fillText: (text: string) => labels.push(text) }, { get: (target, key) => key in target ? target[key as keyof typeof target] : () => { } });
+        const canvas = { width: 520, height: 760, getContext: () => ctx } as unknown as HTMLCanvasElement;
+        drawFrontBadgeCanvas(canvas, null);
+        drawBackBadgeCanvas(canvas);
+        expect(labels.join(' ')).toContain('Personal portfolio pass');
+        expect(labels.join(' ')).not.toMatch(/\d{8,}|NIM|SECURE ID|STUDENT ID|citizen/i);
     });
-
-    // Projects check
-    PROJECTS_DATA.forEach((p) => {
-      expect(hasDash(p.title)).toBe(false);
-      expect(hasDash(p.summary)).toBe(false);
-      expect(hasDash(p.description)).toBe(false);
-      p.highlights.forEach((h) => expect(hasDash(h)).toBe(false));
+    it('does not seed old guestbook entries when loading local notes', () => {
+        const source = readFileSync('src/components/Contact/Guestbook.tsx', 'utf8');
+        expect(source).toContain('kayla_portfolio_local_notes_v2');
+        expect(source).not.toContain("getItem('kayla_portfolio_guestbook')");
     });
-
-    // Education check
-    EDUCATION_DATA.forEach((e) => {
-      expect(hasDash(e.institution)).toBe(false);
-      expect(hasDash(e.description)).toBe(false);
-      e.coursework.forEach((c) => expect(hasDash(c)).toBe(false));
-    });
-
-    // Research check
-    RESEARCH_DATA.forEach((r) => {
-      expect(hasDash(r.title)).toBe(false);
-      expect(hasDash(r.abstract)).toBe(false);
-    });
-
-    // Guestbook check
-    INITIAL_GUESTBOOK.forEach((g) => {
-      expect(hasDash(g.comment)).toBe(false);
-    });
-  });
 });

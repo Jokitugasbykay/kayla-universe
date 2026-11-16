@@ -8,7 +8,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
-    "lint": "tsc --noEmit",
+    "lint": "eslint src tests",
     "test": "vitest run",
     "test:e2e": "playwright test"
   },
@@ -31,7 +31,9 @@
     "@types/react-dom": "^19.0.2",
     "@types/three": "^0.170.0",
     "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^10.15.0",
     "typescript": "^5.7.2",
+    "typescript-eslint": "^8.72.2",
     "vite": "^6.0.3",
     "vitest": "^5.1.0"
   }

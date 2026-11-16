@@ -27,20 +27,20 @@ export class LanyardVerletSystem {
   card: CardState;
   anchorY: number;
 
-  constructor(segmentCount = 16, segmentLength = 0.165, anchorY = 3.1) {
+  constructor(segmentCount = 14, segmentLength = 0.135, anchorY = 2.35) {
     this.segmentCount = segmentCount;
     this.segmentLength = segmentLength;
     this.anchorY = anchorY;
 
     this.nodes = [];
     for (let i = 0; i <= segmentCount; i++) {
-      const initX = (i / segmentCount) * 0.08;
+      const initX = (i / segmentCount) * 0.05;
       const initY = anchorY - i * segmentLength;
       this.nodes.push({
         x: initX,
         y: initY,
         z: 0,
-        oldX: initX - (i === segmentCount ? 0.005 : 0),
+        oldX: initX - (i === segmentCount ? 0.003 : 0),
         oldY: initY,
         oldZ: 0,
         pinned: i === 0
@@ -50,7 +50,7 @@ export class LanyardVerletSystem {
     this.card = {
       isDragging: false,
       dragTargetX: 0,
-      dragTargetY: -0.1,
+      dragTargetY: anchorY - segmentCount * segmentLength,
       rotY: -0.15,
       rotYVel: 0.012,
       targetFlipY: 0,
@@ -61,6 +61,7 @@ export class LanyardVerletSystem {
   }
 
   setAnchorPosition(x: number, y: number, z = 0) {
+    this.anchorY = y;
     if (this.nodes.length > 0) {
       this.nodes[0].x = x;
       this.nodes[0].y = y;
@@ -71,17 +72,21 @@ export class LanyardVerletSystem {
   applyImpulse(fx: number, fy: number, fz: number) {
     const tip = this.nodes[this.segmentCount];
     if (tip) {
-      tip.oldX -= fx;
-      tip.oldY -= fy;
-      tip.oldZ -= fz;
-      this.card.rotYVel += fx * 0.12;
+      // Limit impulse magnitude to keep within camera bounds
+      const clampedFx = Math.max(-0.16, Math.min(0.16, fx));
+      const clampedFy = Math.max(-0.08, Math.min(0.08, fy));
+      const clampedFz = Math.max(-0.06, Math.min(0.06, fz));
+      tip.oldX -= clampedFx;
+      tip.oldY -= clampedFy;
+      tip.oldZ -= clampedFz;
+      this.card.rotYVel += clampedFx * 0.10;
     }
   }
 
   toggleFlip() {
     this.card.isFlipped = !this.card.isFlipped;
     this.card.targetFlipY = this.card.isFlipped ? Math.PI : 0;
-    this.card.rotYVel += 0.24;
+    this.card.rotYVel += 0.22;
   }
 
   step(gravity = -0.0035, damping = 0.985, iterations = 16) {
@@ -100,9 +105,15 @@ export class LanyardVerletSystem {
         continue;
       }
 
-      const vx = (node.x - node.oldX) * damping;
-      const vy = (node.y - node.oldY) * damping;
-      const vz = (node.z - node.oldZ) * damping;
+      let vx = (node.x - node.oldX) * damping;
+      let vy = (node.y - node.oldY) * damping;
+      let vz = (node.z - node.oldZ) * damping;
+
+      // Velocity clamping to prevent explosive movements outside frustum
+      const maxVel = 0.28;
+      vx = Math.max(-maxVel, Math.min(maxVel, vx));
+      vy = Math.max(-maxVel, Math.min(maxVel, vy));
+      vz = Math.max(-maxVel, Math.min(maxVel, vz));
 
       node.oldX = node.x;
       node.oldY = node.y;
@@ -149,16 +160,24 @@ export class LanyardVerletSystem {
       }
     }
 
-    // 3. Card Inertia and Angular Physics
+    // 3. Safety frustum boundary constraints on all nodes
+    for (let i = 1; i <= count; i++) {
+      n[i].x = Math.max(-2.2, Math.min(2.2, n[i].x));
+      n[i].y = Math.max(-3.2, Math.min(this.anchorY, n[i].y));
+      n[i].z = Math.max(-1.0, Math.min(1.0, n[i].z));
+    }
+
+    // 4. Card Inertia and Angular Physics
     const tip = n[count];
     const prev = n[count - 1];
     const tipVx = tip.x - tip.oldX;
     const ropeAngleZ = Math.atan2(tip.x - prev.x, prev.y - tip.y);
 
-    this.card.tiltZ += (-ropeAngleZ * 0.75 - this.card.tiltZ) * 0.15;
-    this.card.tiltX += (Math.sin(performance.now() * 0.0015) * 0.03 - this.card.tiltX) * 0.08;
+    const targetTiltZ = Math.max(-0.45, Math.min(0.45, -ropeAngleZ * 0.75));
+    this.card.tiltZ += (targetTiltZ - this.card.tiltZ) * 0.15;
+    this.card.tiltX += (Math.sin(performance.now() * 0.0015) * 0.025 - this.card.tiltX) * 0.08;
 
-    this.card.rotYVel += tipVx * 0.065;
+    this.card.rotYVel += tipVx * 0.055;
     const springToFlip = (this.card.targetFlipY - this.card.rotY) * 0.075;
     this.card.rotYVel = (this.card.rotYVel + springToFlip) * 0.92;
     this.card.rotY += this.card.rotYVel;
