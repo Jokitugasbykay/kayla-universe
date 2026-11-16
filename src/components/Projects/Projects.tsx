@@ -51,6 +51,15 @@ export const Projects: React.FC = () => {
                                                 </div>
                                             </div>
                                         )}
+
+                                        {project.id === 'journalingtrade' && (
+                                            <div className={styles.liveOverlayBadge}>
+                                                <div className={styles.liveBadgeMeta}>
+                                                    <span className={styles.liveDot}></span>
+                                                    <span className={styles.liveText}>journalingtrade.github.io</span>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
 

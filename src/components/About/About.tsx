@@ -77,7 +77,7 @@ export const About: React.FC<AboutProps> = () => {
                         </p>
 
                         <p className={styles.narrativeText}>
-                            Alongside coursework, I actively build platforms like <strong>JOKI.IN</strong> and quantitative tools like <strong>Kayla Finance</strong>. In daily trading, I apply that same systematic discipline: analyzing price action mechanics, market structure, and mathematical risk-to-reward ratios.
+                            Alongside coursework, I actively build platforms like <strong>JOKI.IN</strong> and quantitative tools like <strong>journalingtrade</strong>. In daily trading, I apply that same systematic discipline: analyzing price action mechanics, market structure, and mathematical risk-to-reward ratios.
                         </p>
 
                         <div className={styles.rightCtaBlock}>

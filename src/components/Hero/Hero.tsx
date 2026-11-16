@@ -29,7 +29,7 @@ export const Hero: React.FC<HeroProps> = () => {
                     </p>
 
                     <p className={styles.heroBio}>
-                        Scientific thinker and builder behind <strong>JOKI.IN</strong> and <strong>Kayla Finance</strong>, connecting analytical modeling and systematic risk discipline with production software craft and daily trading.
+                        Scientific thinker and builder behind <strong>JOKI.IN</strong> and <strong>journalingtrade</strong>, connecting analytical modeling and systematic risk discipline with production software craft and daily trading.
                     </p>
 
                     {/* Action CTAs */}

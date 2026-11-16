@@ -13,7 +13,7 @@ export const PROFILE_DATA: PortfolioProfile = {
 
 export const STATS_DATA = [
     { number: 'Physics', label: 'Academic Discipline', detail: 'Semester 5, Universitas Airlangga' },
-    { number: 'Builder', label: 'Selected Work', detail: 'JOKI.IN & Kayla Finance platforms' },
+    { number: 'Builder', label: 'Selected Work', detail: 'JOKI.IN & journalingtrade platforms' },
     { number: 'Markets', label: 'Daily Trading', detail: 'Price dynamics, risk models & execution' }
 ];
 
@@ -48,22 +48,23 @@ export const PROJECTS_DATA: ProjectItem[] = [
         accentColor: '#c8ad8d'
     },
     {
-        id: 'kayla-finance',
-        title: 'Kayla Finance',
-        category: 'Analytical Financial Dashboard',
+        id: 'journalingtrade',
+        title: 'journalingtrade',
+        category: 'Trading Journal & Risk Workspace',
         year: '2024',
-        summary: 'Personal portfolio tracking and predictive modeling engine designed for compound projections and capital allocation.',
-        description: 'Constructed an analytical workbench for multi-ledger tracking, cash flow visualizations, and compounding calculations without third-party analytics bloat.',
+        summary: 'Comprehensive workspace for disciplined traders featuring trade journaling, statistical performance analytics, risk calculation, and real-time macroeconomic calendars.',
+        description: 'Architected an interactive trading journal and analytics workbench featuring trade execution logging, OCR setup recognition from charts/PDFs, risk-to-reward ratio calculators, and probability metrics.',
         highlights: [
-            'Built recursive compound interest and capital projection calculations.',
-            'Designed lightweight canvas chart visualizer for cash-flow analytics.',
-            'Created modular transaction categorization with deterministic state management.'
+            'Engineered automated risk-reward ratio calculator and multi-currency P&L tracking.',
+            'Integrated browser-side OCR scanning for chart setups and broker trade history.',
+            'Built probability statistics, win rate analytics, and macroeconomic news feed.'
         ],
-        technologies: ['TypeScript', 'React', 'Three.js', 'CSS Modules', 'Vector Math'],
-        github: 'https://github.com/Jokitugasbykay/kayla-finance',
-        linkLabel: 'View Source',
-        previewImage: './assets/kayla-finance.svg',
-        accentColor: '#889882'
+        technologies: ['JavaScript', 'HTML5/CSS3', 'Python', 'Supabase', 'TradingView', 'Chart.js'],
+        link: 'https://jokitugasbykay.github.io/Journaling_trade.github.io/',
+        linkLabel: 'Launch Platform',
+        github: 'https://github.com/Jokitugasbykay/Journaling_trade.github.io',
+        previewImage: './assets/journalingtrade-preview.png',
+        accentColor: '#c8ad8d'
     }
 ];
 

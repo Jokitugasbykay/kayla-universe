@@ -6,7 +6,7 @@ export const PORTFOLIO_PASS = {
     affiliation: 'UNIVERSITAS AIRLANGGA',
     role: 'PHYSICS UNDERGRADUATE / SEMESTER 5',
     focus: 'PHYSICS • SCIENTIFIC COMPUTING • MARKETS',
-    subtext: 'Universitas Airlangga // JOKI.IN & Kayla Finance',
+    subtext: 'Universitas Airlangga // JOKI.IN & journalingtrade',
     url: 'jokitugasbykay.github.io/kayla-universe/'
 };
 
@@ -282,7 +282,7 @@ export function drawBackBadgeCanvas(canvas: HTMLCanvasElement) {
         {
             num: '04',
             title: 'Production Software Craft',
-            desc: 'Building responsive web platforms including JOKI.IN and analytical modeling engines like Kayla Finance.'
+            desc: 'Building responsive web platforms including JOKI.IN and trading analytics tools like journalingtrade.'
         }
     ];
 
