@@ -32,7 +32,7 @@ export const Projects: React.FC = () => {
                                         {project.previewImage && (
                                             <img
                                                 src={project.previewImage}
-                                                alt={`${project.title} Preview`}
+                                                alt={project.id === 'jokiin' ? 'Illustration of a digital workspace on a laptop' : project.title + ' Preview'}
                                                 className={styles.previewImage}
                                                 loading="eager"
                                             />
