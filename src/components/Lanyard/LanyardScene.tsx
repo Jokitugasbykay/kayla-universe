@@ -32,5 +32,5 @@ export const LanyardScene: React.FC = () => {
         return Boolean(gl);
     }, []);
     if (!supported) return <LanyardFallback />;
-    return <ReferenceLanyard className={styles.referenceLanyard} frontImage={images[0]} backImage={images[1]} strapImage={images[2]} anchor={mobile ? 'center' : 'right'} size={0.6} intro={false} breeze={0} />;
+    return <ReferenceLanyard className={styles.referenceLanyard} frontImage={images[0]} backImage={images[1]} strapImage={images[2]} anchor={mobile ? 'center' : 'right'} size={0.6} intro={true} breeze={0} />;
 };
