@@ -1,25 +1,25 @@
 .lanyardStage {
   position: relative;
   width: 100%;
-  max-width: none;
-  height: 780px;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   user-select: none;
   -webkit-user-select: none;
-  margin: 0 auto;
+  pointer-events: none;
 }
 
 .lanyardCanvas {
   width: 100%;
-  height: 720px;
+  height: 100%;
   display: block;
   cursor: grab;
   touch-action: none;
   outline: none;
   background: transparent;
+  pointer-events: auto;
 }
 
 .lanyardCanvas:active {
@@ -29,28 +29,5 @@
 .fallbackCanvas {
   max-width: 100%;
   height: auto;
-}
-
-@media (max-width: 900px) {
-  .lanyardStage {
-    height: 660px;
-    max-width: 480px;
-  }
-  .lanyardCanvas {
-    height: 600px;
-  }
-}
-
-@media (max-width: 600px) {
-  .lanyardStage {
-    height: 560px;
-    max-width: 390px;
-  }
-  .lanyardCanvas {
-    height: 500px;
-  }
-}
-
-@media (max-width: 1024px) {
-  .lanyardCanvas { pointer-events: auto; }
+  pointer-events: auto;
 }

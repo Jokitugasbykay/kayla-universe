@@ -12,7 +12,7 @@ interface LanyardSceneProps {
 export const LanyardScene: React.FC<LanyardSceneProps> = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [webglSupported, setWebglSupported] = useState<boolean>(true);
-    const simRef = useRef<AdvancedLanyardPhysics>(new AdvancedLanyardPhysics(14, 0.115, new THREE.Vector3(0, 2.70, 0)));
+    const simRef = useRef<AdvancedLanyardPhysics>(new AdvancedLanyardPhysics(5, 0.38, new THREE.Vector3(2.74, 3.25, 0)));
     const rafRef = useRef<number>(0);
 
     const handleFlip = useCallback(() => {
@@ -79,19 +79,25 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
         const updateCameraFraming = () => {
             if (!camera || !canvas) return;
             const rect = canvas.getBoundingClientRect();
-            const width = rect.width || 580;
-            const height = rect.height || 720;
+            const width = rect.width || window.innerWidth || 1440;
+            const height = rect.height || window.innerHeight || 800;
             camera.aspect = width / height;
-            const halfFovRad = (26 * Math.PI) / 360;
-            const targetVisibleHeight = 6.10;
+
+            const halfFovRad = (24 * Math.PI) / 360;
+            const targetVisibleHeight = 6.2;
             const camZ = (targetVisibleHeight * 0.5) / Math.tan(halfFovRad);
-            const visibleWidthNeeded = 3.65;
-            const minZForWidth = (visibleWidthNeeded * 0.5) / (camera.aspect * Math.tan(halfFovRad));
-            const finalZ = Math.max(camZ, minZForWidth);
-            const centerX = width > 900 ? -Math.tan(halfFovRad) * finalZ * camera.aspect * 0.55 : 0;
-            camera.position.set(centerX, -0.45, finalZ);
-            camera.lookAt(centerX, -0.45, 0);
+
+            camera.position.set(0, 0, camZ);
+            camera.lookAt(0, 0, 0);
             camera.updateProjectionMatrix();
+
+            const visibleHeight = 2 * camZ * Math.tan(halfFovRad);
+            const visibleWidth = visibleHeight * camera.aspect;
+
+            const isDesktop = width >= 1024;
+            const anchorX = isDesktop ? 0.23 * visibleWidth : 0;
+            const anchorY = isDesktop ? (visibleHeight * 0.5) + 0.15 : 0.8;
+            simRef.current.setAnchorPosition(anchorX, anchorY, 0, false);
         };
 
         try {
@@ -106,15 +112,15 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
             renderer.toneMappingExposure = 1.05;
 
             const rect = canvas.getBoundingClientRect();
-            const width = rect.width || 580;
-            const height = rect.height || 720;
+            const width = rect.width || window.innerWidth || 1440;
+            const height = rect.height || window.innerHeight || 800;
             renderer.setSize(width, height, false);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 
             scene = new THREE.Scene();
 
             // Perspective Camera calibrated to keep badge comfortably within view and prominently scaled
-            camera = new THREE.PerspectiveCamera(26, width / height, 0.1, 50);
+            camera = new THREE.PerspectiveCamera(24, width / height, 0.1, 50);
             updateCameraFraming();
 
             // Studio Lighting for High-Contrast Clean Shading
@@ -203,6 +209,13 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
             // Centered directly at card group origin (Center of Mass)
             cardMesh.position.set(0, 0, 0);
             cardGroup.add(cardMesh);
+
+            // Invisible generous hit proxy ensuring 100% grab reliability regardless of tilt angle
+            const hitProxyGeo = new THREE.BoxGeometry(cardW * 1.15, cardH * 1.15, 0.45);
+            const hitProxyMat = new THREE.MeshBasicMaterial({ visible: false });
+            const hitProxyMesh = new THREE.Mesh(hitProxyGeo, hitProxyMat);
+            hitProxyMesh.position.set(0, 0, 0);
+            cardGroup.add(hitProxyMesh);
 
             // Polished Hardware Clasp: Crisp chrome bracket + swivel ring
             const metalMat = new THREE.MeshStandardMaterial({
@@ -295,7 +308,11 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
             if (e.button !== 0) return;
             const hit = getCardIntersection(e);
             if (!hit || !cardGroup || !camera) return;
-            e.preventDefault();
+            try {
+                canvas.setPointerCapture(e.pointerId);
+            } catch {
+                // Ignore pointer capture errors in testing/virtual environments
+            }
             camera.getWorldDirection(dragPlane.normal);
             dragPlane.setFromNormalAndCoplanarPoint(dragPlane.normal, hit.point);
 
@@ -312,8 +329,20 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
             const { nx, ny } = getNormCoords(e);
             raycaster.setFromCamera(new THREE.Vector2(nx, ny), camera);
             if (raycaster.ray.intersectPlane(dragPlane, dragPoint)) {
-                sim.updateDragTarget(dragPoint);
+                // Camera-aware bounds calculation allowing full traversal across hero into text column
+                const vHalf = Math.tan((camera.fov * Math.PI) / 360) * camera.position.z;
+                const hHalf = vHalf * camera.aspect;
+                const minDragX = -hHalf + 1.2;
+                const maxDragX = hHalf - 1.2;
+                const maxDragY = sim.anchor.y - 0.25;
+                const minDragY = -vHalf + 1.0;
 
+                const clampedTarget = new THREE.Vector3(
+                    Math.max(minDragX, Math.min(maxDragX, dragPoint.x)),
+                    Math.max(minDragY, Math.min(maxDragY, dragPoint.y)),
+                    dragPoint.z
+                );
+                sim.updateDragTarget(clampedTarget);
             }
         };
 
@@ -335,7 +364,7 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
             if (getCardIntersection(e)) handleFlip();
         };
 
-        window.addEventListener('pointerdown', handlePointerDown);
+        canvas.addEventListener('pointerdown', handlePointerDown);
         window.addEventListener('pointermove', handlePointerMove);
         window.addEventListener('pointerup', handlePointerUp);
         window.addEventListener('pointercancel', handlePointerUp);
@@ -377,8 +406,8 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
         const handleResize = () => {
             if (!renderer || !camera || !canvas) return;
             const rect = canvas.getBoundingClientRect();
-            const width = rect.width || 580;
-            const height = rect.height || 720;
+            const width = rect.width || window.innerWidth || 1440;
+            const height = rect.height || window.innerHeight || 800;
             updateCameraFraming();
             renderer.setSize(width, height, false);
         };
@@ -388,7 +417,7 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
         return () => {
             cancelAnimationFrame(rafRef.current);
             window.removeEventListener('resize', handleResize);
-            window.removeEventListener('pointerdown', handlePointerDown);
+            canvas.removeEventListener('pointerdown', handlePointerDown);
             window.removeEventListener('pointermove', handlePointerMove);
             window.removeEventListener('pointerup', handlePointerUp);
             window.removeEventListener('pointercancel', handlePointerUp);

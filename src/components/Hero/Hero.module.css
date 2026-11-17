@@ -21,9 +21,20 @@
   z-index: 0;
 }
 
+.heroLanyardOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 4;
+  pointer-events: none;
+}
+
 .heroContainer {
   position: relative;
-  z-index: 1;
+  z-index: 5;
+  pointer-events: none;
   max-width: var(--container-max);
   margin: 0 auto;
   width: 100%;
@@ -31,13 +42,13 @@
   grid-template-columns: 1.15fr 0.85fr;
   column-gap: clamp(2rem, 5vw, 4rem);
   align-items: center;
-  min-height: 780px;
 }
 
 .heroContent {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  pointer-events: none;
 }
 
 .heroEyebrow {
@@ -104,6 +115,11 @@
   gap: 1.25rem;
   margin-bottom: 2.5rem;
   flex-wrap: wrap;
+}
+
+.actionRow a,
+.socialDiscovery a {
+  pointer-events: auto;
 }
 
 .primaryCta {
@@ -198,14 +214,9 @@
   transform: translateY(-2px);
 }
 
-.heroVisual {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.heroVisualSpacer {
   min-height: 720px;
+  pointer-events: none;
 }
 
 @media (max-width: 1024px) {
@@ -216,7 +227,6 @@
   .heroContainer {
     grid-template-columns: 1fr;
     gap: 2.5rem;
-    min-height: 0;
   }
 
   .heroContent {
@@ -238,8 +248,7 @@
     justify-content: center;
   }
 
-  .heroVisual {
-    position: relative;
-    min-height: 500px;
+  .heroVisualSpacer {
+    min-height: 520px;
   }
 }

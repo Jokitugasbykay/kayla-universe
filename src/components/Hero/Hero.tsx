@@ -12,6 +12,10 @@ export const Hero: React.FC<HeroProps> = () => {
     return (
         <section id="home" className={styles.heroSection}>
             <div className={styles.heroBackgroundGlow}></div>
+            {/* Full-width 3D Canvas Layer spanning the entire hero */}
+            <div className={styles.heroLanyardOverlay}>
+                <LanyardScene />
+            </div>
             <div className={styles.heroContainer}>
                 {/* Left Column: Expressive Editorial Typography & Clear Identity */}
                 <div className={styles.heroContent}>
@@ -72,10 +76,8 @@ export const Hero: React.FC<HeroProps> = () => {
                     </div>
                 </div>
 
-                {/* Right Column: Prominent 3D Hanging Lanyard Pass */}
-                <div className={styles.heroVisual}>
-                    <LanyardScene />
-                </div>
+                {/* Right Column: Spacer reserving grid column space */}
+                <div className={styles.heroVisualSpacer} aria-hidden="true" />
             </div>
         </section>
     );

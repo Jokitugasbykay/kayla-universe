@@ -236,9 +236,9 @@ export class AdvancedLanyardPhysics {
   private accumulator: number;
 
   constructor(
-    segmentCount = 14,
-    segmentLength = 0.115,
-    anchorPosition = new THREE.Vector3(0, 2.70, 0),
+    segmentCount = 5,
+    segmentLength = 0.38,
+    anchorPosition = new THREE.Vector3(2.74, 3.25, 0),
     config: Partial<PhysicsConfig> = {}
   ) {
     this.config = { ...DEFAULT_PHYSICS_CONFIG, ...config };
@@ -251,7 +251,7 @@ export class AdvancedLanyardPhysics {
     this.ropeNodes = [];
     for (let i = 0; i <= segmentCount; i++) {
       const pos = new THREE.Vector3(
-        this.anchor.x + (i / segmentCount) * 0.04,
+        this.anchor.x,
         this.anchor.y - i * segmentLength,
         this.anchor.z
       );
@@ -259,7 +259,7 @@ export class AdvancedLanyardPhysics {
         position: pos.clone(),
         prevPosition: pos.clone(),
         velocity: new THREE.Vector3(0, 0, 0),
-        invMass: i === 0 ? 0 : 1 / 0.025, // Pin the anchor node
+        invMass: i === 0 ? 0 : 1 / 0.04, // Pin the anchor node
         pinned: i === 0
       });
     }
@@ -267,7 +267,7 @@ export class AdvancedLanyardPhysics {
     // 2. Initialize Card Rigid Body
     const ropeTip = this.ropeNodes[segmentCount].position;
     const cardSize = new THREE.Vector3(2.35, 3.525, 0.045);
-    const initialCardPos = ropeTip.clone().sub(new THREE.Vector3(0, cardSize.y * 0.5 + 0.12, 0));
+    const initialCardPos = ropeTip.clone().sub(new THREE.Vector3(0, cardSize.y * 0.5 + 0.08, 0));
     this.card = new CardRigidBody(initialCardPos, cardSize, 0.28);
     this.card.prevPosition.copy(this.card.position);
 
@@ -280,11 +280,22 @@ export class AdvancedLanyardPhysics {
     this.accumulator = 0;
   }
 
-  setAnchorPosition(x: number, y: number, z = 0) {
+  setAnchorPosition(x: number, y: number, z = 0, teleport = false) {
+    const dx = x - this.anchor.x;
+    const dy = y - this.anchor.y;
+    const dz = z - this.anchor.z;
     this.anchor.set(x, y, z);
     if (this.ropeNodes.length > 0) {
       this.ropeNodes[0].position.copy(this.anchor);
       this.ropeNodes[0].prevPosition.copy(this.anchor);
+      if (teleport) {
+        for (let i = 1; i <= this.segmentCount; i++) {
+          this.ropeNodes[i].position.add(new THREE.Vector3(dx, dy, dz));
+          this.ropeNodes[i].prevPosition.add(new THREE.Vector3(dx, dy, dz));
+        }
+        this.card.position.add(new THREE.Vector3(dx, dy, dz));
+        this.card.prevPosition.add(new THREE.Vector3(dx, dy, dz));
+      }
     }
   }
 
@@ -385,20 +396,24 @@ export class AdvancedLanyardPhysics {
     const cardUp = new THREE.Vector3(0, 1, 0).applyQuaternion(this.card.quaternion);
     const tiltCross = new THREE.Vector3().crossVectors(cardUp, upVector);
     this.card.applyTorque(tiltCross.multiplyScalar(this.config.strapBendingStiffness));
+    // Strong upright torque preventing upside down inversion
+    this.card.angularVelocity.addScaledVector(tiltCross, 65.0 * dt);
 
-    // Pointer Dragging Force & Torque (Applied at exact local grab location)
+    // Pointer Dragging: Responsive PBD grab constraint coupled with natural torque
     if (this.isDragging) {
       const currentGrabWorld = this.card.localToWorld(this.dragGrabLocal);
-      const grabVel = this.card.getVelocityAtWorldPoint(currentGrabWorld);
-      const toTarget = this.dragTargetWorld.clone().sub(currentGrabWorld);
+      const grabDelta = this.dragTargetWorld.clone().sub(currentGrabWorld);
 
-      // Spring-damper force at grab point
-      const pullForce = toTarget.multiplyScalar(this.config.dragSpringStiffness);
-      const dampForce = grabVel.multiplyScalar(this.config.dragSpringDamping);
-      const totalDragForce = pullForce.sub(dampForce);
+      // Direct PBD displacement with smooth compliance
+      this.card.position.addScaledVector(grabDelta, 0.85);
 
-      // Apply force at the exact 3D grab point on the card (creates realistic torque = r x F)
-      this.card.applyForceAtWorldPoint(totalDragForce, currentGrabWorld);
+      // Preserve velocity momentum for natural release swing
+      this.card.velocity.copy(grabDelta).multiplyScalar(1 / dt).clampLength(0, 14);
+
+      // Apply natural torque from off-center grab lever arm (tau = r x delta)
+      const lever = this.dragGrabLocal.clone().applyQuaternion(this.card.quaternion);
+      const torque = new THREE.Vector3().crossVectors(lever, grabDelta);
+      this.card.angularVelocity.addScaledVector(torque, 16.0 * dt);
     }
 
     // 2. Integrate Card Rigid Body linear and angular motion
@@ -526,10 +541,10 @@ export class AdvancedLanyardPhysics {
 
   private enforceSafetyFrustumBounds() {
     const card = this.card;
-    const maxX = 3.2;
-    const minY = -4.2;
-    const maxY = this.anchor.y - 0.2;
-    const maxZ = 2.2;
+    const maxX = 8.5; // Generous horizontal bound covering ultrawide displays and text drag
+    const minY = -5.8;
+    const maxY = this.anchor.y + 0.6;
+    const maxZ = 3.5;
 
     if (card.position.x < -maxX) {
       card.position.x = -maxX;
