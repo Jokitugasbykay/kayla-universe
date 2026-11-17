@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { PROFILE_DATA } from '../../data/portfolio';
 import { LanyardScene } from '../Lanyard/LanyardScene';
 import styles from './Hero.module.css';
@@ -8,7 +8,37 @@ interface HeroProps {
     portraitSrc?: string;
 }
 
+const phrases = [
+    'Curious about how the universe works.',
+    'Exploring physics, one question at a time.',
+    'Turning ideas into useful software.',
+    'Learning through code and experiments.',
+    'Finding patterns in complex systems.',
+    'Building with curiosity and care.',
+    'Exploring the possibilities of AI.',
+    'Thinking in models and probabilities.',
+    'Making space for creative discoveries.',
+    'Always learning, always building.'
+];
+
 export const Hero: React.FC<HeroProps> = () => {
+    const [phraseIndex, setPhraseIndex] = useState(0);
+    const [length, setLength] = useState(phrases[0].length);
+    const [deleting, setDeleting] = useState(false);
+    useEffect(() => {
+        const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+        if (media.matches) return;
+        const phrase = phrases[phraseIndex];
+        const delay = !deleting && length === phrase.length ? 2200 : deleting ? 35 : 65;
+        const timer = window.setTimeout(() => {
+            if (!deleting && length === phrase.length) setDeleting(true);
+            else if (deleting && length === 0) {
+                setDeleting(false);
+                setPhraseIndex((phraseIndex + 1) % phrases.length);
+            } else setLength(length + (deleting ? -1 : 1));
+        }, delay);
+        return () => window.clearTimeout(timer);
+    }, [phraseIndex, length, deleting]);
     return (
         <section id="home" className={styles.heroSection}>
             <div className={styles.heroBackgroundGlow}></div>
@@ -27,6 +57,10 @@ export const Hero: React.FC<HeroProps> = () => {
                         <span className={styles.titleLead}>I am</span>
                         <span className={styles.titleName}>Kayla Gabrielle</span>
                     </h1>
+
+                    <p className={styles.heroTyping} aria-label="Curious about physics, AI, and building software.">
+                        <span aria-hidden="true">{phrases[phraseIndex].slice(0, length)}<span className={styles.typingCursor}>|</span></span>
+                    </p>
 
                     <p className={styles.heroTagline}>
                         Undergraduate in Physics at <strong>Universitas Airlangga</strong> exploring continuous physical principles, machine learning, and mathematical mechanics.

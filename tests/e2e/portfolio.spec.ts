@@ -118,3 +118,11 @@ test('capture dynamic physics interaction states', async ({ page, isMobile }) =>
     await page.screenshot({ path: `review/lanyard-flipped-back-${w}.png` });
     await page.screenshot({ path: 'review/lanyard-flipped-back.png' });
 });
+
+test('hero rotates its typing text', async ({ page }) => {
+    await page.goto('/');
+    const text = page.locator('[aria-label="Curious about physics, AI, and building software."]');
+    await expect(text).toBeVisible();
+    await expect(text).toContainText('Curious about how the universe works.');
+    await expect(text).toContainText('Exploring physics, one question at a time.', { timeout: 12000 });
+});
