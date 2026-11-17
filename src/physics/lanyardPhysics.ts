@@ -351,6 +351,8 @@ export class AdvancedLanyardPhysics {
     const gravity = this.config.gravity;
     const count = this.segmentCount;
     const nodes = this.ropeNodes;
+    this.card.prevPosition.copy(this.card.position);
+    const previousRotation = this.card.quaternion.clone();
 
     const linDamp = Math.exp(-this.config.linearDampingRate * dt);
     const angDamp = Math.exp(-this.config.angularDampingRate * dt);
@@ -512,6 +514,11 @@ export class AdvancedLanyardPhysics {
       // Update the tip node position to exactly match attachment hardware
       nodes[count].position.copy(this.card.getAttachmentWorld());
     }
+
+    this.card.velocity.copy(this.card.position).sub(this.card.prevPosition).divideScalar(dt);
+    const rotationDelta = this.card.quaternion.clone().multiply(previousRotation.invert());
+    const sign = rotationDelta.w < 0 ? -1 : 1;
+    this.card.angularVelocity.set(rotationDelta.x, rotationDelta.y, rotationDelta.z).multiplyScalar(2 * sign / dt);
 
     // 5. Camera Frustum Safety Soft Bounds
     this.enforceSafetyFrustumBounds();

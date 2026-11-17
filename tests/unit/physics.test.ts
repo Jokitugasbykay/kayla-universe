@@ -144,6 +144,25 @@ describe('Physics Engines & Numerical Integrators', () => {
             expect(sim.isDragging).toBe(false);
         });
 
+        it('swings back after release without accumulating gravity velocity', () => {
+            const sim = new AdvancedLanyardPhysics();
+            for (let i = 0; i < 180; i++) sim.update(1 / 60);
+            expect(sim.card.velocity.length()).toBeLessThan(0.5);
+            const point = sim.card.position.clone();
+            sim.startDragging(point);
+            sim.updateDragTarget(point.clone().add(new THREE.Vector3(0.8, 0.3, 0)));
+            for (let i = 0; i < 45; i++) sim.update(1 / 60);
+            const releasedX = sim.card.position.x;
+            sim.stopDragging();
+            let movedBack = false;
+            for (let i = 0; i < 180; i++) {
+                sim.update(1 / 60);
+                if (sim.card.position.x < releasedX - 0.1) movedBack = true;
+                expect(Number.isFinite(sim.card.position.x)).toBe(true);
+            }
+            expect(releasedX).toBeGreaterThan(0.2);
+            expect(movedBack).toBe(true);
+        });
         it('toggles flip and smoothly rotates target orientation', () => {
             const sim = new AdvancedLanyardPhysics();
             expect(sim.isFlipped).toBe(false);

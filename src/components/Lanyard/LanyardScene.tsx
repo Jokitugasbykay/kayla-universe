@@ -320,12 +320,13 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
                 const halfCardH = 1.76;
                 const minDragX = -hHalf + halfCardW + 0.2;
                 const maxDragX = hHalf - halfCardW - 0.2;
-                const maxDragY = sim.anchor.y - 0.25;
+                const maxDragY = sim.anchor.y - halfCardH - 0.25;
                 const minDragY = camera.position.y - vHalf + halfCardH + 0.2;
 
+                const grabOffset = sim.dragGrabLocal.clone().applyQuaternion(sim.card.quaternion);
                 const clampedTarget = new THREE.Vector3(
-                    Math.max(minDragX, Math.min(maxDragX, dragPoint.x)),
-                    Math.max(minDragY, Math.min(maxDragY, dragPoint.y)),
+                    Math.max(minDragX, Math.min(maxDragX, dragPoint.x - grabOffset.x)) + grabOffset.x,
+                    Math.max(minDragY, Math.min(maxDragY, dragPoint.y - grabOffset.y)) + grabOffset.y,
                     dragPoint.z
                 );
                 sim.updateDragTarget(clampedTarget);
