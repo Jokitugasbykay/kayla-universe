@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import * as THREE from 'three';
 import { AdvancedLanyardPhysics } from '../../physics/lanyardPhysics';
-import { drawFrontBadgeCanvas, drawBackBadgeCanvas } from './LanyardBadge';
+import { drawFrontBadgeCanvas, drawBackBadgeCanvas, drawStrapCanvas } from './LanyardBadge';
 import { LanyardFallback } from './LanyardFallback';
 import styles from './Lanyard.module.css';
 
@@ -14,7 +14,7 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
     const [webglSupported, setWebglSupported] = useState<boolean>(true);
     const [isFlipped, setIsFlipped] = useState<boolean>(false);
     const [telemetry, setTelemetry] = useState<string>('Drag card to swing / Double-click to turn');
-    const simRef = useRef<AdvancedLanyardPhysics>(new AdvancedLanyardPhysics(14, 0.125, new THREE.Vector3(0, 2.35, 0)));
+    const simRef = useRef<AdvancedLanyardPhysics>(new AdvancedLanyardPhysics(14, 0.115, new THREE.Vector3(0, 2.70, 0)));
     const rafRef = useRef<number>(0);
 
     const handleFlip = useCallback(() => {
@@ -38,16 +38,20 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
         }
         (testGl as WebGLRenderingContext).getExtension('WEBGL_lose_context')?.loseContext();
 
-        // High-resolution badge textures (1040 x 1520) for crisp Retina display
+        // High-resolution badge textures (1040 x 1560) for crisp Retina display (exact 1:1.5 aspect ratio)
         const frontCanvas = document.createElement('canvas');
         frontCanvas.width = 1040;
-        frontCanvas.height = 1520;
+        frontCanvas.height = 1560;
         const backCanvas = document.createElement('canvas');
         backCanvas.width = 1040;
-        backCanvas.height = 1520;
+        backCanvas.height = 1560;
+        const strapCanvas = document.createElement('canvas');
+        strapCanvas.width = 1024;
+        strapCanvas.height = 128;
 
         drawFrontBadgeCanvas(frontCanvas);
         drawBackBadgeCanvas(backCanvas);
+        drawStrapCanvas(strapCanvas);
 
         let renderer: THREE.WebGLRenderer | null = null;
         let scene: THREE.Scene | null = null;
@@ -57,6 +61,7 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
         let strapMesh: THREE.Mesh | null = null;
         let frontTex: THREE.CanvasTexture | null = null;
         let backTex: THREE.CanvasTexture | null = null;
+        let strapTex: THREE.CanvasTexture | null = null;
 
         const dispose = () => {
             const materials = new Set<THREE.Material>();
@@ -71,7 +76,25 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
             materials.forEach((m) => m.dispose());
             frontTex?.dispose();
             backTex?.dispose();
+            strapTex?.dispose();
             renderer?.dispose();
+        };
+
+        const updateCameraFraming = () => {
+            if (!camera || !canvas) return;
+            const rect = canvas.getBoundingClientRect();
+            const width = rect.width || 580;
+            const height = rect.height || 720;
+            camera.aspect = width / height;
+            const halfFovRad = (26 * Math.PI) / 360;
+            const targetVisibleHeight = 6.10;
+            const camZ = (targetVisibleHeight * 0.5) / Math.tan(halfFovRad);
+            const visibleWidthNeeded = 3.65;
+            const minZForWidth = (visibleWidthNeeded * 0.5) / (camera.aspect * Math.tan(halfFovRad));
+            const finalZ = Math.max(camZ, minZForWidth);
+            camera.position.set(0, -0.45, finalZ);
+            camera.lookAt(0, -0.45, 0);
+            camera.updateProjectionMatrix();
         };
 
         try {
@@ -86,60 +109,76 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
             renderer.toneMappingExposure = 1.05;
 
             const rect = canvas.getBoundingClientRect();
-            const width = rect.width || 540;
-            const height = rect.height || 680;
+            const width = rect.width || 580;
+            const height = rect.height || 720;
             renderer.setSize(width, height, false);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 
             scene = new THREE.Scene();
 
-            // Perspective Camera calibrated to keep badge comfortably within view
-            camera = new THREE.PerspectiveCamera(34, width / height, 0.1, 50);
-            camera.position.set(0, -0.28, Math.max(11.8, 6.0 / camera.aspect));
+            // Perspective Camera calibrated to keep badge comfortably within view and prominently scaled
+            camera = new THREE.PerspectiveCamera(26, width / height, 0.1, 50);
+            updateCameraFraming();
 
-            // Studio Lighting for Warm Editorial Material Shading
-            const ambLight = new THREE.AmbientLight(0xf5f3ee, 1.1);
+            // Studio Lighting for High-Contrast Clean Shading
+            const ambLight = new THREE.AmbientLight(0xffffff, 1.25);
             scene.add(ambLight);
 
-            const keyLight = new THREE.DirectionalLight(0xfff8ee, 1.5);
+            const keyLight = new THREE.DirectionalLight(0xffffff, 1.6);
             keyLight.position.set(3.5, 6.0, 5.0);
             scene.add(keyLight);
 
-            const rimLight = new THREE.PointLight(0xc8ad8d, 1.2, 20);
-            rimLight.position.set(-3.5, -1.0, 3.5);
+            const rimLight = new THREE.PointLight(0xc8ad8d, 1.0, 25);
+            rimLight.position.set(-3.5, -1.0, 4.0);
             scene.add(rimLight);
 
-            const fillLight = new THREE.DirectionalLight(0x8a929a, 0.4);
-            fillLight.position.set(0, -4, 2);
+            const fillLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            fillLight.position.set(0, -4, 3);
             scene.add(fillLight);
 
             // Canvas Textures with exact sRGB color space and anisotropic filtering
             frontTex = new THREE.CanvasTexture(frontCanvas);
             backTex = new THREE.CanvasTexture(backCanvas);
+            strapTex = new THREE.CanvasTexture(strapCanvas);
+
             frontTex.colorSpace = THREE.SRGBColorSpace;
             backTex.colorSpace = THREE.SRGBColorSpace;
+            strapTex.colorSpace = THREE.SRGBColorSpace;
+
             frontTex.generateMipmaps = true;
             backTex.generateMipmaps = true;
+            strapTex.generateMipmaps = true;
+
             frontTex.minFilter = THREE.LinearMipmapLinearFilter;
             backTex.minFilter = THREE.LinearMipmapLinearFilter;
+            strapTex.minFilter = THREE.LinearMipmapLinearFilter;
+
             frontTex.magFilter = THREE.LinearFilter;
             backTex.magFilter = THREE.LinearFilter;
+            strapTex.magFilter = THREE.LinearFilter;
+
+            strapTex.wrapS = THREE.RepeatWrapping;
+            strapTex.wrapT = THREE.ClampToEdgeWrapping;
+
             const maxAniso = renderer.capabilities.getMaxAnisotropy();
             frontTex.anisotropy = maxAniso;
             backTex.anisotropy = maxAniso;
+            strapTex.anisotropy = maxAniso;
+
             frontTex.needsUpdate = true;
             backTex.needsUpdate = true;
+            strapTex.needsUpdate = true;
 
             cardGroup = new THREE.Group();
 
-            // Card Geometry matching exact 1040:1520 aspect ratio (0.6842)
-            const cardW = 1.90;
-            const cardH = cardW * (frontCanvas.height / frontCanvas.width);
-            const cardDepth = 0.04;
+            // Card Geometry matching exact 1040:1560 aspect ratio (1:1.5) and prominent size
+            const cardW = 2.35;
+            const cardH = 3.525;
+            const cardDepth = 0.045;
             const cardGeo = new THREE.BoxGeometry(cardW, cardH, cardDepth);
 
             const edgeMat = new THREE.MeshStandardMaterial({
-                color: 0x101114,
+                color: 0x14161d,
                 roughness: 0.35,
                 metalness: 0.6
             });
@@ -168,33 +207,44 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
             cardMesh.position.set(0, 0, 0);
             cardGroup.add(cardMesh);
 
-            // Polished Hardware Clasp: Warm satin titanium/champagne bracket + swivel ring
+            // Polished Hardware Clasp: Crisp chrome bracket + swivel ring
             const metalMat = new THREE.MeshStandardMaterial({
-                color: 0xd6cebe,
-                roughness: 0.28,
-                metalness: 0.85
+                color: 0xefefef,
+                roughness: 0.22,
+                metalness: 0.95
             });
 
             // Swivel ring loop positioned at attachment point
-            const ringGeo = new THREE.TorusGeometry(0.10, 0.022, 16, 24);
+            const ringGeo = new THREE.TorusGeometry(0.12, 0.024, 16, 24);
             const ringMesh = new THREE.Mesh(ringGeo, metalMat);
-            ringMesh.position.set(0, cardH * 0.5 + 0.12, 0);
+            ringMesh.position.set(0, cardH * 0.5 + 0.08, 0);
             ringMesh.rotation.x = Math.PI / 2;
             cardGroup.add(ringMesh);
 
             // Clasp bracket body
-            const bracketGeo = new THREE.BoxGeometry(0.32, 0.14, 0.07);
+            const bracketGeo = new THREE.BoxGeometry(0.38, 0.16, 0.08);
             const bracketMesh = new THREE.Mesh(bracketGeo, metalMat);
-            bracketMesh.position.set(0, cardH * 0.5 + 0.04, 0);
+            bracketMesh.position.set(0, cardH * 0.5 - 0.02, 0);
             cardGroup.add(bracketMesh);
 
             scene.add(cardGroup);
 
-            // Woven Fabric Strap Ribbon Geometry (Refined matte charcoal woven strap, no neon glow)
+            // Woven Fabric Strap Ribbon Geometry with branded texture
             const ropeSegments = simRef.current.segmentCount;
             const strapGeo = new THREE.BufferGeometry();
             const strapPositions = new Float32Array((ropeSegments + 1) * 2 * 3);
+            const strapUVs = new Float32Array((ropeSegments + 1) * 2 * 2);
+
+            for (let i = 0; i <= ropeSegments; i++) {
+                const u = (i / ropeSegments) * 1.0;
+                strapUVs[(i * 2) * 2 + 0] = u;
+                strapUVs[(i * 2) * 2 + 1] = 1.0;
+                strapUVs[(i * 2 + 1) * 2 + 0] = u;
+                strapUVs[(i * 2 + 1) * 2 + 1] = 0.0;
+            }
+
             strapGeo.setAttribute('position', new THREE.BufferAttribute(strapPositions, 3));
+            strapGeo.setAttribute('uv', new THREE.BufferAttribute(strapUVs, 2));
 
             const strapIndices: number[] = [];
             for (let i = 0; i < ropeSegments; i++) {
@@ -207,9 +257,9 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
             strapGeo.setIndex(strapIndices);
 
             const strapMat = new THREE.MeshStandardMaterial({
-                color: 0x141518,
-                roughness: 0.85,
-                metalness: 0.05,
+                map: strapTex,
+                roughness: 0.70,
+                metalness: 0.10,
                 side: THREE.DoubleSide
             });
             strapMesh = new THREE.Mesh(strapGeo, strapMat);
@@ -271,12 +321,12 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
                 // Camera-aware bounds calculation to guarantee card remains comfortably inside frustum
                 const vHalf = Math.tan((camera.fov * Math.PI) / 360) * camera.position.z;
                 const hHalf = vHalf * camera.aspect;
-                const halfCardW = 0.95;
-                const halfCardH = 1.45;
-                const minDragX = -hHalf + halfCardW + 0.15;
-                const maxDragX = hHalf - halfCardW - 0.15;
+                const halfCardW = 1.18;
+                const halfCardH = 1.76;
+                const minDragX = -hHalf + halfCardW + 0.2;
+                const maxDragX = hHalf - halfCardW - 0.2;
                 const maxDragY = sim.anchor.y - 0.25;
-                const minDragY = camera.position.y - vHalf + halfCardH + 0.25;
+                const minDragY = camera.position.y - vHalf + halfCardH + 0.2;
 
                 const clampedTarget = new THREE.Vector3(
                     Math.max(minDragX, Math.min(maxDragX, dragPoint.x)),
@@ -325,7 +375,7 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
             }
 
             if (strapMesh && cardGroup && renderer && scene && camera) {
-                const { left, right } = sim.getRopeRibbonVertices(0.075);
+                const { left, right } = sim.getRopeRibbonVertices(0.095);
                 const posAttr = strapMesh.geometry.attributes.position as THREE.BufferAttribute;
 
                 for (let i = 0; i <= sim.segmentCount; i++) {
@@ -348,11 +398,9 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
         const handleResize = () => {
             if (!renderer || !camera || !canvas) return;
             const rect = canvas.getBoundingClientRect();
-            const width = rect.width || 540;
-            const height = rect.height || 680;
-            camera.aspect = width / height;
-            camera.position.z = Math.max(11.8, 6.0 / camera.aspect);
-            camera.updateProjectionMatrix();
+            const width = rect.width || 580;
+            const height = rect.height || 720;
+            updateCameraFraming();
             renderer.setSize(width, height, false);
         };
 

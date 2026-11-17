@@ -103,7 +103,7 @@ describe('Physics Engines & Numerical Integrators', () => {
             expect(sim.ropeNodes[0].pinned).toBe(true);
             expect(sim.ropeNodes[0].position.y).toBe(2.35);
             expect(sim.ropeNodes[14].pinned).toBe(false);
-            expect(sim.card.mass).toBe(0.22);
+            expect(sim.card.mass).toBe(0.28);
             expect(sim.isDragging).toBe(false);
             expect(sim.isFlipped).toBe(false);
         });

@@ -201,7 +201,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 580px;
+  min-height: 720px;
 }
 
 @media (max-width: 1024px) {

@@ -63,9 +63,9 @@ export class CardRigidBody {
   attachmentLocal: THREE.Vector3;
 
   constructor(
-    centerOfMass = new THREE.Vector3(0, -0.91, 0),
-    size = new THREE.Vector3(1.90, 1.90 * (1520 / 1040), 0.04),
-    mass = 0.22
+    centerOfMass = new THREE.Vector3(0, -0.79, 0),
+    size = new THREE.Vector3(2.35, 3.525, 0.045),
+    mass = 0.28
   ) {
     this.position = centerOfMass.clone();
     this.prevPosition = centerOfMass.clone();
@@ -97,8 +97,8 @@ export class CardRigidBody {
 
     // Attachment ring is at the top center of the card
     // Since card CoM is at local (0, 0, 0) of the rigid body,
-    // top edge is at +h/2 plus clasp height (0.12)
-    this.attachmentLocal = new THREE.Vector3(0, h * 0.5 + 0.12, 0);
+    // top edge is at +h/2 plus clasp height (0.08)
+    this.attachmentLocal = new THREE.Vector3(0, h * 0.5 + 0.08, 0);
   }
 
   getAttachmentWorld(): THREE.Vector3 {
@@ -237,8 +237,8 @@ export class AdvancedLanyardPhysics {
 
   constructor(
     segmentCount = 14,
-    segmentLength = 0.125,
-    anchorPosition = new THREE.Vector3(0, 2.35, 0),
+    segmentLength = 0.115,
+    anchorPosition = new THREE.Vector3(0, 2.70, 0),
     config: Partial<PhysicsConfig> = {}
   ) {
     this.config = { ...DEFAULT_PHYSICS_CONFIG, ...config };
@@ -266,9 +266,9 @@ export class AdvancedLanyardPhysics {
 
     // 2. Initialize Card Rigid Body
     const ropeTip = this.ropeNodes[segmentCount].position;
-    const cardSize = new THREE.Vector3(1.90, 1.90 * (1520 / 1040), 0.04);
+    const cardSize = new THREE.Vector3(2.35, 3.525, 0.045);
     const initialCardPos = ropeTip.clone().sub(new THREE.Vector3(0, cardSize.y * 0.5 + 0.12, 0));
-    this.card = new CardRigidBody(initialCardPos, cardSize, 0.22);
+    this.card = new CardRigidBody(initialCardPos, cardSize, 0.28);
     this.card.prevPosition.copy(this.card.position);
 
     this.isDragging = false;
@@ -519,10 +519,10 @@ export class AdvancedLanyardPhysics {
 
   private enforceSafetyFrustumBounds() {
     const card = this.card;
-    const maxX = 2.4;
-    const minY = -3.4;
+    const maxX = 3.2;
+    const minY = -4.2;
     const maxY = this.anchor.y - 0.2;
-    const maxZ = 1.6;
+    const maxZ = 2.2;
 
     if (card.position.x < -maxX) {
       card.position.x = -maxX;
@@ -553,7 +553,7 @@ export class AdvancedLanyardPhysics {
    * Generates ribbon vertex pairs for smooth fabric strap rendering.
    * Correctly interpolates twist from the anchor to the card clasp.
    */
-  getRopeRibbonVertices(halfWidth = 0.075): { left: THREE.Vector3[]; right: THREE.Vector3[] } {
+  getRopeRibbonVertices(halfWidth = 0.095): { left: THREE.Vector3[]; right: THREE.Vector3[] } {
     const left: THREE.Vector3[] = [];
     const right: THREE.Vector3[] = [];
     const nodes = this.ropeNodes;
