@@ -16,7 +16,7 @@ export const Footer: React.FC = () => {
                 <div className={styles.footerTopRow}>
                     <div className={styles.brandCol}>
                         <div className={styles.brandLockup}>
-                            <span className={styles.monogram}>KG</span>
+                            <img className={styles.monogram} src="./assets/kayla-logo.svg" alt="" />
                             <span className={styles.brandName}>KAYLA UNIVERSE</span>
                         </div>
                         <p className={styles.brandTagline}>

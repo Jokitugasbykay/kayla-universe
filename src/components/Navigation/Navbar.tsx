@@ -28,7 +28,7 @@ export const Navbar: React.FC = () => {
             <div className={styles.navContainer}>
                 {/* Brand Monogram */}
                 <a href="#home" className={styles.brandLockup} aria-label="Kayla Gabrielle Home">
-                    <span className={styles.monogram}>KG</span>
+                    <img className={styles.monogram} src="./assets/kayla-logo.svg" alt="" />
                     <span className={styles.brandText}>
                         <span className={styles.brandName}>Kayla Gabrielle</span>
                         <span className={styles.brandTitle}>Physics, AI &amp; Markets</span>
