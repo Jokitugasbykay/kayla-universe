@@ -37,29 +37,6 @@ export const Projects: React.FC = () => {
                                                 loading="eager"
                                             />
                                         )}
-
-                                        {project.id === 'jokiin' && (
-                                            <div className={styles.liveOverlayBadge}>
-                                                <img
-                                                    src="./assets/jokiin-logo.png"
-                                                    alt="JOKI.IN Logo"
-                                                    className={styles.projectLogo}
-                                                />
-                                                <div className={styles.liveBadgeMeta}>
-                                                    <span className={styles.liveDot}></span>
-                                                    <span className={styles.liveText}>jokiin.my.id</span>
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {project.id === 'journalingtrade' && (
-                                            <div className={styles.liveOverlayBadge}>
-                                                <div className={styles.liveBadgeMeta}>
-                                                    <span className={styles.liveDot}></span>
-                                                    <span className={styles.liveText}>journalingtrade.github.io</span>
-                                                </div>
-                                            </div>
-                                        )}
                                     </div>
                                 </div>
 
