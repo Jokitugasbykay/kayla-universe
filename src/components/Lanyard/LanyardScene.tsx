@@ -88,8 +88,9 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
             const visibleWidthNeeded = 3.65;
             const minZForWidth = (visibleWidthNeeded * 0.5) / (camera.aspect * Math.tan(halfFovRad));
             const finalZ = Math.max(camZ, minZForWidth);
-            camera.position.set(0, -0.45, finalZ);
-            camera.lookAt(0, -0.45, 0);
+            const centerX = width > 900 ? -Math.tan(halfFovRad) * finalZ * camera.aspect * 0.55 : 0;
+            camera.position.set(centerX, -0.45, finalZ);
+            camera.lookAt(centerX, -0.45, 0);
             camera.updateProjectionMatrix();
         };
 
@@ -281,6 +282,8 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
 
         const getCardIntersection = (e: MouseEvent): THREE.Intersection | null => {
             if (!camera || !cardGroup) return null;
+            const rect = canvas.getBoundingClientRect();
+            if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) return null;
             const { nx, ny } = getNormCoords(e);
             raycaster.setFromCamera(new THREE.Vector2(nx, ny), camera);
             cardGroup.updateMatrixWorld(true);
@@ -292,11 +295,7 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
             if (e.button !== 0) return;
             const hit = getCardIntersection(e);
             if (!hit || !cardGroup || !camera) return;
-            try {
-                canvas.setPointerCapture(e.pointerId);
-            } catch {
-                // Ignore pointer capture errors in testing/virtual environments
-            }
+            e.preventDefault();
             camera.getWorldDirection(dragPlane.normal);
             dragPlane.setFromNormalAndCoplanarPoint(dragPlane.normal, hit.point);
 

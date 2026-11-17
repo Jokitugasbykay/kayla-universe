@@ -31,6 +31,7 @@
   grid-template-columns: 1.15fr 0.85fr;
   column-gap: clamp(2rem, 5vw, 4rem);
   align-items: center;
+  min-height: 780px;
 }
 
 .heroContent {
@@ -198,6 +199,9 @@
 }
 
 .heroVisual {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -212,6 +216,7 @@
   .heroContainer {
     grid-template-columns: 1fr;
     gap: 2.5rem;
+    min-height: 0;
   }
 
   .heroContent {
@@ -234,6 +239,7 @@
   }
 
   .heroVisual {
+    position: relative;
     min-height: 500px;
   }
 }
