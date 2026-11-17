@@ -313,23 +313,8 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
             const { nx, ny } = getNormCoords(e);
             raycaster.setFromCamera(new THREE.Vector2(nx, ny), camera);
             if (raycaster.ray.intersectPlane(dragPlane, dragPoint)) {
-                // Camera-aware bounds calculation to guarantee card remains comfortably inside frustum
-                const vHalf = Math.tan((camera.fov * Math.PI) / 360) * camera.position.z;
-                const hHalf = vHalf * camera.aspect;
-                const halfCardW = 1.18;
-                const halfCardH = 1.76;
-                const minDragX = -hHalf + halfCardW + 0.2;
-                const maxDragX = hHalf - halfCardW - 0.2;
-                const maxDragY = sim.anchor.y - halfCardH - 0.25;
-                const minDragY = camera.position.y - vHalf + halfCardH + 0.2;
+                sim.updateDragTarget(dragPoint);
 
-                const grabOffset = sim.dragGrabLocal.clone().applyQuaternion(sim.card.quaternion);
-                const clampedTarget = new THREE.Vector3(
-                    Math.max(minDragX, Math.min(maxDragX, dragPoint.x - grabOffset.x)) + grabOffset.x,
-                    Math.max(minDragY, Math.min(maxDragY, dragPoint.y - grabOffset.y)) + grabOffset.y,
-                    dragPoint.z
-                );
-                sim.updateDragTarget(clampedTarget);
             }
         };
 
@@ -351,7 +336,7 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
             if (getCardIntersection(e)) handleFlip();
         };
 
-        canvas.addEventListener('pointerdown', handlePointerDown);
+        window.addEventListener('pointerdown', handlePointerDown);
         window.addEventListener('pointermove', handlePointerMove);
         window.addEventListener('pointerup', handlePointerUp);
         window.addEventListener('pointercancel', handlePointerUp);
@@ -404,7 +389,7 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
         return () => {
             cancelAnimationFrame(rafRef.current);
             window.removeEventListener('resize', handleResize);
-            canvas.removeEventListener('pointerdown', handlePointerDown);
+            window.removeEventListener('pointerdown', handlePointerDown);
             window.removeEventListener('pointermove', handlePointerMove);
             window.removeEventListener('pointerup', handlePointerUp);
             window.removeEventListener('pointercancel', handlePointerUp);

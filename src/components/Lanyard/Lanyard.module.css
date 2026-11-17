@@ -1,7 +1,7 @@
 .lanyardStage {
   position: relative;
   width: 100%;
-  max-width: 640px;
+  max-width: none;
   height: 780px;
   display: flex;
   flex-direction: column;
@@ -49,4 +49,8 @@
   .lanyardCanvas {
     height: 500px;
   }
+}
+
+@media (max-width: 1024px) {
+  .lanyardCanvas { pointer-events: auto; }
 }
