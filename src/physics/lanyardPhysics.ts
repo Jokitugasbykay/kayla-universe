@@ -31,8 +31,8 @@ export const DEFAULT_PHYSICS_CONFIG: PhysicsConfig = {
   gravity: new THREE.Vector3(0, -9.81, 0),
   substeps: 8,
   fixedDelta: 1 / 120, // 120 Hz internal physics rate
-  linearDampingRate: 0.45,
-  angularDampingRate: 2.2,
+  linearDampingRate: 0.7,
+  angularDampingRate: 2.8,
   aerodynamicDrag: 0.75,
   strapTwistStiffness: 2.2,
   strapBendingStiffness: 3.5,
@@ -396,8 +396,6 @@ export class AdvancedLanyardPhysics {
     const cardUp = new THREE.Vector3(0, 1, 0).applyQuaternion(this.card.quaternion);
     const tiltCross = new THREE.Vector3().crossVectors(cardUp, upVector);
     this.card.applyTorque(tiltCross.multiplyScalar(this.config.strapBendingStiffness));
-    // Strong upright torque preventing upside down inversion
-    this.card.angularVelocity.addScaledVector(tiltCross, 65.0 * dt);
 
     // Pointer Dragging: Responsive PBD grab constraint coupled with natural torque
     if (this.isDragging) {
@@ -405,10 +403,8 @@ export class AdvancedLanyardPhysics {
       const grabDelta = this.dragTargetWorld.clone().sub(currentGrabWorld);
 
       // Direct PBD displacement with smooth compliance
-      this.card.position.addScaledVector(grabDelta, 0.85);
+      this.card.position.add(grabDelta.clone().multiplyScalar(0.65).clampLength(0, 0.12));
 
-      // Preserve velocity momentum for natural release swing
-      this.card.velocity.copy(grabDelta).multiplyScalar(1 / dt).clampLength(0, 14);
 
       // Apply natural torque from off-center grab lever arm (tau = r x delta)
       const lever = this.dragGrabLocal.clone().applyQuaternion(this.card.quaternion);
