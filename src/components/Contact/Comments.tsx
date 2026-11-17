@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Guestbook } from './Guestbook';
 import styles from './Contact.module.css';
 
 type Comment = { id: string; author: string; message: string; avatar: string | null; created_at: string };
@@ -83,6 +82,5 @@ export const Comments: React.FC = () => {
             {comments.length === limit && <button type="button" onClick={() => setLimit(limit + 20)}>Show more comments</button>}
         </div>
         <p className={styles.guestbookSubtitle}><a href="https://github.com/Jokitugasbykay/kayla-universe/discussions" target="_blank" rel="noopener noreferrer">Previous GitHub comments</a></p>
-        <details><summary>Previous browser-local notes</summary><Guestbook /></details>
     </div>;
 };

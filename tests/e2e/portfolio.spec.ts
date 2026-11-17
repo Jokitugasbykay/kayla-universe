@@ -11,8 +11,6 @@ test('safe public content, loaded assets and usable interactions', async ({ page
     const text = await page.locator('body').innerText();
     expect(text).not.toMatch(/\bNIM\b|SECURE ID|STUDENT ID|Malaysian|citizen|researcher|[\u2013\u2014]/i);
     await expect(page.getByRole('heading', { name: 'Leave a comment' })).toBeVisible();
-    await page.getByText('Previous browser-local notes').click();
-    await expect(page.getByText('No local notes yet.')).toBeVisible();
     await expect(page.locator('#contact a[href="https://github.com/Jokitugasbykay"]')).toBeVisible();
     const canvas = page.locator('canvas[aria-label*="lanyard"]');
     await expect(canvas).toBeVisible();
@@ -37,13 +35,6 @@ test('safe public content, loaded assets and usable interactions', async ({ page
         await page.getByRole('button', { name: 'Toggle navigation menu' }).click();
         await page.getByRole('link', { name: 'Contact', exact: true }).first().click();
     }
-    await page.getByLabel('Your Name *').fill('Local test visitor');
-    await page.getByLabel('Message *').fill('A browser-local note.');
-    await page.getByRole('button', { name: 'Save locally' }).click();
-    await expect(page.locator('details').getByRole('status')).toHaveText('Saved on this browser only.');
-    await page.reload();
-    await page.getByText('Previous browser-local notes').click();
-    await expect(page.getByText('A browser-local note.')).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     expect(errors).toEqual([]);
 });
@@ -59,7 +50,7 @@ test('responsive visual review and reduced motion', async ({ page, viewport }, t
     await testInfo.attach('Full page', { path: `review/after-${viewport!.width}-full.png`, contentType: 'image/png' });
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
-test('fallback remains usable and storage failure is truthful', async ({ page }) => {
+test('fallback remains usable', async ({ page }) => {
     await page.addInitScript(() => {
         const original = HTMLCanvasElement.prototype.getContext;
         HTMLCanvasElement.prototype.getContext = function (type: string, ...args: unknown[]) {
@@ -67,7 +58,6 @@ test('fallback remains usable and storage failure is truthful', async ({ page })
                 return null;
             return Reflect.apply(original, this, [type, ...args]);
         } as typeof original;
-        Storage.prototype.setItem = () => { throw new Error('Storage disabled for test'); };
     });
     await page.goto('/');
     const fallback = page.locator('canvas[aria-label="Interactive physics lanyard for Kayla Gabrielle"]');
@@ -82,11 +72,6 @@ test('fallback remains usable and storage failure is truthful', async ({ page })
     await page.mouse.up();
     await page.mouse.dblclick(box.x + box.width / 2, box.y + box.height * 0.5);
     await page.waitForTimeout(300);
-    await page.getByText('Previous browser-local notes').click();
-    await page.getByLabel('Your Name *').fill('Local visitor');
-    await page.getByLabel('Message *').fill('Unsaved note');
-    await page.getByRole('button', { name: 'Save locally' }).click();
-    await expect(page.locator('details').getByRole('status')).toContainText('Storage is unavailable');
 });
 
 test('capture dynamic physics interaction states', async ({ page, isMobile }) => {
