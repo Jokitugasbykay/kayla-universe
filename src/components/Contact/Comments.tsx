@@ -81,6 +81,5 @@ export const Comments: React.FC = () => {
             </article>)}
             {comments.length === limit && <button type="button" onClick={() => setLimit(limit + 20)}>Show more comments</button>}
         </div>
-        <p className={styles.guestbookSubtitle}><a href="https://github.com/Jokitugasbykay/kayla-universe/discussions" target="_blank" rel="noopener noreferrer">Previous GitHub comments</a></p>
     </div>;
 };
