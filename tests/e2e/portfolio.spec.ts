@@ -141,3 +141,27 @@ test('scroll reveals cards and respects reduced motion', async ({ page }) => {
     await page.reload();
     await expect(card).toHaveCSS('opacity', '1');
 });
+
+test('navigation tracks the section in view', async ({ page }) => {
+    await page.goto('/');
+    const nav = page.getByRole('navigation', { name: 'Main Navigation' });
+    await expect(nav.getByRole('link', { name: 'Home' })).toHaveAttribute('aria-current', 'location');
+    await page.locator('#contact').scrollIntoViewIfNeeded();
+    await expect(nav.getByRole('link', { name: 'Contact' })).toHaveAttribute('aria-current', 'location');
+});
+
+test('contact form sends the expected fields to the configured endpoint', async ({ page }) => {
+    let posted = '';
+    await page.route('https://formsubmit.co/kaylafisika24@gmail.com', async route => {
+        posted = route.request().postData() || '';
+        await route.fulfill({ status: 200, contentType: 'text/html', body: 'Test received' });
+    });
+    await page.goto('/');
+    await page.locator('#contact-name').fill('Test Visitor');
+    await page.locator('#contact-email').fill('visitor@example.com');
+    await page.locator('#contact-message').fill('Hello Kayla');
+    await page.getByRole('button', { name: 'Send message' }).click();
+    await expect(page.getByText('Test received')).toBeVisible();
+    expect(new URLSearchParams(posted).get('message')).toBe('Hello Kayla');
+    expect(new URLSearchParams(posted).get('email')).toBe('visitor@example.com');
+});

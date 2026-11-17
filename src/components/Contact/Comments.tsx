@@ -21,7 +21,7 @@ export const Comments: React.FC = () => {
             strict: '1',
             'reactions-enabled': '0',
             'input-position': 'top',
-            theme: 'https://jokitugasbykay.github.io/kayla-universe/assets/giscus-kayla.css',
+            theme: 'https://jokitugasbykay.github.io/kayla-universe/assets/giscus-kayla.css?v=2',
             lang: 'en',
         }).forEach(([key, value]) => script.setAttribute(`data-${key}`, value));
         node.appendChild(script);

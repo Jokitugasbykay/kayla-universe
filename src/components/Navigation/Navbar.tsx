@@ -2,13 +2,21 @@ import React, { useState, useEffect } from 'react';
 import styles from './Navbar.module.css';
 
 export const Navbar: React.FC = () => {
+    const [activeSection, setActiveSection] = useState('home');
     const [scrolled, setScrolled] = useState<boolean>(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
 
     useEffect(() => {
         const handleScroll = () => {
             setScrolled(window.scrollY > 40);
+            const ids = ['home', 'about', 'education', 'projects', 'research', 'skills', 'contact'];
+            const current = ids.filter(id => {
+                const section = document.getElementById(id);
+                return section && section.getBoundingClientRect().top <= window.innerHeight * 0.35;
+            }).at(-1);
+            setActiveSection(current || 'home');
         };
+        handleScroll();
         window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
@@ -38,7 +46,7 @@ export const Navbar: React.FC = () => {
                 {/* Floating Centered Pill Navigation */}
                 <nav className={styles.floatingNavPill} aria-label="Main Navigation">
                     {navLinks.map((link) => (
-                        <a key={link.href} href={link.href} className={styles.navLink}>
+                        <a key={link.href} href={link.href} className={`${styles.navLink} ${activeSection === link.href.slice(1) ? styles.navLinkActive : ''}`} aria-current={activeSection === link.href.slice(1) ? 'location' : undefined}>
                             {link.label}
                         </a>
                     ))}

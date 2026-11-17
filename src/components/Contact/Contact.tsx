@@ -26,6 +26,17 @@ export const Contact: React.FC = () => {
                             Whether you are interested in discussing computational physics, exploring machine learning models, or discussing software projects like JOKI.IN, feel free to reach out.
                         </p>
 
+                        <form className={styles.contactForm} action="https://formsubmit.co/kaylafisika24@gmail.com" method="POST">
+                            <input type="hidden" name="_subject" value="New message from Kayla Universe" />
+                            <label htmlFor="contact-name">Name</label>
+                            <input id="contact-name" name="name" type="text" maxLength={80} required />
+                            <label htmlFor="contact-email">Email</label>
+                            <input id="contact-email" name="email" type="email" maxLength={254} required />
+                            <label htmlFor="contact-message">Message</label>
+                            <textarea id="contact-message" name="message" rows={5} maxLength={4000} required />
+                            <p>Your message will be sent to Kayla through FormSubmit.</p>
+                            <button type="submit">Send message</button>
+                        </form>
                         <div className={styles.channelList}>
                             <a
                                 href={PROFILE_DATA.github}

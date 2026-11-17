@@ -363,3 +363,11 @@
     grid-template-columns: 1fr;
   }
 }
+
+.contactForm { display: grid; gap: 0.5rem; margin: 1.5rem 0 2rem; }
+.contactForm label { color: var(--fg-200); font-size: 0.82rem; font-weight: 600; }
+.contactForm input, .contactForm textarea { width: 100%; padding: 0.8rem; color: var(--fg-50); background: var(--bg-elevated); border: 1px solid var(--border-default); border-radius: 8px; }
+.contactForm textarea { resize: vertical; }
+.contactForm p { margin: 0.25rem 0; color: var(--fg-400); font-size: 0.78rem; }
+.contactForm button { padding: 0.8rem 1.25rem; color: var(--bg-950); background: var(--accent-primary); border-radius: 8px; font-weight: 600; }
+.contactForm button:hover { background: var(--accent-hover); }
