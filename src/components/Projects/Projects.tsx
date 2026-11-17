@@ -9,7 +9,7 @@ export const Projects: React.FC = () => {
             <div className={styles.projectsBackgroundGlow}></div>
             <div className={styles.projectsContainer}>
                 {/* Section Header */}
-                <div className={styles.sectionHeader}>
+                <div data-reveal className={styles.sectionHeader}>
                     <span className={styles.eyebrowBadge}>PORTFOLIO CASE STUDIES</span>
                     <h2 className={styles.sectionTitle}>Featured Projects</h2>
                     <p className={styles.sectionSubtitle}>
@@ -23,7 +23,7 @@ export const Projects: React.FC = () => {
                         const isReversed = index % 2 === 1;
                         return (
                             <article
-                                key={project.id}
+                                data-reveal key={project.id}
                                 className={`${styles.projectCard} ${isReversed ? styles.cardReversed : ''}`}
                             >
                                 {/* Visual Showcase Side */}
@@ -96,7 +96,7 @@ export const Projects: React.FC = () => {
                 </div>
 
                 {/* Interactive Physics Simulator */}
-                <div className={styles.simWrapper}>
+                <div data-reveal className={styles.simWrapper}>
                     <QuantumSimulator />
                 </div>
             </div>

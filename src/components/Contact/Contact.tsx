@@ -9,7 +9,7 @@ export const Contact: React.FC = () => {
             <div className={styles.contactBackgroundGlow}></div>
             <div className={styles.contactContainer}>
                 {/* Section Header */}
-                <div className={styles.sectionHeader}>
+                <div data-reveal className={styles.sectionHeader}>
                     <span className={styles.eyebrowBadge}>COMMUNICATION</span>
                     <h2 className={styles.sectionTitle}>Get In Touch</h2>
                     <p className={styles.sectionSubtitle}>
@@ -20,7 +20,7 @@ export const Contact: React.FC = () => {
                 {/* Dual Column Layout */}
                 <div className={styles.contactGrid}>
                     {/* Left Column: Direct Communication Channels */}
-                    <div className={styles.directCard}>
+                    <div data-reveal className={styles.directCard}>
                         <h3 className={styles.cardHeading}>Let us collaborate.</h3>
                         <p className={styles.cardParagraph}>
                             Whether you are interested in discussing computational physics, exploring machine learning models, or discussing software projects like JOKI.IN, feel free to reach out.
@@ -53,7 +53,7 @@ export const Contact: React.FC = () => {
                     </div>
 
                     {/* Right Column: Local Guestbook Notes */}
-                    <div className={styles.guestbookColumn}>
+                    <div data-reveal className={styles.guestbookColumn}>
                         <Comments />
                     </div>
                 </div>

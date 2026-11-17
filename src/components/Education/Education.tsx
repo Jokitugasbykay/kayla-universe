@@ -7,7 +7,7 @@ export const Education: React.FC = () => {
         <section id="education" className={styles.educationSection}>
             <div className={styles.educationContainer}>
                 {/* Section Header */}
-                <div className={styles.sectionHeader}>
+                <div data-reveal className={styles.sectionHeader}>
                     <span className={styles.eyebrowBadge}>ACADEMIC ROOTS</span>
                     <h2 className={styles.sectionTitle}>Education & Foundations</h2>
                     <p className={styles.sectionSubtitle}>
@@ -18,7 +18,7 @@ export const Education: React.FC = () => {
                 {/* Timeline Cards Grid */}
                 <div className={styles.educationGrid}>
                     {EDUCATION_DATA.map((item, idx) => (
-                        <article key={idx} className={styles.educationCard}>
+                        <article key={idx} data-reveal className={styles.educationCard}>
                             <div className={styles.cardHeader}>
                                 <div className={styles.timeBadge}>{item.period}</div>
                                 <span className={styles.statusPill}>{item.badge}</span>

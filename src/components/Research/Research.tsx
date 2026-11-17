@@ -7,7 +7,7 @@ export const Research: React.FC = () => {
         <section id="research" className={styles.researchSection}>
             <div className={styles.researchContainer}>
                 {/* Section Header */}
-                <div className={styles.sectionHeader}>
+                <div data-reveal className={styles.sectionHeader}>
                     <span className={styles.eyebrowBadge}>SCIENTIFIC INQUIRY</span>
                     <h2 className={styles.sectionTitle}>Research & Exploration</h2>
                     <p className={styles.sectionSubtitle}>
@@ -18,7 +18,7 @@ export const Research: React.FC = () => {
                 {/* Research Topics Grid */}
                 <div className={styles.researchGrid}>
                     {RESEARCH_DATA.map((item) => (
-                        <article key={item.code} className={styles.researchCard}>
+                        <article key={item.code} data-reveal className={styles.researchCard}>
                             <div className={styles.cardHeader}>
                                 <span className={styles.codeBadge}>TOPIC {item.code}</span>
                                 <span className={styles.statusPill}>{item.status}</span>

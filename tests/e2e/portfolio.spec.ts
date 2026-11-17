@@ -130,3 +130,14 @@ test('hero rotates its typing text', async ({ page }) => {
     await expect(text).toContainText('Curious about how the universe works.');
     await expect(text).toContainText('Exploring physics, one question at a time.', { timeout: 12000 });
 });
+
+test('scroll reveals cards and respects reduced motion', async ({ page }) => {
+    await page.goto('/');
+    const card = page.locator('#education article').first();
+    await expect(card).toHaveCSS('opacity', '0.25');
+    await card.scrollIntoViewIfNeeded();
+    await expect(card).toHaveCSS('opacity', '1');
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.reload();
+    await expect(card).toHaveCSS('opacity', '1');
+});

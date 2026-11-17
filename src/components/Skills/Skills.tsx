@@ -7,7 +7,7 @@ export const Skills: React.FC = () => {
         <section id="skills" className={styles.skillsSection}>
             <div className={styles.skillsContainer}>
                 {/* Section Header */}
-                <div className={styles.sectionHeader}>
+                <div data-reveal className={styles.sectionHeader}>
                     <span className={styles.eyebrowBadge}>TECHNICAL CRAFT</span>
                     <h2 className={styles.sectionTitle}>Skills & Competencies</h2>
                     <p className={styles.sectionSubtitle}>
@@ -18,7 +18,7 @@ export const Skills: React.FC = () => {
                 {/* Modern Categorized Cards Grid */}
                 <div className={styles.skillsGrid}>
                     {SKILLS_DATA.map((cat) => (
-                        <div key={cat.categoryNumber} className={styles.skillCategoryCard}>
+                        <div key={cat.categoryNumber} data-reveal className={styles.skillCategoryCard}>
                             <div className={styles.cardTopRow}>
                                 <span className={styles.categoryIndex}>{cat.categoryNumber}</span>
                                 <span className={styles.focusPill}>{cat.focusPill}</span>

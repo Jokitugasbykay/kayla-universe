@@ -23,22 +23,19 @@ export const App: React.FC = () => {
             return;
         }
         const ctx = gsap.context(() => {
-            const sections = ['#about', '#education', '#projects', '#research', '#skills', '#contact'];
-            sections.forEach((selector) => {
-                const el = document.querySelector(selector);
-                if (el) {
-                    gsap.fromTo(el, { opacity: 0.88, y: 24 }, {
-                        opacity: 1,
-                        y: 0,
-                        duration: 0.75,
-                        ease: 'power2.out',
-                        scrollTrigger: {
-                            trigger: el,
-                            start: 'top 85%',
-                            toggleActions: 'play none none none'
-                        }
-                    });
-                }
+            gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((element) => {
+                gsap.fromTo(element, { opacity: 0.25, y: 24 }, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.7,
+                    ease: 'power2.out',
+                    onComplete: () => gsap.set(element, { clearProps: 'opacity,transform' }),
+                    scrollTrigger: {
+                        trigger: element,
+                        start: 'top 92%',
+                        once: true
+                    }
+                });
             });
         }, mainRef);
         return () => {

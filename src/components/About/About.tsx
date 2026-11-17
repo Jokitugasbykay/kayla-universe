@@ -11,7 +11,7 @@ export const About: React.FC<AboutProps> = () => {
         <section id="about" className={styles.aboutSection}>
             <div className={styles.aboutContainer}>
                 {/* Section Header */}
-                <div className={styles.sectionHeader}>
+                <div data-reveal className={styles.sectionHeader}>
                     <span className={styles.sectionEyebrow}>ABOUT &amp; DISCIPLINES</span>
                     <h2 className={styles.sectionTitle}>Scientific Thinker, Builder &amp; Trader</h2>
                     <p className={styles.sectionSubtitle}>
@@ -22,7 +22,7 @@ export const About: React.FC<AboutProps> = () => {
                 {/* Central Triptych Layout */}
                 <div className={styles.triptychGrid}>
                     {/* Left Column: Personal Background */}
-                    <div className={styles.leftNarrative}>
+                    <div data-reveal className={styles.leftNarrative}>
                         <div className={styles.introHeading}>
                             <span className={styles.hiText}>Hi, I am</span>
                             <h3 className={styles.nameText}>Kayla Gabrielle</h3>
@@ -48,7 +48,7 @@ export const About: React.FC<AboutProps> = () => {
                     </div>
 
                     {/* Center Column: Intentional Black Architectural Portrait Placeholder */}
-                    <div className={styles.centerVisual}>
+                    <div data-reveal className={styles.centerVisual}>
                         <div className={styles.portraitPlaceholderFrame}>
                             <div className={styles.placeholderMonogramBlock}>
                                 <span className={styles.placeholderMonogram}>KG</span>
@@ -67,7 +67,7 @@ export const About: React.FC<AboutProps> = () => {
                     </div>
 
                     {/* Right Column: Software Craft & Daily Trading Discipline */}
-                    <div className={styles.rightNarrative}>
+                    <div data-reveal className={styles.rightNarrative}>
                         <h4 className={styles.rightSubheading}>
                             From Physical Principles to Software &amp; Markets
                         </h4>
@@ -92,7 +92,7 @@ export const About: React.FC<AboutProps> = () => {
                 {/* 3 Metric Cards Row */}
                 <div className={styles.statsRow}>
                     {STATS_DATA.map((stat, idx) => (
-                        <div key={idx} className={styles.statCard}>
+                        <div key={idx} data-reveal className={styles.statCard}>
                             <span className={styles.statNumber}>{stat.number}</span>
                             <span className={styles.statLabel}>{stat.label}</span>
                             <span className={styles.statDetail}>{stat.detail}</span>
