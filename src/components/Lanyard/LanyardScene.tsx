@@ -1,10 +1,17 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import ReferenceLanyard from './reference-lanyard.js';
 import { LanyardFallback } from './LanyardFallback';
 import { drawFrontBadgeCanvas, drawBackBadgeCanvas, drawStrapCanvas } from './LanyardBadge';
 import styles from './Lanyard.module.css';
 
 export const LanyardScene: React.FC = () => {
+    const [mobile, setMobile] = useState(() => window.matchMedia('(max-width: 1024px)').matches);
+    useEffect(() => {
+        const query = window.matchMedia('(max-width: 1024px)');
+        const update = () => setMobile(query.matches);
+        query.addEventListener('change', update);
+        return () => query.removeEventListener('change', update);
+    }, []);
     const images = useMemo(() => {
         const front = document.createElement('canvas');
         const back = document.createElement('canvas');
@@ -25,5 +32,5 @@ export const LanyardScene: React.FC = () => {
         return Boolean(gl);
     }, []);
     if (!supported) return <LanyardFallback />;
-    return <ReferenceLanyard className={styles.referenceLanyard} frontImage={images[0]} backImage={images[1]} strapImage={images[2]} anchor={window.matchMedia('(max-width: 1024px)').matches ? "center" : "right"} size={0.6} intro={false} breeze={0} />;
+    return <ReferenceLanyard className={styles.referenceLanyard} frontImage={images[0]} backImage={images[1]} strapImage={images[2]} anchor={mobile ? 'center' : 'right'} size={0.6} intro={false} breeze={0} />;
 };
