@@ -15,10 +15,9 @@ test('safe public content, loaded assets and usable interactions', async ({ page
     const canvas = page.locator('canvas[aria-label*="lanyard"]');
     await expect(canvas).toBeVisible();
     expect(await canvas.evaluate((e: HTMLCanvasElement) => !!e.getContext('webgl2'))).toBe(true);
-    const turnBtn = page.getByRole('button', { name: /Turn lanyard badge|Flip lanyard badge/i });
-    await turnBtn.click();
-    await expect(turnBtn).toHaveText(/Front View|Show Front/i);
     const box = (await canvas.boundingBox())!;
+    await page.mouse.dblclick(box.x + box.width / 2, box.y + box.height * 0.55);
+    await page.waitForTimeout(300);
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
     await page.mouse.down();
     await page.mouse.move(box.x + box.width * .65, box.y + box.height * .4, { steps: 5 });
@@ -72,15 +71,12 @@ test('fallback remains usable and storage failure is truthful', async ({ page })
     const box = (await fallback.boundingBox())!;
     await page.mouse.move(box.x + 4, box.y + 4);
     await page.mouse.down();
-    await expect(page.getByText('Holding card / Release to swing')).toHaveCount(0);
     await page.mouse.up();
     await page.mouse.move(box.x + box.width / 2, box.y + box.height * 0.5);
     await page.mouse.down();
-    await expect(page.getByText('Holding card / Release to swing')).toBeVisible();
     await page.mouse.up();
-    const fallbackTurnBtn = page.getByRole('button', { name: /Turn lanyard badge|Flip lanyard badge/i });
-    await fallbackTurnBtn.click();
-    await expect(fallbackTurnBtn).toHaveText(/Front View|Show Front/i);
+    await page.mouse.dblclick(box.x + box.width / 2, box.y + box.height * 0.5);
+    await page.waitForTimeout(300);
     await page.getByLabel('Your Name *').fill('Local visitor');
     await page.getByLabel('Message *').fill('Unsaved note');
     await page.getByRole('button', { name: 'Save locally' }).click();
@@ -108,9 +104,8 @@ test('capture dynamic physics interaction states', async ({ page }) => {
     await page.mouse.up();
     await page.waitForTimeout(700);
 
-    // 2. Flip badge to reverse side
-    const turnBtn = page.getByRole('button', { name: /Turn lanyard badge|Flip lanyard badge/i });
-    await turnBtn.click();
+    // 2. Flip badge to reverse side by double-clicking
+    await page.mouse.dblclick(box.x + box.width / 2, box.y + box.height * 0.55);
     await page.waitForTimeout(900);
     await page.screenshot({ path: 'review/lanyard-flipped-back.png' });
 });

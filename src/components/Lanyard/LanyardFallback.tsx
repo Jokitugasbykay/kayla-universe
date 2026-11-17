@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { LanyardVerletSystem } from '../../physics/verletChain';
 import { drawFrontBadgeCanvas, drawBackBadgeCanvas } from './LanyardBadge';
 import styles from './Lanyard.module.css';
@@ -14,14 +14,10 @@ export const LanyardFallback: React.FC<LanyardFallbackProps> = ({ onFlipToggle }
     const backCanvasRef = useRef<HTMLCanvasElement | null>(null);
     const simRef = useRef<LanyardVerletSystem>(new LanyardVerletSystem(14, 0.135, 2.35));
     const rafRef = useRef<number>(0);
-    const [isFlipped, setIsFlipped] = useState<boolean>(false);
-    const [telemetry, setTelemetry] = useState<string>('Drag card to swing / Double-click to turn');
 
     const handleFlip = useCallback(() => {
         simRef.current.toggleFlip();
-        setIsFlipped((prev) => !prev);
         onFlipToggle?.();
-        setTelemetry(simRef.current.card.isFlipped ? 'Reverse view' : 'Front view');
     }, [onFlipToggle]);
 
     useEffect(() => {
@@ -78,7 +74,6 @@ export const LanyardFallback: React.FC<LanyardFallbackProps> = ({ onFlipToggle }
             sim.card.dragTargetX = tip.x;
             sim.card.dragTargetY = tip.y;
             canvas.style.cursor = 'grabbing';
-            setTelemetry('Holding card / Release to swing');
         };
 
         const handlePointerMove = (e: PointerEvent) => {
@@ -99,7 +94,6 @@ export const LanyardFallback: React.FC<LanyardFallbackProps> = ({ onFlipToggle }
             if (sim.card.isDragging) {
                 sim.card.isDragging = false;
                 canvas.style.cursor = hitCard(e) ? 'grab' : 'default';
-                setTelemetry('Drag card to swing / Double-click to flip');
             }
         };
 
@@ -196,19 +190,6 @@ export const LanyardFallback: React.FC<LanyardFallbackProps> = ({ onFlipToggle }
                 className={`${styles.lanyardCanvas} ${styles.fallbackCanvas}`}
                 aria-label="Interactive physics lanyard for Kayla Gabrielle"
             />
-            <div className={styles.lanyardMetaHint}>
-                <span className={styles.hintText}>{telemetry}</span>
-                <div className={styles.controlButtons}>
-                    <button
-                        type="button"
-                        onClick={handleFlip}
-                        className={styles.subtleFlipBtn}
-                        aria-label="Turn lanyard badge"
-                    >
-                        {isFlipped ? 'Front View' : 'Turn Card'}
-                    </button>
-                </div>
-            </div>
         </div>
     );
 };

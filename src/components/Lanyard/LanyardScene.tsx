@@ -12,15 +12,11 @@ interface LanyardSceneProps {
 export const LanyardScene: React.FC<LanyardSceneProps> = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [webglSupported, setWebglSupported] = useState<boolean>(true);
-    const [isFlipped, setIsFlipped] = useState<boolean>(false);
-    const [telemetry, setTelemetry] = useState<string>('Drag card to swing / Double-click to turn');
     const simRef = useRef<AdvancedLanyardPhysics>(new AdvancedLanyardPhysics(14, 0.115, new THREE.Vector3(0, 2.70, 0)));
     const rafRef = useRef<number>(0);
 
     const handleFlip = useCallback(() => {
         simRef.current.toggleFlip();
-        setIsFlipped((prev) => !prev);
-        setTelemetry(simRef.current.isFlipped ? 'Reverse view' : 'Front view');
     }, []);
 
     useEffect(() => {
@@ -306,7 +302,6 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
 
             sim.startDragging(hit.point);
             canvas.style.cursor = 'grabbing';
-            setTelemetry('Holding card / Release to swing');
         };
 
         const handlePointerMove = (e: PointerEvent) => {
@@ -348,7 +343,6 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
             if (sim.isDragging) {
                 sim.stopDragging();
                 canvas.style.cursor = getCardIntersection(e) ? 'grab' : 'default';
-                setTelemetry('Drag card to swing / Double-click to turn');
             }
         };
 
@@ -429,19 +423,6 @@ export const LanyardScene: React.FC<LanyardSceneProps> = () => {
                 className={styles.lanyardCanvas}
                 aria-label="Interactive 3D physics lanyard for Kayla Gabrielle"
             />
-            <div className={styles.lanyardMetaHint}>
-                <span className={styles.hintText}>{telemetry}</span>
-                <div className={styles.controlButtons}>
-                    <button
-                        type="button"
-                        onClick={handleFlip}
-                        className={styles.subtleFlipBtn}
-                        aria-label="Turn lanyard badge"
-                    >
-                        {isFlipped ? 'Front View' : 'Turn Card'}
-                    </button>
-                </div>
-            </div>
         </div>
     );
 };
