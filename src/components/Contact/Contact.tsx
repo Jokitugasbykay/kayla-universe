@@ -1,6 +1,6 @@
 import React from 'react';
 import { PROFILE_DATA } from '../../data/portfolio';
-import { Guestbook } from './Guestbook';
+import { Comments } from './Comments';
 import styles from './Contact.module.css';
 
 export const Contact: React.FC = () => {
@@ -54,7 +54,7 @@ export const Contact: React.FC = () => {
 
                     {/* Right Column: Local Guestbook Notes */}
                     <div className={styles.guestbookColumn}>
-                        <Guestbook />
+                        <Comments />
                     </div>
                 </div>
             </div>

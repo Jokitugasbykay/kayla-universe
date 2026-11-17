@@ -10,6 +10,8 @@ test('safe public content, loaded assets and usable interactions', async ({ page
         expect(await img.evaluate((e: HTMLImageElement) => e.complete && e.naturalWidth > 0)).toBe(true);
     const text = await page.locator('body').innerText();
     expect(text).not.toMatch(/\bNIM\b|SECURE ID|STUDENT ID|Malaysian|citizen|researcher|[\u2013\u2014]/i);
+    await expect(page.getByRole('heading', { name: 'Leave a comment' })).toBeVisible();
+    await page.getByText('Previous browser-local notes').click();
     await expect(page.getByText('No local notes yet.')).toBeVisible();
     await expect(page.locator('#contact a[href="https://github.com/Jokitugasbykay"]')).toBeVisible();
     const canvas = page.locator('canvas[aria-label*="lanyard"]');
@@ -40,6 +42,7 @@ test('safe public content, loaded assets and usable interactions', async ({ page
     await page.getByRole('button', { name: 'Save locally' }).click();
     await expect(page.getByRole('status')).toHaveText('Saved on this browser only.');
     await page.reload();
+    await page.getByText('Previous browser-local notes').click();
     await expect(page.getByText('A browser-local note.')).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     expect(errors).toEqual([]);
@@ -79,6 +82,7 @@ test('fallback remains usable and storage failure is truthful', async ({ page })
     await page.mouse.up();
     await page.mouse.dblclick(box.x + box.width / 2, box.y + box.height * 0.5);
     await page.waitForTimeout(300);
+    await page.getByText('Previous browser-local notes').click();
     await page.getByLabel('Your Name *').fill('Local visitor');
     await page.getByLabel('Message *').fill('Unsaved note');
     await page.getByRole('button', { name: 'Save locally' }).click();
