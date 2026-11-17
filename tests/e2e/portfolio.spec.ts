@@ -40,7 +40,7 @@ test('safe public content, loaded assets and usable interactions', async ({ page
     await page.getByLabel('Your Name *').fill('Local test visitor');
     await page.getByLabel('Message *').fill('A browser-local note.');
     await page.getByRole('button', { name: 'Save locally' }).click();
-    await expect(page.getByRole('status')).toHaveText('Saved on this browser only.');
+    await expect(page.locator('details').getByRole('status')).toHaveText('Saved on this browser only.');
     await page.reload();
     await page.getByText('Previous browser-local notes').click();
     await expect(page.getByText('A browser-local note.')).toBeVisible();
@@ -86,7 +86,7 @@ test('fallback remains usable and storage failure is truthful', async ({ page })
     await page.getByLabel('Your Name *').fill('Local visitor');
     await page.getByLabel('Message *').fill('Unsaved note');
     await page.getByRole('button', { name: 'Save locally' }).click();
-    await expect(page.getByRole('status')).toContainText('Storage is unavailable');
+    await expect(page.locator('details').getByRole('status')).toContainText('Storage is unavailable');
 });
 
 test('capture dynamic physics interaction states', async ({ page, isMobile }) => {
@@ -164,4 +164,26 @@ test('contact form sends the expected fields to the configured endpoint', async 
     await expect(page.getByText('Test received')).toBeVisible();
     expect(new URLSearchParams(posted).get('message')).toBe('Hello Kayla');
     expect(new URLSearchParams(posted).get('email')).toBe('visitor@example.com');
+});
+
+
+test('guestbook sends and displays a visitor comment', async ({ page }) => {
+    let submitted = false;
+    await page.route('https://aelagbiyhsblqjxittlw.supabase.co/rest/v1/**', async route => {
+        if (route.request().url().includes('/rpc/')) {
+            const data = route.request().postDataJSON();
+            expect(data.p_author).toBe('Visitor');
+            expect(data.p_message).toBe('Hello Kayla');
+            submitted = true;
+            await route.fulfill({ status: 204 });
+        } else {
+            await route.fulfill({ json: submitted ? [{ id: '1', author: 'Visitor', message: 'Hello Kayla', avatar: null, created_at: '2026-11-17T00:00:00Z' }] : [] });
+        }
+    });
+    await page.goto('/');
+    await page.locator('#comment-name').fill('Visitor');
+    await page.getByLabel('Comment', { exact: true }).fill('Hello Kayla');
+    await page.getByRole('button', { name: 'Send comment' }).click();
+    await expect(page.getByText('Comment sent.')).toBeVisible();
+    await expect(page.getByText('Hello Kayla')).toBeVisible();
 });

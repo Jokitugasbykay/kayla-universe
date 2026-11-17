@@ -371,3 +371,8 @@
 .contactForm p { margin: 0.25rem 0; color: var(--fg-400); font-size: 0.78rem; }
 .contactForm button { padding: 0.8rem 1.25rem; color: var(--bg-950); background: var(--accent-primary); border-radius: 8px; font-weight: 600; }
 .contactForm button:hover { background: var(--accent-hover); }
+.commentAuthor { display: flex; align-items: center; gap: 0.65rem; min-width: 0; overflow-wrap: anywhere; }
+.commentAvatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; flex: none; }
+.entryComment { white-space: pre-wrap; overflow-wrap: anywhere; }
+
+.commentAvatarPlaceholder { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--bg-elevated); color: var(--accent-primary); flex: none; }
