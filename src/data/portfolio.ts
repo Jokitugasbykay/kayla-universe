@@ -44,8 +44,8 @@ export const PROJECTS_DATA: ProjectItem[] = [
         technologies: ['React', 'TypeScript', 'TailwindCSS', 'Node.js', 'Vite'],
         link: 'https://jokiin.my.id',
         linkLabel: 'Launch Platform',
-        previewImage: './assets/jokiin-home.png',
-        previewVideo: './assets/jokiin-intro.mp4',
+        previewImage: './assets/jokiin-brand.png',
+        previewVideo: './assets/jokiin-logo-promo.mp4',
         accentColor: '#c8ad8d'
     },
     {

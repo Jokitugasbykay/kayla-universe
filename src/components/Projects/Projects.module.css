@@ -121,6 +121,13 @@
   transition: transform var(--transition-slow);
 }
 
+[data-project="jokiin"] .previewVideo,
+[data-project="jokiin"] .reducedMotionImage {
+  object-fit: contain;
+  object-position: center;
+  background: #080b0a;
+}
+
 .reducedMotionImage { display: none; }
 
 @media (prefers-reduced-motion: reduce) {

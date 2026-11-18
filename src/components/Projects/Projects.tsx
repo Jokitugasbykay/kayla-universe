@@ -22,7 +22,7 @@ export const Projects: React.FC = () => {
                         const isReversed = index % 2 === 1;
                         return (
                             <article
-                                data-reveal key={project.id}
+                                data-reveal data-project={project.id} key={project.id}
                                 className={`${styles.projectCard} ${isReversed ? styles.cardReversed : ''}`}
                             >
                                 {/* Visual Showcase Side */}
