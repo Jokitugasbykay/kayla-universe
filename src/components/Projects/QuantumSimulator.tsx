@@ -127,7 +127,6 @@ export const QuantumSimulator: React.FC = () => {
         {/* Controls Column */}
         <div className={styles.simControlsCol}>
           <div className={styles.simEyebrow}>Illustrative wave model</div>
-          <h3 className={styles.simTitle}>Two waves, one envelope</h3>
           <p className={styles.simDescription}>
             A Gaussian envelope containing two complex sinusoidal waves. Parameters use arbitrary units. This animation is not a solution of the Schrodinger equation, and its squared magnitude is not normalized probability. The grey curve is a decorative quadratic reference.
           </p>

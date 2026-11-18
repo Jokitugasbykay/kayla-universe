@@ -11,7 +11,7 @@ export const Education: React.FC = () => {
                     <span className={styles.eyebrowBadge}>ACADEMIC ROOTS</span>
                     <h2 className={styles.sectionTitle}>Education & Foundations</h2>
                     <p className={styles.sectionSubtitle}>
-                        A record of continuous academic inquiry and cross-border learning.
+                        My education and experience so far.
                     </p>
                 </div>
 
@@ -24,20 +24,21 @@ export const Education: React.FC = () => {
                                 <span className={styles.statusPill}>{item.badge}</span>
                             </div>
 
+                            {item.logo && <img className={styles.institutionLogo} src={item.logo} alt="" />}
                             <h3 className={styles.institutionTitle}>{item.institution}</h3>
                             <h4 className={styles.degreeTitle}>{item.qualification}</h4>
 
-                            <div className={styles.locationMeta}>
+                            {item.location && <div className={styles.locationMeta}>
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                                     <circle cx="12" cy="10" r="3"></circle>
                                 </svg>
                                 <span>{item.location}</span>
-                            </div>
+                            </div>}
 
                             <p className={styles.itemDescription}>{item.description}</p>
 
-                            <div className={styles.courseworkWrapper}>
+                            {item.coursework.length > 0 && <div className={styles.courseworkWrapper}>
                                 <span className={styles.courseworkLabel}>Core Topics:</span>
                                 <div className={styles.courseworkPills}>
                                     {item.coursework.map((course, cIdx) => (
@@ -46,10 +47,15 @@ export const Education: React.FC = () => {
                                         </span>
                                     ))}
                                 </div>
-                            </div>
+                            </div>}
                         </article>
                     ))}
                 </div>
+                <article data-reveal className={styles.experience}>
+                    <span className={styles.timeBadge}>SEMESTER 3</span>
+                    <h3 className={styles.institutionTitle}>Local TV Internship</h3>
+                    <p className={styles.itemDescription}>Internship at a local television station during my third semester.</p>
+                </article>
             </div>
         </section>
     );

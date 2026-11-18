@@ -11,7 +11,7 @@ export const Skills: React.FC = () => {
                     <span className={styles.eyebrowBadge}>TECHNICAL CRAFT</span>
                     <h2 className={styles.sectionTitle}>Skills & Competencies</h2>
                     <p className={styles.sectionSubtitle}>
-                        Tools demonstrated across production work, scientific computation, and system architecture.
+                        A blend of creative work, media, science, development, and market analysis.
                     </p>
                 </div>
 

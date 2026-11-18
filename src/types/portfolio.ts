@@ -21,6 +21,7 @@ export interface EducationItem {
     description: string;
     coursework: string[];
     badge: string;
+    logo?: string;
 }
 export interface SkillCategory {
     categoryNumber: string;

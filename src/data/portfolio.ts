@@ -70,13 +70,24 @@ export const PROJECTS_DATA: ProjectItem[] = [
 
 export const EDUCATION_DATA: EducationItem[] = [
     {
-        period: '2022 - Present',
+        period: 'Currently studying',
         institution: 'Universitas Airlangga',
         qualification: 'Undergraduate Physics student',
         location: 'Surabaya, Indonesia',
         description: 'Currently in Semester 5. Core studies in classical mechanics, differential equations, computational simulation, and quantum phenomena.',
         coursework: ['Classical Mechanics', 'Mathematical Physics', 'Computational Simulation', 'Quantum Physics', 'Thermodynamics'],
-        badge: 'Academic Core'
+        badge: 'Academic Core',
+        logo: './assets/unair-logo.png'
+    },
+    {
+        period: 'High school',
+        institution: 'SMAK PENABUR Pondok Indah',
+        qualification: 'High school education',
+        location: '',
+        description: 'Studied at SMAK PENABUR Pondok Indah.',
+        coursework: [],
+        badge: 'Education',
+        logo: './assets/penabur-logo.webp'
     }
 ];
 
@@ -109,8 +120,22 @@ export const RESEARCH_DATA: ResearchInterest[] = [
 
 export const SKILLS_DATA: SkillCategory[] = [
     {
+        categoryNumber: '04',
+        domain: 'Design & Video Editing',
+        summary: 'Visual design and video editing for creative projects.',
+        items: ['Design', 'Video Editing'],
+        focusPill: 'Creative'
+    },
+    {
+        categoryNumber: '05',
+        domain: 'News & Media',
+        summary: 'Experience in news and media, including an internship at a local TV station.',
+        items: ['News', 'Media'],
+        focusPill: 'Media'
+    },
+    {
         categoryNumber: '01',
-        domain: 'Frontend & Systems Craft',
+        domain: 'Junior Web Development',
         summary: 'Modern web applications built with an eye for performance, motion fidelity, and clean structure.',
         items: ['TypeScript', 'React 19', 'Next.js', 'Three.js', 'WebGL', 'GSAP', 'Vite', 'CSS Modules'],
         focusPill: 'Engineering'

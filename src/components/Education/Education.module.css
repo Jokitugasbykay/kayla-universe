@@ -42,8 +42,9 @@
 }
 
 .educationGrid {
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 1.5rem;
   width: 100%;
 }
 
@@ -152,3 +153,23 @@
   border-radius: var(--radius-sm);
   color: var(--fg-200);
 }
+
+.institutionLogo {
+  width: auto;
+  max-width: 150px;
+  height: 64px;
+  object-fit: contain;
+  object-position: left center;
+  margin-bottom: 1.25rem;
+}
+
+.experience {
+  margin-top: 1.5rem;
+  padding: clamp(2rem, 4vw, 3rem);
+  background: var(--bg-850);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+}
+
+.experience .institutionTitle { margin-top: 0.75rem; }
+.experience .itemDescription { margin-bottom: 0; }
