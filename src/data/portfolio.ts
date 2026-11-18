@@ -45,7 +45,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
         link: 'https://jokiin.my.id',
         linkLabel: 'Launch Platform',
         previewImage: './assets/jokiin-real.png',
-        previewVideo: './assets/jokiin-project.mp4',
+        previewVideo: './assets/jokiin-ad.mp4',
         accentColor: '#c8ad8d'
     },
     {
@@ -65,7 +65,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
         linkLabel: 'Launch Platform',
         github: 'https://github.com/Jokitugasbykay/Journaling_trade.github.io',
         previewImage: './assets/journalingtrade-real.png',
-        previewVideo: './assets/journalingtrade-project.mp4',
+        previewVideo: './assets/journalingtrade-ad.mp4',
         accentColor: '#c8ad8d'
     }
 ];
