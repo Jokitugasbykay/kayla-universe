@@ -78,8 +78,8 @@ export const PROJECTS_DATA: ProjectItem[] = [
         highlights: ['Transaction tracking', 'Financial reporting', 'Trading overview'],
         technologies: ['Next.js', 'React', 'TypeScript', 'Recharts'],
         github: 'https://github.com/Jokitugasbykay/keuangan.github.io',
-        previewImage: './assets/kayla-finance-poster.png',
-        previewVideo: './assets/kayla-finance-promo.mp4'
+        previewImage: './assets/kayla-finance-dashboard-poster.png',
+        previewVideo: './assets/kayla-finance-dashboard.mp4'
     }
 ];
 
