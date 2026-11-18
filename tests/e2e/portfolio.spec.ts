@@ -192,17 +192,18 @@ test('header scrolls without changing the home URL', async ({ page, viewport }) 
     await expect(page.locator('h1')).toContainText('Kayla Gabrielle');
 });
 
-test('JOKI.IN case study switches experiences and restores focus', async ({ page }) => {
+test('JOKI.IN case study expands within its card and restores focus', async ({ page }) => {
     await page.goto('/');
     const card = page.locator('[data-project="jokiin"]');
-    const trigger = card.getByRole('button', { name: /explore case study/i });
+    const trigger = card.getByRole('button', { name: /(?:explore|close) case study/i }).first();
     await trigger.click();
-    const dialog = page.getByRole('dialog', { name: /one ecosystem/i });
-    await expect(dialog).toBeVisible();
-    await dialog.getByRole('button', { name: /digital store/i }).click();
-    await expect(dialog.getByText(/redirects to sign-in/i)).toBeVisible();
-    await expect(dialog.getByRole('button', { name: /digital store/i })).toHaveAttribute('aria-pressed', 'true');
-    await page.keyboard.press('Escape');
-    await expect(dialog).toBeHidden();
+    const detail = card.getByRole('region', { name: /one ecosystem/i });
+    await expect(detail).toBeVisible();
+    await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    await detail.getByRole('button', { name: /digital store/i }).click();
+    await expect(detail.getByText(/redirects to sign-in/i)).toBeVisible();
+    await expect(detail.getByRole('button', { name: /digital store/i })).toHaveAttribute('aria-pressed', 'true');
+    await detail.getByRole('button', { name: /close project details/i }).click();
+    await expect(detail).toBeHidden();
     await expect(trigger).toBeFocused();
 });

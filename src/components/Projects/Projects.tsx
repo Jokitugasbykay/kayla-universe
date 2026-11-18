@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { PROJECTS_DATA } from '../../data/portfolio';
 import { JokiinDetail } from './JokiinDetail';
 import styles from './Projects.module.css';
 
 export const Projects: React.FC = () => {
     const [jokiinOpen, setJokiinOpen] = useState(false);
+    const jokiinButton = useRef<HTMLButtonElement>(null);
     return (
         <section id="projects" className={styles.projectsSection}>
             <div className={styles.projectsBackgroundGlow}></div>
@@ -79,8 +80,8 @@ export const Projects: React.FC = () => {
                                     {/* Action Links */}
                                     <div className={styles.actionRow}>
                                         {project.id === 'jokiin' && (
-                                            <button type="button" className={styles.primaryLink} onClick={() => setJokiinOpen(true)}>
-                                                Explore case study <span aria-hidden="true">↗</span>
+                                            <button ref={jokiinButton} type="button" className={styles.primaryLink} aria-expanded={jokiinOpen} aria-controls="jokiin-details" onClick={() => setJokiinOpen(!jokiinOpen)}>
+                                                {jokiinOpen ? 'Close case study' : 'Explore case study'} <span aria-hidden="true">{jokiinOpen ? '↑' : '↓'}</span>
                                             </button>
                                         )}
                                         {project.link && (
@@ -109,13 +110,15 @@ export const Projects: React.FC = () => {
                                         )}
                                     </div>
                                 </div>
+                                {project.id === 'jokiin' && <div id="jokiin-details" className={styles.projectDetails} hidden={!jokiinOpen}>
+                                    {jokiinOpen && <JokiinDetail onClose={() => { setJokiinOpen(false); jokiinButton.current?.focus(); }} />}
+                                </div>}
                             </article>
                         );
                     })}
                 </div>
 
             </div>
-            <JokiinDetail open={jokiinOpen} onClose={() => setJokiinOpen(false)} />
         </section>
     );
 };

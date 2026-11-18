@@ -1,27 +1,19 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import styles from './JokiinDetail.module.css';
 
-type Props = { open: boolean; onClose: () => void };
+type Props = { onClose: () => void };
 
-export function JokiinDetail({ open, onClose }: Props) {
-  const dialog = useRef<HTMLDialogElement>(null);
+export function JokiinDetail({ onClose }: Props) {
   const [section, setSection] = useState<'services' | 'store'>('services');
-
-  useEffect(() => {
-    const node = dialog.current;
-    if (!node) return;
-    if (open && !node.open) node.showModal();
-    if (!open && node.open) node.close();
-  }, [open]);
 
   const services = section === 'services';
 
   return (
-    <dialog ref={dialog} className={styles.dialog} aria-labelledby="jokiin-detail-title" onClose={onClose}>
+    <section className={styles.detail} aria-labelledby="jokiin-detail-title">
       <div className={styles.shell}>
         <div className={styles.topbar}>
           <span>PROJECT / JOKI.IN</span>
-          <button type="button" onClick={() => dialog.current?.close()} aria-label="Close project details">Close <span aria-hidden="true">×</span></button>
+          <button type="button" onClick={onClose} aria-label="Close project details">Close <span aria-hidden="true">×</span></button>
         </div>
         <div className={styles.hero}>
           <div>
@@ -72,8 +64,8 @@ export function JokiinDetail({ open, onClose }: Props) {
             <div><span>04 / DEVELOPMENT</span><h4>Interface to integration</h4><p>The repository includes catalog and checkout interfaces. Their runtime behavior requires authenticated end-to-end validation.</p></div>
           </div>
         </section>
-        <div className={styles.bottom}><span>JOKI.IN / CASE STUDY</span><button type="button" onClick={() => dialog.current?.close()}>Back to projects ↑</button></div>
+        <div className={styles.bottom}><span>JOKI.IN / CASE STUDY</span><button type="button" onClick={onClose}>Close case study ↑</button></div>
       </div>
-    </dialog>
+    </section>
   );
 }

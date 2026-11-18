@@ -1,12 +1,10 @@
-.dialog { width: min(1180px, calc(100% - 32px)); max-width: none; max-height: calc(100dvh - 32px); padding: 0; border: 1px solid #ffffff20; border-radius: 18px; color: #f5f4f0; background: #0c0e10; overflow: auto; box-shadow: 0 30px 100px #000b; }
-.dialog::backdrop { background: #000c; backdrop-filter: blur(8px); }
-.dialog:focus { outline: none; }
+.detail { width: 100%; border: 1px solid #ffffff18; border-radius: 18px; color: #f5f4f0; background: #171a1b; }
 .shell { padding: 0 clamp(24px, 6vw, 82px); }
 .topbar, .bottom { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 28px 0; color: #bda68c; font: 600 11px var(--font-mono); letter-spacing: .08em; }
 .topbar { border-bottom: 1px solid #ffffff18; }
 .topbar button, .bottom button { color: #eeeae3; background: none; border: 0; cursor: pointer; font: inherit; padding: 10px 0 10px 12px; }
 .topbar button span { font: 24px Arial, sans-serif; vertical-align: middle; margin-left: 8px; }
-.dialog button:focus-visible, .dialog a:focus-visible { outline: 2px solid #d4b99a; outline-offset: 4px; }
+.detail button:focus-visible, .detail a:focus-visible { outline: 2px solid #d4b99a; outline-offset: 4px; }
 .hero { display: grid; grid-template-columns: 1.1fr .9fr; align-items: center; gap: 5vw; padding: clamp(54px, 8vw, 100px) 0; }
 .kicker { color: #c8ad8d; font: 600 11px var(--font-mono); letter-spacing: .14em; margin: 0 0 20px; }
 .hero h2 { margin: 0; color: #f8f7f4; font-size: clamp(42px, 6vw, 75px); line-height: 1.03; letter-spacing: -.045em; font-weight: 800; }
@@ -39,7 +37,6 @@
 .notes h4 { margin: 14px 0 0; font-size: 17px; }
 .bottom { border-top: 1px solid #ffffff18; }
 @media (max-width: 700px) {
- .dialog { width: calc(100% - 20px); max-height: calc(100dvh - 20px); }
  .hero, .feature, .engineering { grid-template-columns: 1fr; }
  .hero { gap: 32px; }
  .brand { min-height: 200px; }
