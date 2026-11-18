@@ -10,7 +10,7 @@
 
 .headerScrolled {
   padding: 0.85rem var(--content-padding-x);
-  background: rgba(10, 11, 13, 0.88);
+  background: rgba(10, 11, 13, 0.76);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--hairline);
