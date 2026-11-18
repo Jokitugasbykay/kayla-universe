@@ -191,3 +191,18 @@ test('header scrolls without changing the home URL', async ({ page, viewport }) 
     await expect(page).toHaveURL(/\/home$/);
     await expect(page.locator('h1')).toContainText('Kayla Gabrielle');
 });
+
+test('JOKI.IN case study switches experiences and restores focus', async ({ page }) => {
+    await page.goto('/');
+    const card = page.locator('[data-project="jokiin"]');
+    const trigger = card.getByRole('button', { name: /explore case study/i });
+    await trigger.click();
+    const dialog = page.getByRole('dialog', { name: /one ecosystem/i });
+    await expect(dialog).toBeVisible();
+    await dialog.getByRole('button', { name: /digital store/i }).click();
+    await expect(dialog.getByText(/redirects to sign-in/i)).toBeVisible();
+    await expect(dialog.getByRole('button', { name: /digital store/i })).toHaveAttribute('aria-pressed', 'true');
+    await page.keyboard.press('Escape');
+    await expect(dialog).toBeHidden();
+    await expect(trigger).toBeFocused();
+});

@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { PROJECTS_DATA } from '../../data/portfolio';
+import { JokiinDetail } from './JokiinDetail';
 import styles from './Projects.module.css';
 
 export const Projects: React.FC = () => {
+    const [jokiinOpen, setJokiinOpen] = useState(false);
     return (
         <section id="projects" className={styles.projectsSection}>
             <div className={styles.projectsBackgroundGlow}></div>
@@ -76,12 +78,17 @@ export const Projects: React.FC = () => {
 
                                     {/* Action Links */}
                                     <div className={styles.actionRow}>
+                                        {project.id === 'jokiin' && (
+                                            <button type="button" className={styles.primaryLink} onClick={() => setJokiinOpen(true)}>
+                                                Explore case study <span aria-hidden="true">↗</span>
+                                            </button>
+                                        )}
                                         {project.link && (
                                             <a
                                                 href={project.link}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className={styles.primaryLink}
+                                                className={project.id === 'jokiin' ? styles.secondaryLink : styles.primaryLink}
                                             >
                                                 <span>{project.linkLabel || 'Launch Platform'}</span>
                                                 <span className={styles.linkArrow} aria-hidden="true">&rarr;</span>
@@ -108,6 +115,7 @@ export const Projects: React.FC = () => {
                 </div>
 
             </div>
+            <JokiinDetail open={jokiinOpen} onClose={() => setJokiinOpen(false)} />
         </section>
     );
 };

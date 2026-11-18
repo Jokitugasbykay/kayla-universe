@@ -32,16 +32,16 @@ export const PROJECTS_DATA: ProjectItem[] = [
     {
         id: 'jokiin',
         title: 'JOKI.IN',
-        category: 'Production Web Platform',
+        category: 'Digital Services & Commerce Platform',
         year: '2024',
-        summary: 'Digital academic and task management platform connecting collaborative student workflows with dependable fulfillment.',
-        description: 'Engineered an operational task marketplace featuring responsive client dashboards, transparent order intake pipelines, status tracking, and automated fulfillment routing.',
+        summary: 'A connected web ecosystem for digital services and a digital product store.',
+        description: 'Explore the service discovery experience, the Digital Store, and the engineering behind their shared platform.',
         highlights: [
             'Architected client-facing service catalog with dynamic pricing calculators.',
             'Implemented order tracking state machine with real-time progress indicators.',
             'Engineered mobile-first interface optimized for speed and clarity.'
         ],
-        technologies: ['React', 'TypeScript', 'TailwindCSS', 'Node.js', 'Vite'],
+        technologies: ['Next.js', 'Web interfaces', 'Responsive design'],
         link: 'https://jokiin.my.id',
         linkLabel: 'Launch Platform',
         previewImage: './assets/jokiin-brand.png',
