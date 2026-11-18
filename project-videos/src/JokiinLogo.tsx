@@ -58,6 +58,7 @@ function LogoReveal() {
 
 function JokiinEndCard() {
   const accent = '#67d3ae';
+  const frame = useCurrentFrame();
   return (
     <AbsoluteFill style={{ background: '#000', color: '#fff', fontFamily: 'Arial, sans-serif' }}>
       <div style={{ position: 'absolute', top: 34, left: 44, right: 44, paddingBottom: 23, borderBottom: '1px solid #ffffff22', display: 'flex', justifyContent: 'space-between', fontSize: 16, fontWeight: 700 }}>
@@ -66,9 +67,9 @@ function JokiinEndCard() {
       </div>
       <AbsoluteFill style={{ alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ color: accent, fontSize: 14, fontWeight: 700, letterSpacing: 3, marginBottom: 25 }}>ACADEMIC SERVICES</div>
-        <div style={{ fontSize: 82, fontWeight: 900, letterSpacing: -2 }}>JOKI.IN</div>
-        <div style={{ marginTop: 23, fontSize: 21, color: '#d6d6d6' }}>Teman tugas mahasiswa.</div>
-        <div style={{ marginTop: 28, height: 3, width: 74, background: accent }} />
+        <div style={{ fontSize: 82, fontWeight: 900, letterSpacing: -2, translate: `0 ${interpolate(frame, [0, 24], [24, 0], { ...clamp, easing })}px` }}>JOKI.IN</div>
+        <div style={{ marginTop: 23, fontSize: 21, color: '#d6d6d6', opacity: interpolate(frame, [10, 35], [0, 1], clamp) }}>Teman tugas mahasiswa.</div>
+        <div style={{ marginTop: 28, height: 3, width: interpolate(frame, [12, 44], [0, 74], { ...clamp, easing }), background: accent }} />
       </AbsoluteFill>
     </AbsoluteFill>
   );
