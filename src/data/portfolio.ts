@@ -120,35 +120,35 @@ export const RESEARCH_DATA: ResearchInterest[] = [
 
 export const SKILLS_DATA: SkillCategory[] = [
     {
-        categoryNumber: '04',
+        categoryNumber: '01',
         domain: 'Design & Video Editing',
         summary: 'Visual design and video editing for creative projects.',
         items: ['Design', 'Video Editing'],
         focusPill: 'Creative'
     },
     {
-        categoryNumber: '05',
+        categoryNumber: '02',
         domain: 'News & Media',
         summary: 'Experience in news and media, including an internship at a local TV station.',
         items: ['News', 'Media'],
         focusPill: 'Media'
     },
     {
-        categoryNumber: '01',
+        categoryNumber: '03',
         domain: 'Junior Web Development',
         summary: 'Modern web applications built with an eye for performance, motion fidelity, and clean structure.',
         items: ['TypeScript', 'React 19', 'Next.js', 'Three.js', 'WebGL', 'GSAP', 'Vite', 'CSS Modules'],
         focusPill: 'Engineering'
     },
     {
-        categoryNumber: '02',
+        categoryNumber: '04',
         domain: 'Physics & Scientific Computing',
         summary: 'Mathematical modeling, differential analysis, and computational mechanics methods.',
         items: ['Mathematical Mechanics', 'Differential Equations', 'Python', 'NumPy', 'Verlet Dynamics', 'Quantum Modeling'],
         focusPill: 'Science'
     },
     {
-        categoryNumber: '03',
+        categoryNumber: '05',
         domain: 'Market Analysis & Trading Discipline',
         summary: 'Systematic approach to price behavior, capital preservation, and daily market execution.',
         items: ['Price Action Mechanics', 'Support & Resistance', 'Risk-to-Reward Modeling', 'Market Structure', 'Capital Management'],
