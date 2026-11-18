@@ -67,6 +67,17 @@ export const PROJECTS_DATA: ProjectItem[] = [
         previewImage: './assets/journalingtrade-real.png',
         previewVideo: './assets/journalingtrade-ad.mp4',
         accentColor: '#c8ad8d'
+    },
+    {
+        id: 'kayla-finance',
+        title: 'Kayla Finance',
+        category: 'Personal Finance & Trading',
+        year: '',
+        summary: 'A personal workspace for tracking finances and trading activity.',
+        description: 'Brings transaction records, accounts, financial reporting and trading information together in one place.',
+        highlights: ['Transaction tracking', 'Financial reporting', 'Trading overview'],
+        technologies: ['Next.js', 'React', 'TypeScript', 'Recharts'],
+        github: 'https://github.com/Jokitugasbykay/keuangan.github.io'
     }
 ];
 

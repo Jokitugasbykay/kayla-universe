@@ -33,13 +33,21 @@ export const Projects: React.FC = () => {
                                                 <video className={`${styles.previewImage} ${styles.previewVideo}`} src={project.previewVideo} poster={project.previewImage} autoPlay muted loop playsInline aria-label={`${project.title} project preview`} />
                                                 <img className={`${styles.previewImage} ${styles.reducedMotionImage}`} src={project.previewImage} alt={`${project.title} project preview`} />
                                             </>
-                                        ) : project.previewImage && (
+                                        ) : project.previewImage ? (
                                             <img
                                                 src={project.previewImage}
                                                 alt={`${project.title} project preview`}
                                                 className={styles.previewImage}
                                                 loading="eager"
                                             />
+                                        ) : (
+                                            <div className={styles.financePreview} aria-label="Kayla Finance project">
+                                                <span className={styles.financeMark}>KF</span>
+                                                <span className={styles.financeLabel}>PERSONAL FINANCE & TRADING</span>
+                                                <strong>Kayla Finance</strong>
+                                                <span className={styles.financeRule} />
+                                                <span>Transactions · Accounts · Trading</span>
+                                            </div>
                                         )}
                                     </div>
                                 </div>
@@ -48,7 +56,7 @@ export const Projects: React.FC = () => {
                                 <div className={styles.infoContainer}>
                                     <div className={styles.categoryRow}>
                                         <span className={styles.categoryPill}>{project.category}</span>
-                                        <span className={styles.yearPill}>{project.year}</span>
+                                        {project.year && <span className={styles.yearPill}>{project.year}</span>}
                                     </div>
 
                                     <h3 className={styles.projectTitle}>{project.title}</h3>

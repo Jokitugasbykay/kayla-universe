@@ -121,6 +121,44 @@
   transition: transform var(--transition-slow);
 }
 
+.financePreview {
+  aspect-ratio: 16 / 10;
+  background: #101417;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  color: var(--fg-200);
+  gap: 1rem;
+}
+
+.financePreview strong {
+  color: var(--fg-50);
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  letter-spacing: -0.04em;
+}
+
+.financeMark {
+  color: #101417;
+  background: var(--accent-primary);
+  padding: 0.55rem;
+  border-radius: 6px;
+  font-weight: 800;
+}
+
+.financeLabel {
+  font: 600 0.68rem var(--font-mono);
+  letter-spacing: 0.12em;
+  color: var(--accent-primary);
+}
+
+.financeRule {
+  height: 1px;
+  width: 100%;
+  background: var(--hairline);
+}
+
 [data-project="jokiin"] .previewVideo,
 [data-project="jokiin"] .reducedMotionImage {
   object-fit: contain;
