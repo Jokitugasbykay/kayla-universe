@@ -1,6 +1,5 @@
 import React from 'react';
 import { PROJECTS_DATA } from '../../data/portfolio';
-import { QuantumSimulator } from './QuantumSimulator';
 import styles from './Projects.module.css';
 
 export const Projects: React.FC = () => {
@@ -95,10 +94,6 @@ export const Projects: React.FC = () => {
                     })}
                 </div>
 
-                {/* Interactive Physics Simulator */}
-                <div data-reveal className={styles.simWrapper}>
-                    <QuantumSimulator />
-                </div>
             </div>
         </section>
     );
