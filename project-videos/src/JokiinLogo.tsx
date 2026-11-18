@@ -8,16 +8,21 @@ const outroFrames = 66;
 export const jokiinPromoFrames = logoFrames + footageFrames + outroFrames;
 
 export function JokiinPromo() {
+  const frame = useCurrentFrame();
   return (
     <AbsoluteFill style={{ background: '#080b0a' }}>
       <Sequence durationInFrames={logoFrames}>
         <LogoReveal />
       </Sequence>
       <Sequence from={logoFrames} durationInFrames={footageFrames}>
-        <OffthreadVideo src={staticFile('1118.mp4')} playbackRate={1.5} muted style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+        <AbsoluteFill style={{ opacity: interpolate(frame, [logoFrames, logoFrames + 18, logoFrames + footageFrames - 18, logoFrames + footageFrames], [0, 1, 1, 0], clamp) }}>
+          <OffthreadVideo src={staticFile('1118.mp4')} playbackRate={1.5} muted style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+        </AbsoluteFill>
       </Sequence>
       <Sequence from={logoFrames + footageFrames} durationInFrames={outroFrames}>
-        <JokiinEndCard />
+        <AbsoluteFill style={{ opacity: interpolate(frame, [logoFrames + footageFrames, logoFrames + footageFrames + 18], [0, 1], clamp) }}>
+          <JokiinEndCard />
+        </AbsoluteFill>
       </Sequence>
     </AbsoluteFill>
   );
@@ -27,7 +32,7 @@ function LogoReveal() {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const time = frame / fps;
-  const iconX = interpolate(time, [0.7, 1.38, 1.6, 2.38], [0, 128, 128, -212], { ...clamp, easing });
+  const iconX = interpolate(time, [0.8, 2], [0, -212], { ...clamp, easing });
   const textX = interpolate(time, [2.02, 2.68], [148, 112], { ...clamp, easing });
 
   return (
@@ -36,14 +41,14 @@ function LogoReveal() {
         position: 'absolute', zIndex: 1, width: 290, height: 290,
         translate: `${iconX}px 0`,
         scale: interpolate(time, [0, 0.65], [0.88, 1], { ...clamp, easing }),
-        opacity: interpolate(time, [0, 0.4], [0, 1], clamp),
+        opacity: interpolate(time, [0, 0.7, 3.65, 4.18], [0, 1, 1, 0], clamp),
       }}>
         <Img src={staticFile('jokiin-mark.png')} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
       </div>
       <div style={{
         position: 'absolute', color: '#fff', font: '900 88px Arial, sans-serif',
         letterSpacing: -3, translate: `${textX}px 0`,
-        opacity: interpolate(time, [2.02, 2.68], [0, 1], clamp),
+        opacity: interpolate(time, [1.1, 2, 3.65, 4.18], [0, 1, 1, 0], clamp),
       }}>
         JOKI<span style={{ color: '#28c9a2' }}>.IN</span>
       </div>
