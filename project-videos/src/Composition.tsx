@@ -1,8 +1,8 @@
 import { AbsoluteFill, Easing, Img, interpolate, staticFile, useCurrentFrame } from 'remotion';
-type Props = { image: string; title: string; subtitle: string; accent: string; headline: string; detail: string; closing: string };
+type Props = { image: string; introImage?: string; title: string; subtitle: string; accent: string; headline: string; detail: string; closing: string };
 const ease = Easing.bezier(0.22, 1, 0.36, 1);
 const clamp = { extrapolateLeft: 'clamp' as const, extrapolateRight: 'clamp' as const, easing: ease };
-export const ProjectVideo: React.FC<Props> = ({ image, title, subtitle, accent, headline, detail, closing }) => {
+export const ProjectVideo: React.FC<Props> = ({ image, introImage, title, subtitle, accent, headline, detail, closing }) => {
   const frame = useCurrentFrame();
   const opening = interpolate(frame, [0, 8, 44, 60], [0, 1, 1, 0], clamp);
   const showcase = interpolate(frame, [44, 65, 171, 190], [0, 1, 1, 0], clamp);
@@ -16,11 +16,13 @@ export const ProjectVideo: React.FC<Props> = ({ image, title, subtitle, accent, 
         <span>{title}</span><span style={{ color: accent, fontSize: 12, letterSpacing: 2 }}>{subtitle.toUpperCase()}</span>
       </div>
       <div style={{ position: 'absolute', top: 74, left: 52, right: 52, height: 1, backgroundColor: '#ffffff22' }} />
-      <AbsoluteFill style={{ justifyContent: 'center', padding: '80px', opacity: opening }}>
+      {introImage ? <div style={{ position: 'absolute', inset: '96px 52px 94px', opacity: opening, overflow: 'hidden', borderRadius: 12, backgroundColor: '#f6faf8' }}>
+        <Img src={staticFile(introImage)} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+      </div> : <AbsoluteFill style={{ justifyContent: 'center', padding: '80px', opacity: opening }}>
         <div style={{ color: accent, fontSize: 15, letterSpacing: 3, fontWeight: 700, marginBottom: 20 }}>INTRODUCING</div>
         <div style={{ fontSize: 75, lineHeight: 1.06, maxWidth: 800, fontWeight: 800, letterSpacing: -3, whiteSpace: 'pre-line', translate: `0 ${headlineSlide}px` }}>{headline}</div>
         <div style={{ width: 110, height: 4, backgroundColor: accent, marginTop: 28 }} />
-      </AbsoluteFill>
+      </AbsoluteFill>}
       <div style={{ position: 'absolute', inset: '96px 52px 94px', opacity: showcase, translate: `0 ${slide}px` }}>
         <div style={{ width: '100%', height: '100%', borderRadius: 12, overflow: 'hidden', border: '1px solid #ffffff26', boxShadow: '0 20px 50px #0009', backgroundColor: '#16191c' }}>
           <Img src={staticFile(image)} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', scale: `${zoom}` }} />
