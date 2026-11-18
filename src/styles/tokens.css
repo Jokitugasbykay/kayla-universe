@@ -4,6 +4,8 @@
   --bg-900: #0f1013; /* Primary container / section background */
   --bg-850: #14161a; /* Elevated surface / card background */
   --bg-800: #1a1c22; /* Card hover / interactive surface */
+  --bg-elevated: #1a1c22;
+  --border-default: rgba(255, 255, 255, 0.20);
   --bg-surface: rgba(16, 17, 21, 0.75);
   --bg-card: rgba(19, 21, 26, 0.85);
 

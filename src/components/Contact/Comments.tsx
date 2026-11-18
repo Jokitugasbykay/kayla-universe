@@ -50,7 +50,13 @@ export const Comments: React.FC = () => {
                 method: 'POST', headers,
                 body: JSON.stringify({ p_author: name.trim(), p_message: message.trim(), p_avatar: avatar }),
             });
-            if (!response.ok) throw new Error('Could not send your comment. Please try again later.');
+            if (!response.ok) {
+                const error = await response.json().catch(() => null);
+                if (error?.message === 'Comment limit reached. Please try again later.') {
+                    throw new Error('The guestbook has reached its daily limit. Please try again later.');
+                }
+                throw new Error('Could not send your comment. Please try again later.');
+            }
             setName(''); setMessage(''); setPhoto(null);
             if (fileRef.current) fileRef.current.value = '';
             setStatus('Comment sent.');

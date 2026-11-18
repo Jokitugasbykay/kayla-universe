@@ -89,6 +89,7 @@ export const Navbar: React.FC = () => {
                             key={link.href}
                             href={link.href}
                             className={styles.mobileNavLink}
+                            aria-current={activeSection === link.href.slice(1) ? 'location' : undefined}
                             onClick={() => setMobileMenuOpen(false)}
                         >
                             {link.label}

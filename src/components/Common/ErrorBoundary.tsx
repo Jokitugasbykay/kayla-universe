@@ -104,25 +104,6 @@ export class ErrorBoundary extends Component<Props, State> {
               >
                 Reload Portfolio
               </button>
-              <button
-                type="button"
-                onClick={() => {
-                  localStorage.clear();
-                  window.location.reload();
-                }}
-                style={{
-                  padding: '10px 20px',
-                  backgroundColor: 'transparent',
-                  color: '#94a3b8',
-                  borderRadius: '6px',
-                  fontWeight: 500,
-                  fontSize: '0.9rem',
-                  border: '1px solid #334155',
-                  cursor: 'pointer'
-                }}
-              >
-                Reset Cache & Reload
-              </button>
             </div>
           </div>
         </div>

@@ -30,7 +30,7 @@ export const Projects: React.FC = () => {
                                     <div className={styles.imageWrapper}>
                                         {project.previewVideo ? (
                                             <>
-                                                <video className={`${styles.previewImage} ${styles.previewVideo}`} src={project.previewVideo} poster={project.previewImage} autoPlay muted loop playsInline aria-label={`${project.title} project preview`} />
+                                                <video className={`${styles.previewImage} ${styles.previewVideo}`} src={project.previewVideo} poster={project.previewImage} autoPlay muted loop playsInline controls aria-label={`${project.title} project preview`} />
                                                 <img className={`${styles.previewImage} ${styles.reducedMotionImage}`} src={project.previewImage} alt={`${project.title} project preview`} />
                                             </>
                                         ) : project.previewImage ? (

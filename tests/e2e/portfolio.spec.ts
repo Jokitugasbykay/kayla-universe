@@ -129,10 +129,13 @@ test('scroll reveals cards and respects reduced motion', async ({ page }) => {
 
 test('navigation tracks the section in view', async ({ page }) => {
     await page.goto('/');
-    const nav = page.getByRole('navigation', { name: 'Main Navigation' });
-    await expect(nav.getByRole('link', { name: 'Home' })).toHaveAttribute('aria-current', 'location');
+    const compact = (page.viewportSize()?.width ?? 1440) <= 960;
+    if (compact) await page.getByRole('button', { name: /menu/i }).click();
+    const nav = compact ? page.locator('header') : page.getByRole('navigation', { name: 'Main Navigation' });
+    const home = nav.getByRole('link', { name: 'Home', exact: true }).last();
+    await expect(home).toHaveAttribute('aria-current', 'location');
     await page.locator('#contact').scrollIntoViewIfNeeded();
-    await expect(nav.getByRole('link', { name: 'Contact' })).toHaveAttribute('aria-current', 'location');
+    await expect(nav.getByRole('link', { name: 'Contact', exact: true }).last()).toHaveAttribute('aria-current', 'location');
 });
 
 test('contact form sends the expected fields to the configured endpoint', async ({ page }) => {
