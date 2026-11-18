@@ -121,6 +121,13 @@
   transition: transform var(--transition-slow);
 }
 
+.reducedMotionImage { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .previewVideo { display: none; }
+  .reducedMotionImage { display: block; }
+}
+
 .projectCard:hover .previewImage {
   transform: scale(1.02);
 }

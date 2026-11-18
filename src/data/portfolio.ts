@@ -44,7 +44,8 @@ export const PROJECTS_DATA: ProjectItem[] = [
         technologies: ['React', 'TypeScript', 'TailwindCSS', 'Node.js', 'Vite'],
         link: 'https://jokiin.my.id',
         linkLabel: 'Launch Platform',
-        previewImage: './assets/jokiin-portfolio-illustration.png',
+        previewImage: './assets/jokiin-real.png',
+        previewVideo: './assets/jokiin-project.mp4',
         accentColor: '#c8ad8d'
     },
     {
@@ -63,7 +64,8 @@ export const PROJECTS_DATA: ProjectItem[] = [
         link: 'https://jokitugasbykay.github.io/Journaling_trade.github.io/',
         linkLabel: 'Launch Platform',
         github: 'https://github.com/Jokitugasbykay/Journaling_trade.github.io',
-        previewImage: './assets/journalingtrade-illustration.png',
+        previewImage: './assets/journalingtrade-real.png',
+        previewVideo: './assets/journalingtrade-project.mp4',
         accentColor: '#c8ad8d'
     }
 ];

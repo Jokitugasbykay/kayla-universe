@@ -11,6 +11,7 @@ export interface ProjectItem {
     linkLabel?: string;
     github?: string;
     previewImage?: string;
+    previewVideo?: string;
     accentColor?: string;
 }
 export interface EducationItem {

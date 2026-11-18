@@ -28,10 +28,15 @@ export const Projects: React.FC = () => {
                                 {/* Visual Showcase Side */}
                                 <div className={styles.visualContainer}>
                                     <div className={styles.imageWrapper}>
-                                        {project.previewImage && (
+                                        {project.previewVideo ? (
+                                            <>
+                                                <video className={`${styles.previewImage} ${styles.previewVideo}`} src={project.previewVideo} poster={project.previewImage} autoPlay muted loop playsInline aria-label={`${project.title} project preview`} />
+                                                <img className={`${styles.previewImage} ${styles.reducedMotionImage}`} src={project.previewImage} alt={`${project.title} project preview`} />
+                                            </>
+                                        ) : project.previewImage && (
                                             <img
                                                 src={project.previewImage}
-                                                alt={project.id === 'jokiin' ? 'Illustration of a digital workspace on a laptop' : project.id === 'journalingtrade' ? 'Illustration of a trading journal on a laptop' : project.title + ' Preview'}
+                                                alt={`${project.title} project preview`}
                                                 className={styles.previewImage}
                                                 loading="eager"
                                             />
