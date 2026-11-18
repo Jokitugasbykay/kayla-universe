@@ -45,7 +45,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
         link: 'https://jokiin.my.id',
         linkLabel: 'Launch Platform',
         previewImage: './assets/jokiin-brand.png',
-        previewVideo: './assets/jokiin-logo-promo.mp4',
+        previewVideo: './assets/jokiin-logo-promo-v2.mp4',
         accentColor: '#c8ad8d'
     },
     {

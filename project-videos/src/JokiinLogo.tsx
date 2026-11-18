@@ -2,15 +2,22 @@ import { AbsoluteFill, Easing, Img, OffthreadVideo, Sequence, interpolate, stati
 
 const easing = Easing.bezier(0.22, 1, 0.36, 1);
 const clamp = { extrapolateLeft: 'clamp' as const, extrapolateRight: 'clamp' as const };
+const logoFrames = 126;
+const footageFrames = 122;
+const outroFrames = 66;
+export const jokiinPromoFrames = logoFrames + footageFrames + outroFrames;
 
 export function JokiinPromo() {
   return (
     <AbsoluteFill style={{ background: '#080b0a' }}>
-      <Sequence durationInFrames={180}>
+      <Sequence durationInFrames={logoFrames}>
         <LogoReveal />
       </Sequence>
-      <Sequence from={180} durationInFrames={183}>
-        <OffthreadVideo src={staticFile('1118.mp4')} muted style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+      <Sequence from={logoFrames} durationInFrames={footageFrames}>
+        <OffthreadVideo src={staticFile('1118.mp4')} playbackRate={1.5} muted style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+      </Sequence>
+      <Sequence from={logoFrames + footageFrames} durationInFrames={outroFrames}>
+        <JokiinEndCard />
       </Sequence>
     </AbsoluteFill>
   );
@@ -20,9 +27,8 @@ function LogoReveal() {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const time = frame / fps;
-  const iconX = interpolate(time, [0.7, 1.45, 2.25, 3.35], [0, 170, 170, -212], { ...clamp, easing });
-  const textX = interpolate(time, [2.25, 3.35], [-102, 112], { ...clamp, easing });
-  const ending = interpolate(time, [5.2, 5.95], [1, 0], clamp);
+  const iconX = interpolate(time, [0.7, 1.38, 1.6, 2.38], [0, 128, 128, -212], { ...clamp, easing });
+  const textX = interpolate(time, [2.02, 2.68], [148, 112], { ...clamp, easing });
 
   return (
     <AbsoluteFill style={{ background: '#080b0a', justifyContent: 'center', alignItems: 'center' }}>
@@ -30,17 +36,35 @@ function LogoReveal() {
         position: 'absolute', zIndex: 1, width: 290, height: 290,
         translate: `${iconX}px 0`,
         scale: interpolate(time, [0, 0.65], [0.88, 1], { ...clamp, easing }),
-        opacity: interpolate(time, [0, 0.4], [0, 1], clamp) * ending,
+        opacity: interpolate(time, [0, 0.4], [0, 1], clamp),
       }}>
         <Img src={staticFile('jokiin-mark.png')} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
       </div>
       <div style={{
         position: 'absolute', color: '#fff', font: '900 88px Arial, sans-serif',
         letterSpacing: -3, translate: `${textX}px 0`,
-        opacity: interpolate(time, [1.45, 2.1], [0, 1], clamp) * ending,
+        opacity: interpolate(time, [2.02, 2.68], [0, 1], clamp),
       }}>
         JOKI<span style={{ color: '#28c9a2' }}>.IN</span>
       </div>
+    </AbsoluteFill>
+  );
+}
+
+function JokiinEndCard() {
+  const accent = '#67d3ae';
+  return (
+    <AbsoluteFill style={{ background: '#000', color: '#fff', fontFamily: 'Arial, sans-serif' }}>
+      <div style={{ position: 'absolute', top: 34, left: 44, right: 44, paddingBottom: 23, borderBottom: '1px solid #ffffff22', display: 'flex', justifyContent: 'space-between', fontSize: 16, fontWeight: 700 }}>
+        <span>JOKI.IN</span>
+        <span style={{ color: accent, fontSize: 12, letterSpacing: 2 }}>ACADEMIC SERVICES</span>
+      </div>
+      <AbsoluteFill style={{ alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ color: accent, fontSize: 14, fontWeight: 700, letterSpacing: 3, marginBottom: 25 }}>ACADEMIC SERVICES</div>
+        <div style={{ fontSize: 82, fontWeight: 900, letterSpacing: -2 }}>JOKI.IN</div>
+        <div style={{ marginTop: 23, fontSize: 21, color: '#d6d6d6' }}>Teman tugas mahasiswa.</div>
+        <div style={{ marginTop: 28, height: 3, width: 74, background: accent }} />
+      </AbsoluteFill>
     </AbsoluteFill>
   );
 }
