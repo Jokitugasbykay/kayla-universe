@@ -7,7 +7,7 @@ describe('Public content safety', () => {
         expect(PROFILE_DATA.name).toBe('Kayla Gabrielle');
         expect(PROFILE_DATA.university).toBe('Universitas Airlangga');
         expect(INITIAL_GUESTBOOK).toEqual([]);
-        expect(EDUCATION_DATA).toHaveLength(1);
+        expect(EDUCATION_DATA.map(item => item.institution)).toEqual(['Universitas Airlangga', 'SMAK PENABUR Pondok Indah']);
         expect(EDUCATION_DATA[0].qualification).toContain('student');
         expect(PROJECTS_DATA.every(p => !p.github || new URL(p.github).pathname.split('/').filter(Boolean).length === 2)).toBe(true);
     });
