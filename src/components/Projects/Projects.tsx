@@ -110,8 +110,8 @@ export const Projects: React.FC = () => {
                                         )}
                                     </div>
                                 </div>
-                                {project.id === 'jokiin' && <div id="jokiin-details" className={styles.projectDetails} hidden={!jokiinOpen}>
-                                    {jokiinOpen && <JokiinDetail onClose={() => { setJokiinOpen(false); jokiinButton.current?.focus(); }} />}
+                                {project.id === 'jokiin' && <div id="jokiin-details" className={styles.projectDetails} data-open={jokiinOpen} inert={!jokiinOpen}>
+                                    <div className={styles.detailInner}><JokiinDetail onClose={() => { setJokiinOpen(false); jokiinButton.current?.focus(); }} /></div>
                                 </div>}
                             </article>
                         );

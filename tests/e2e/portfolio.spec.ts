@@ -197,7 +197,7 @@ test('JOKI.IN case study expands within its card and restores focus', async ({ p
     const card = page.locator('[data-project="jokiin"]');
     const trigger = card.getByRole('button', { name: /(?:explore|close) case study/i }).first();
     await trigger.click();
-    const detail = card.getByRole('region', { name: /one ecosystem/i });
+    const detail = card.getByRole('region', { name: /inside joki.in/i });
     await expect(detail).toBeVisible();
     await expect(trigger).toHaveAttribute('aria-expanded', 'true');
     await detail.getByRole('button', { name: /digital store/i }).click();
