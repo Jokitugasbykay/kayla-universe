@@ -199,6 +199,10 @@ test('JOKI.IN case study expands within its card and restores focus', async ({ p
     await trigger.click();
     const detail = card.getByRole('region', { name: /inside joki.in/i });
     await expect(detail).toBeVisible();
+    const cardBox = await card.boundingBox();
+    const detailBox = await detail.boundingBox();
+    expect(Math.abs(cardBox!.x - detailBox!.x)).toBeLessThan(2);
+    expect(Math.abs((cardBox!.x + cardBox!.width) - (detailBox!.x + detailBox!.width))).toBeLessThan(2);
     await expect(trigger).toHaveAttribute('aria-expanded', 'true');
     await detail.getByRole('button', { name: /digital store/i }).click();
     await expect(detail.getByText(/redirects to sign-in/i)).toBeVisible();

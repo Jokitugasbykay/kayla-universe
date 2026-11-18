@@ -1,4 +1,4 @@
-.detail { padding: clamp(22px, 3vw, 38px); border: 1px solid #ffffff12; border-radius: 14px; color: #f3f1ee; background: #171a1a; }
+.detail { padding: clamp(2rem, 3.5vw, 3rem); border-top: 1px solid #ffffff12; color: #f3f1ee; background: #171a1a; }
 .header { display: flex; justify-content: space-between; align-items: start; gap: 16px; }
 .eyebrow, .facts span { font: 600 10px var(--font-mono); letter-spacing: .1em; color: #c8ad8d; }
 .header h2 { margin: 8px 0 0; font-size: clamp(23px, 2.4vw, 30px); letter-spacing: -.025em; }
