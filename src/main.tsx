@@ -4,6 +4,11 @@ import App from './App';
 import { ErrorBoundary } from './components/Common/ErrorBoundary';
 import './index.css';
 
+const initialHash = window.location.hash;
+if (import.meta.env.PROD) {
+  const rootPath = new URL('.', document.baseURI).pathname;
+  window.history.replaceState(window.history.state, '', rootPath + 'home' + window.location.search);
+}
 const rootElement = document.getElementById('root');
 
 if (rootElement) {
@@ -14,4 +19,7 @@ if (rootElement) {
       </ErrorBoundary>
     </React.StrictMode>
   );
+  if (initialHash) {
+    setTimeout(() => document.getElementById(initialHash.slice(1))?.scrollIntoView(), 0);
+  }
 }

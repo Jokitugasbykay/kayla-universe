@@ -172,3 +172,19 @@ test('guestbook sends and displays a visitor comment', async ({ page }) => {
     await expect(page.getByText('Comment sent.')).toBeVisible();
     await expect(page.getByText('Hello Kayla')).toBeVisible();
 });
+
+test('header scrolls without changing the home URL', async ({ page, viewport }) => {
+    await page.goto('/home/');
+    await expect(page).toHaveURL(/\/home$/);
+    await expect(page.locator('h1')).toContainText('Kayla Gabrielle');
+    const initial = page.url();
+    const compact = viewport!.width <= 960;
+    if (compact) await page.getByRole('button', { name: 'Toggle navigation menu' }).click();
+    const link = compact ? page.locator('header').getByRole('link', { name: 'About', exact: true }) : page.getByRole('navigation', { name: 'Main Navigation' }).getByRole('link', { name: 'About' });
+    await link.click();
+    await expect.poll(() => page.evaluate(() => Math.abs(document.querySelector('#about')!.getBoundingClientRect().top))).toBeLessThan(180);
+    expect(page.url()).toBe(initial);
+    await page.reload();
+    await expect(page).toHaveURL(/\/home$/);
+    await expect(page.locator('h1')).toContainText('Kayla Gabrielle');
+});

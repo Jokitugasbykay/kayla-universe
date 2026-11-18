@@ -31,8 +31,18 @@ export const Navbar: React.FC = () => {
         { label: 'Contact', href: '#contact' }
     ];
 
+    const scrollToSection = (event: React.MouseEvent<HTMLElement>) => {
+        if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        const link = (event.target as Element).closest('a[href^="#"]');
+        const id = link?.getAttribute('href')?.slice(1);
+        const section = id ? document.getElementById(id) : null;
+        if (!section) return;
+        event.preventDefault();
+        section.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    };
+
     return (
-        <header className={`${styles.header} ${scrolled ? styles.headerScrolled : ''}`}>
+        <header onClick={scrollToSection} className={`${styles.header} ${scrolled ? styles.headerScrolled : ''}`}>
             <div className={styles.navContainer}>
                 {/* Brand Monogram */}
                 <a href="#home" className={styles.brandLockup} aria-label="Kayla Gabrielle Home">
