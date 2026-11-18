@@ -65,7 +65,7 @@ export const PROJECTS_DATA: ProjectItem[] = [
         linkLabel: 'Launch Platform',
         github: 'https://github.com/Jokitugasbykay/Journaling_trade.github.io',
         previewImage: './assets/journalingtrade-real.png',
-        previewVideo: './assets/journalingtrade-motion.mp4',
+        previewVideo: './assets/journalingtrade-journal.mp4',
         accentColor: '#c8ad8d'
     },
     {
